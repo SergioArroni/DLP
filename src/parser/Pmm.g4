@@ -11,7 +11,7 @@ REAL_CONSTANT: NUMERIC_REAL_CONSTANT | (NUMERIC_REAL_CONSTANT | INT_CONSTANT) ('
 fragment
 NUMERIC_REAL_CONSTANT: INT_CONSTANT '.' [0-9]* | '.' [0-9]+;
 
-IDENT: [a-zA-Z][a-zA-Z0-9_]* | '_'+[a-zA-Z0-9_]*  ;
+ID: [a-zA-Z][a-zA-Z0-9_]* | '_'+[a-zA-Z0-9_]*  ;
 
 COMENTARIO: '#'~[\n]* ->skip;
 

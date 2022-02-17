@@ -17,7 +17,7 @@ public class PmmLexer extends Lexer {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		INT_CONSTANT=1, CHAR_CONSTANT=2, REAL_CONSTANT=3, IDENT=4, COMENTARIO=5, 
+		INT_CONSTANT=1, CHAR_CONSTANT=2, REAL_CONSTANT=3, ID=4, COMENTARIO=5, 
 		COMENTARIO_COMILLAS=6, TRASH=7;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
@@ -30,7 +30,7 @@ public class PmmLexer extends Lexer {
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"INT_CONSTANT", "CHAR_CONSTANT", "REAL_CONSTANT", "NUMERIC_REAL_CONSTANT", 
-			"IDENT", "COMENTARIO", "COMENTARIO_COMILLAS", "TRASH"
+			"ID", "COMENTARIO", "COMENTARIO_COMILLAS", "TRASH"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -42,7 +42,7 @@ public class PmmLexer extends Lexer {
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "INT_CONSTANT", "CHAR_CONSTANT", "REAL_CONSTANT", "IDENT", "COMENTARIO", 
+			null, "INT_CONSTANT", "CHAR_CONSTANT", "REAL_CONSTANT", "ID", "COMENTARIO", 
 			"COMENTARIO_COMILLAS", "TRASH"
 		};
 	}
