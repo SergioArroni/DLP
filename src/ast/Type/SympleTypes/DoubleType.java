@@ -2,11 +2,11 @@ package ast.Type.SympleTypes;
 
 import ast.Type.TypeAbs;
 
-public class Real extends TypeAbs {
+public class DoubleType extends TypeAbs {
 
     private double number;
 
-    public Real(int colum, int line, double number) {
+    public DoubleType(int colum, int line, double number) {
         super(colum, line);
         this.number = number;
     }

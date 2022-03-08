@@ -2,9 +2,9 @@ package ast.Type.SympleTypes;
 
 import ast.Type.TypeAbs;
 
-public class Vacio extends TypeAbs {
+public class VoidType extends TypeAbs {
 
-    public Vacio(int colum, int line) {
+    public VoidType(int colum, int line) {
         super(colum, line);
     }
 

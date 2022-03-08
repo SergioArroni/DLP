@@ -22,7 +22,7 @@ listDef returns [List<Definition> ast =  new ArrayList<Definition>()]:
                 ;
 
 main returns [FuncDefinition ast]:
-            OP1='def' 'main''('')'':' cuerpoMain=inBody {$ast = new FuncDefinition($OP1.getCharPositionInLine()+1, $OP1.getLine(),"main", new FunctionType($OP1.getCharPositionInLine()+1, $OP1.getLine(), "main",new ArrayList<VarDefinition>(), new Vacio($OP1.getCharPositionInLine()+1, $OP1.getLine())), new ArrayList<VarDefinition>(), $cuerpoMain.ast);}
+            OP1='def' 'main''('')'':' cuerpoMain=inBody {$ast = new FuncDefinition($OP1.getCharPositionInLine()+1, $OP1.getLine(),"main", new FunctionType($OP1.getCharPositionInLine()+1, $OP1.getLine(), "main", new ArrayList<VarDefinition>(), new VoidType($OP1.getCharPositionInLine()+1, $OP1.getLine())), $cuerpoMain.ast);}
             ;
 
 def returns [List<Definition> ast =  new ArrayList<Definition>()]:
@@ -36,7 +36,7 @@ defVaribales returns [List<VarDefinition> ast =  new ArrayList<VarDefinition>()]
 
 tipo returns [Type ast] locals [List<RecordField> fields =  new ArrayList<RecordField>()] :
                 | type1=tipoSimple {$ast=$type1.ast;}
-                |OP1='struct' '{' (op1=recordField {$fields.addAll($op1.ast);})+ '}' {$ast= new Struct($OP1.getCharPositionInLine()+1, $OP1.getLine(), $fields);}
+                |  OP1='struct' '{' (op1=recordField {$fields.addAll($op1.ast);})+ '}' {$ast= new Struct($OP1.getCharPositionInLine()+1, $OP1.getLine(), $fields);}
                 | '['INT_CONSTANT']' of=tipo {$ast = new ArrayType($INT_CONSTANT.getCharPositionInLine()+1, $INT_CONSTANT.getLine(), LexerHelper.lexemeToInt($INT_CONSTANT.text) , $of.ast);}
                 ;
 
@@ -45,10 +45,10 @@ recordField returns [List<RecordField> ast =  new ArrayList<RecordField>()]:
             ;
 
 defFunction returns [List<FuncDefinition> ast =  new ArrayList<FuncDefinition>()]:
-                (aux=functionType cuerpo=inBody {$ast.add(new FuncDefinition($functionType.ast.getColumn(),$functionType.ast.getLine(),$aux.ast.getName(), $aux.ast,new ArrayList<VarDefinition>() ,$cuerpo.ast));})+
+                (aux=functionType cuerpo=inBody {$ast.add(new FuncDefinition($functionType.ast.getColumn(),$functionType.ast.getLine(),$aux.ast.getName(), $aux.ast ,$cuerpo.ast));})+
                 ;
 
-functionType returns [FunctionType ast] locals [Type tipoFunc = new Vacio(0,0)]:
+functionType returns [FunctionType ast] locals [Type tipoFunc = new VoidType(0,0)]:
                 'def' OP=ID '(' var=functionTypeParametersAux ')' ':' (type=tipoSimple {$tipoFunc = $type.ast;})? {$ast =  new FunctionType($OP.getCharPositionInLine()+1, $OP.getLine(), $OP.text, $var.ast, $tipoFunc);}
                 ;
 
@@ -57,20 +57,16 @@ functionTypeParametersAux returns [List<VarDefinition> ast =  new ArrayList<VarD
                     ;
 
 tipoSimple returns [Type ast]:
-         TYPE='char' {$ast = new Char($TYPE.getCharPositionInLine()+1, $TYPE.getLine(), LexerHelper.lexemeToChar($TYPE.text));}
-        | TYPE='double' {$ast = new Real($TYPE.getCharPositionInLine()+1, $TYPE.getLine(), LexerHelper.lexemeToReal($TYPE.text));}
-        | TYPE='int' {$ast = new Int($TYPE.getCharPositionInLine()+1, $TYPE.getLine(), LexerHelper.lexemeToInt($TYPE.text));} ;
+         TYPE='char' {$ast = new CharType($TYPE.getCharPositionInLine()+1, $TYPE.getLine(), LexerHelper.lexemeToChar($TYPE.text));}
+        | TYPE='double' {$ast = new DoubleType($TYPE.getCharPositionInLine()+1, $TYPE.getLine(), LexerHelper.lexemeToReal($TYPE.text));}
+        | TYPE='int' {$ast = new IntType($TYPE.getCharPositionInLine()+1, $TYPE.getLine(), LexerHelper.lexemeToInt($TYPE.text));} ;
 
-listStatement returns [List<Statement> ast =  new ArrayList<Statement>()]:
-            (sta1=statement {$ast.add($sta1.ast);})+
-            ;
-
-statement returns [Statement ast] locals [List<Expression> param =  new ArrayList<Expression>(), List<Expression> parameter =  new ArrayList<Expression>()]:
+statement returns [Statement ast] locals [List<Expression> param =  new ArrayList<Expression>(), List<Expression> parameter =  new ArrayList<Expression>(), List<Statement> elses =  new ArrayList<Statement>()]:
             'while' exprWhile=expression ':' cuerpo=statementbody {$ast = new Iterative($exprWhile.ast.getLine(), $exprWhile.ast.getColumn(), $exprWhile.ast, $cuerpo.ast);}
-           | 'if' exprIf=expression ':' stateIf=statementbody ('else' statelse=statementbody)? {$ast= new Condition($exprIf.ast.getLine(), $exprIf.ast.getColumn(), $exprIf.ast, $stateIf.ast, $statelse.ast);}
+           | 'if' exprIf=expression ':' stateIf=statementbody ('else' statelse=statementbody{$elses = $statelse.ast;})? {$ast= new Condition($exprIf.ast.getLine(), $exprIf.ast.getColumn(), $exprIf.ast, $stateIf.ast, $elses);}
            | 'return' stat3=expression ';' {$ast = new Return($stat3.ast.getLine(), $stat3.ast.getColumn(), $stat3.ast);}
-           | 'print' stateRead=inoutBody ';'{$ast = new Read($stateRead.ast.getLine(), $stateRead.ast.getColumn(), $stateRead.ast);}
-           | 'input' stateWrite=inoutBody ';'{$ast = new Write($stateWrite.ast.getLine(), $stateWrite.ast.getColumn(), $stateWrite.ast);}
+           | 'input' stateRead=inoutBody ';'{$ast = new Read($stateRead.ast.getLine(), $stateRead.ast.getColumn(), $stateRead.ast);}
+           | 'print' stateWrite=inoutBody ';'{$ast = new Write($stateWrite.ast.getLine(), $stateWrite.ast.getColumn(), $stateWrite.ast);}
            | left=expression ('=') right=expression ';' {$ast = new Assigmment($left.ast.getLine(), $right.ast.getColumn(), $left.ast, $right.ast);}
            | ID '('(expr1=params{$parameter = $expr1.ast;})*')'';' {$param.addAll($parameter);} {$ast = new FunctionInvoke($ID.getCharPositionInLine()+1, $ID.getLine(), $param, new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text));}
            ;

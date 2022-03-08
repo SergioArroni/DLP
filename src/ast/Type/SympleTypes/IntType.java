@@ -2,11 +2,11 @@ package ast.Type.SympleTypes;
 
 import ast.Type.TypeAbs;
 
-public class Int extends TypeAbs {
+public class IntType extends TypeAbs {
 
     private int number;
 
-    public Int(int colum, int line, int number) {
+    public IntType(int colum, int line, int number) {
         super(colum, line);
         this.number = number;
     }

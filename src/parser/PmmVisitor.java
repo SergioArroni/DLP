@@ -88,12 +88,6 @@ public interface PmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTipoSimple(PmmParser.TipoSimpleContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PmmParser#listStatement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitListStatement(PmmParser.ListStatementContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link PmmParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
