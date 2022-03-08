@@ -4,21 +4,18 @@ import ast.Type.TypeAbs;
 
 public class IntType extends TypeAbs {
 
-    private int number;
+    private static IntType instance;
 
-    public IntType(int colum, int line, int number) {
+    private IntType(int colum, int line) {
         super(colum, line);
-        this.number = number;
+
     }
 
-    public int getNumber() {
-        return number;
+    public static IntType getInstance(int colum, int line) {
+        if (instance == null) {
+            instance = new IntType(colum, line);
+        }
+        return instance;
     }
 
-    @Override
-    public String toString() {
-        return "Int{" +
-                "number=" + number +
-                '}';
-    }
 }

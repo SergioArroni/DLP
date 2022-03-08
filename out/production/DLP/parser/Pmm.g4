@@ -22,7 +22,7 @@ listDef returns [List<Definition> ast =  new ArrayList<Definition>()]:
                 ;
 
 main returns [FuncDefinition ast]:
-            OP1='def' 'main''('')'':' cuerpoMain=inBody {$ast = new FuncDefinition($OP1.getCharPositionInLine()+1, $OP1.getLine(),"main", new FunctionType($OP1.getCharPositionInLine()+1, $OP1.getLine(), "main", new ArrayList<VarDefinition>(), new VoidType($OP1.getCharPositionInLine()+1, $OP1.getLine())), $cuerpoMain.ast);}
+            OP1='def' 'main''('')'':' cuerpoMain=inBody {$ast = new FuncDefinition($OP1.getCharPositionInLine()+1, $OP1.getLine(),"main", new FunctionType($OP1.getCharPositionInLine()+1, $OP1.getLine(), "main", new ArrayList<VarDefinition>(), VoidType.getInstance($OP1.getCharPositionInLine()+1, $OP1.getLine())), $cuerpoMain.ast);}
             ;
 
 def returns [List<Definition> ast =  new ArrayList<Definition>()]:
@@ -48,7 +48,7 @@ defFunction returns [List<FuncDefinition> ast =  new ArrayList<FuncDefinition>()
                 (aux=functionType cuerpo=inBody {$ast.add(new FuncDefinition($functionType.ast.getColumn(),$functionType.ast.getLine(),$aux.ast.getName(), $aux.ast ,$cuerpo.ast));})+
                 ;
 
-functionType returns [FunctionType ast] locals [Type tipoFunc = new VoidType(0,0)]:
+functionType returns [FunctionType ast] locals [Type tipoFunc = VoidType.getInstance(0,0)]:
                 'def' OP=ID '(' var=functionTypeParametersAux ')' ':' (type=tipoSimple {$tipoFunc = $type.ast;})? {$ast =  new FunctionType($OP.getCharPositionInLine()+1, $OP.getLine(), $OP.text, $var.ast, $tipoFunc);}
                 ;
 
@@ -57,9 +57,9 @@ functionTypeParametersAux returns [List<VarDefinition> ast =  new ArrayList<VarD
                     ;
 
 tipoSimple returns [Type ast]:
-         TYPE='char' {$ast = new CharType($TYPE.getCharPositionInLine()+1, $TYPE.getLine(), LexerHelper.lexemeToChar($TYPE.text));}
-        | TYPE='double' {$ast = new DoubleType($TYPE.getCharPositionInLine()+1, $TYPE.getLine(), LexerHelper.lexemeToReal($TYPE.text));}
-        | TYPE='int' {$ast = new IntType($TYPE.getCharPositionInLine()+1, $TYPE.getLine(), LexerHelper.lexemeToInt($TYPE.text));} ;
+         TYPE='char' {$ast = CharType.getInstance($TYPE.getCharPositionInLine()+1, $TYPE.getLine());}
+        | TYPE='double' {$ast = DoubleType.getInstance($TYPE.getCharPositionInLine()+1, $TYPE.getLine());}
+        | TYPE='int' {$ast = IntType.getInstance($TYPE.getCharPositionInLine()+1, $TYPE.getLine());} ;
 
 statement returns [Statement ast] locals [List<Expression> param =  new ArrayList<Expression>(), List<Expression> parameter =  new ArrayList<Expression>(), List<Statement> elses =  new ArrayList<Statement>()]:
             'while' exprWhile=expression ':' cuerpo=statementbody {$ast = new Iterative($exprWhile.ast.getLine(), $exprWhile.ast.getColumn(), $exprWhile.ast, $cuerpo.ast);}

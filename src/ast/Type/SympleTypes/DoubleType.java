@@ -3,22 +3,18 @@ package ast.Type.SympleTypes;
 import ast.Type.TypeAbs;
 
 public class DoubleType extends TypeAbs {
+    private static DoubleType instance;
 
-    private double number;
-
-    public DoubleType(int colum, int line, double number) {
+    private DoubleType(int colum, int line) {
         super(colum, line);
-        this.number = number;
+
     }
 
-    public double getNumber() {
-        return number;
+    public static DoubleType getInstance(int colum, int line) {
+        if (instance == null) {
+            instance = new DoubleType(colum, line);
+        }
+        return instance;
     }
 
-    @Override
-    public String toString() {
-        return "Real{" +
-                "number=" + number +
-                '}';
-    }
 }

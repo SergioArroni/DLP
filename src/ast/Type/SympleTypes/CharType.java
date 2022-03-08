@@ -3,22 +3,20 @@ package ast.Type.SympleTypes;
 import ast.Type.TypeAbs;
 
 public class CharType extends TypeAbs {
+    private static CharType instance;
 
-    private Character character;
-
-    public CharType(int colum, int line, Character character) {
+    private CharType(int colum, int line) {
         super(colum, line);
-        this.character = character;
+
     }
 
-    public Character getCharacter() {
-        return character;
+    public static CharType getInstance(int colum, int line) {
+        if (instance == null) {
+            instance = new CharType(colum, line);
+        }
+        return instance;
     }
 
-    @Override
-    public String toString() {
-        return "Char{" +
-                "character=" + character +
-                '}';
-    }
+
+
 }

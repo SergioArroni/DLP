@@ -264,7 +264,7 @@ public class PmmParser extends Parser {
 			match(T__4);
 			setState(54);
 			((MainContext)_localctx).cuerpoMain = inBody();
-			((MainContext)_localctx).ast =  new FuncDefinition(((MainContext)_localctx).OP1.getCharPositionInLine()+1, ((MainContext)_localctx).OP1.getLine(),"main", new FunctionType(((MainContext)_localctx).OP1.getCharPositionInLine()+1, ((MainContext)_localctx).OP1.getLine(), "main", new ArrayList<VarDefinition>(), new VoidType(((MainContext)_localctx).OP1.getCharPositionInLine()+1, ((MainContext)_localctx).OP1.getLine())), ((MainContext)_localctx).cuerpoMain.ast);
+			((MainContext)_localctx).ast =  new FuncDefinition(((MainContext)_localctx).OP1.getCharPositionInLine()+1, ((MainContext)_localctx).OP1.getLine(),"main", new FunctionType(((MainContext)_localctx).OP1.getCharPositionInLine()+1, ((MainContext)_localctx).OP1.getLine(), "main", new ArrayList<VarDefinition>(), VoidType.getInstance(((MainContext)_localctx).OP1.getCharPositionInLine()+1, ((MainContext)_localctx).OP1.getLine())), ((MainContext)_localctx).cuerpoMain.ast);
 			}
 		}
 		catch (RecognitionException re) {
@@ -661,7 +661,7 @@ public class PmmParser extends Parser {
 
 	public static class FunctionTypeContext extends ParserRuleContext {
 		public FunctionType ast;
-		public Type tipoFunc = new VoidType(0,0);
+		public Type tipoFunc = VoidType.getInstance(0,0);
 		public Token OP;
 		public FunctionTypeParametersAuxContext var;
 		public TipoSimpleContext type;
@@ -838,7 +838,7 @@ public class PmmParser extends Parser {
 				{
 				setState(157);
 				((TipoSimpleContext)_localctx).TYPE = match(T__12);
-				((TipoSimpleContext)_localctx).ast =  new CharType(((TipoSimpleContext)_localctx).TYPE.getCharPositionInLine()+1, ((TipoSimpleContext)_localctx).TYPE.getLine(), LexerHelper.lexemeToChar((((TipoSimpleContext)_localctx).TYPE!=null?((TipoSimpleContext)_localctx).TYPE.getText():null)));
+				((TipoSimpleContext)_localctx).ast =  CharType.getInstance(((TipoSimpleContext)_localctx).TYPE.getCharPositionInLine()+1, ((TipoSimpleContext)_localctx).TYPE.getLine());
 				}
 				break;
 			case T__13:
@@ -846,7 +846,7 @@ public class PmmParser extends Parser {
 				{
 				setState(159);
 				((TipoSimpleContext)_localctx).TYPE = match(T__13);
-				((TipoSimpleContext)_localctx).ast =  new DoubleType(((TipoSimpleContext)_localctx).TYPE.getCharPositionInLine()+1, ((TipoSimpleContext)_localctx).TYPE.getLine(), LexerHelper.lexemeToReal((((TipoSimpleContext)_localctx).TYPE!=null?((TipoSimpleContext)_localctx).TYPE.getText():null)));
+				((TipoSimpleContext)_localctx).ast =  DoubleType.getInstance(((TipoSimpleContext)_localctx).TYPE.getCharPositionInLine()+1, ((TipoSimpleContext)_localctx).TYPE.getLine());
 				}
 				break;
 			case T__14:
@@ -854,7 +854,7 @@ public class PmmParser extends Parser {
 				{
 				setState(161);
 				((TipoSimpleContext)_localctx).TYPE = match(T__14);
-				((TipoSimpleContext)_localctx).ast =  new IntType(((TipoSimpleContext)_localctx).TYPE.getCharPositionInLine()+1, ((TipoSimpleContext)_localctx).TYPE.getLine(), LexerHelper.lexemeToInt((((TipoSimpleContext)_localctx).TYPE!=null?((TipoSimpleContext)_localctx).TYPE.getText():null)));
+				((TipoSimpleContext)_localctx).ast =  IntType.getInstance(((TipoSimpleContext)_localctx).TYPE.getCharPositionInLine()+1, ((TipoSimpleContext)_localctx).TYPE.getLine());
 				}
 				break;
 			default:
