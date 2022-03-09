@@ -2,6 +2,8 @@ package ast.Definition;
 
 import ast.Type.Type;
 
+import java.util.List;
+
 public abstract class DefinitionAbs implements Definition {
 
     private Type type;
@@ -34,6 +36,11 @@ public abstract class DefinitionAbs implements Definition {
     public int getLine() {
         return line;
     }
+
+    public void CheckErrors(List<Definition> def){
+
+    }
+
 
     @Override
     public String toString() {

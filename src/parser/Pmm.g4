@@ -10,6 +10,7 @@ import ast.Type.*;
 import ast.Type.ComplexTypes.*;
 import ast.Type.SympleTypes.*;
 import ast.*;
+import java.util.*;
 }
 
 program returns [Program ast] locals[ArrayList<Definition> defs =  new ArrayList<Definition>()]:
@@ -26,16 +27,16 @@ main returns [FuncDefinition ast]:
 
 def returns [List<Definition> ast =  new ArrayList<Definition>()]:
             defVar=defVaribales {$ast.addAll($defVar.ast);}
-            | defFunc=defFunction {$ast.addAll($defFunc.ast);}
+            | defFunc=defFunction {$ast.addAll($defFunc.ast);} {}
             ;
 
-defVaribales returns [List<VarDefinition> ast =  new ArrayList<VarDefinition>()] locals [List<String> idList =  new ArrayList<String>()]:
-                    OP1=ID {$idList.add($OP1.text);} (',' OP2=ID {$idList.add($OP2.text);})* ':' type=tipo ';' {for(String elem : $idList){ $ast.add(new VarDefinition($OP1.getCharPositionInLine()+1, $OP1.getLine(), elem, $type.ast));} }
+defVaribales returns [List<VarDefinition> ast =  new ArrayList<VarDefinition>()] locals [List<String> idList =  new ArrayList<String>(),List<String> common =  new ArrayList<String>() ]:
+                    OP1=ID {$idList.add($OP1.text);} (',' OP2=ID {$idList.add($OP2.text);})* ':' type=tipo ';' {for(String elem : $idList) { if(!$common.contains(elem)){ $ast.add(new VarDefinition($OP1.getCharPositionInLine()+1, $OP1.getLine(), elem, $type.ast)); $common.add(elem);}else{new ErrorType($OP1.getCharPositionInLine()+1, $OP1.getLine(), "The variable named " + elem + " is already being used");} } }
                     ;
 
-tipo returns [Type ast] locals [List<RecordField> fields =  new ArrayList<RecordField>()] :
+tipo returns [Type ast] locals [List<RecordField> fields =  new ArrayList<RecordField>()]  :
                 | type1=tipoSimple {$ast=$type1.ast;}
-                |  OP1='struct' '{' (op1=recordField {$fields.addAll($op1.ast);})+ '}' {$ast= new Struct($OP1.getCharPositionInLine()+1, $OP1.getLine(), $fields);}
+                |  OP1='struct' '{' (op1=recordField {$fields.addAll($op1.ast);} )+ '}' {$ast= new Struct($OP1.getCharPositionInLine()+1, $OP1.getLine(), $fields);} {((Struct)$ast).CheckErrors();}
                 | '['INT_CONSTANT']' of=tipo {$ast = new ArrayType($INT_CONSTANT.getCharPositionInLine()+1, $INT_CONSTANT.getLine(), LexerHelper.lexemeToInt($INT_CONSTANT.text) , $of.ast);}
                 ;
 
@@ -47,12 +48,12 @@ defFunction returns [List<FuncDefinition> ast =  new ArrayList<FuncDefinition>()
                 (aux=functionType cuerpo=inBody {$ast.add(new FuncDefinition($functionType.ast.getColumn(),$functionType.ast.getLine(),$aux.ast.getName(), $aux.ast ,$cuerpo.ast));})+
                 ;
 
-functionType returns [FunctionType ast] locals [Type tipoFunc = VoidType.getInstance(0,0)]:
+functionType returns [FunctionType ast] locals [Type tipoFunc = VoidType.getInstance(0,0), List<VarDefinition> parameter =  new ArrayList<VarDefinition>()]:
                 'def' OP=ID '(' var=functionTypeParametersAux ')' ':' (type=tipoSimple {$tipoFunc = $type.ast;})? {$ast =  new FunctionType($OP.getCharPositionInLine()+1, $OP.getLine(), $OP.text, $var.ast, $tipoFunc);}
                 ;
 
 functionTypeParametersAux returns [List<VarDefinition> ast =  new ArrayList<VarDefinition>()] locals [List<VarDefinition> param =  new ArrayList<VarDefinition>()]:
-                                (OP1=ID ':' type1=tipoSimple {$param.add(new VarDefinition($OP1.getCharPositionInLine()+1, $OP1.getLine(), $OP1.text,$type1.ast));} (',' OP2=ID ':' type2=tipoSimple {$param.add(new VarDefinition($OP2.getCharPositionInLine()+1, $OP2.getLine(), $OP2.text,$type2.ast));})?)* {$ast.addAll($param);}
+                                (OP1=ID ':' type1=tipoSimple {$param.add(new VarDefinition($OP1.getCharPositionInLine()+1, $OP1.getLine(), $OP1.text,$type1.ast));} (',' OP2=ID ':' type2=tipoSimple {$param.add(new VarDefinition($OP2.getCharPositionInLine()+1, $OP2.getLine(), $OP2.text,$type2.ast));})*   {$ast.addAll($param);} )*
                                 ;
 
 tipoSimple returns [Type ast]:
@@ -89,7 +90,7 @@ inoutBody returns [Expression ast]:
                 ;
 
 expression returns [Expression ast] locals [List<Expression> param =  new ArrayList<Expression>()]:
-            INT_CONSTANT {$ast = new IntLiteral($INT_CONSTANT.getCharPositionInLine()+1, $INT_CONSTANT.getLine(), LexerHelper.lexemeToInt($INT_CONSTANT.text) );}
+              INT_CONSTANT {$ast = new IntLiteral($INT_CONSTANT.getCharPositionInLine()+1, $INT_CONSTANT.getLine(), LexerHelper.lexemeToInt($INT_CONSTANT.text) );}
             | REAL_CONSTANT {$ast = new DoubleLiteral($REAL_CONSTANT.getCharPositionInLine()+1, $REAL_CONSTANT.getLine(), LexerHelper.lexemeToReal($REAL_CONSTANT.text) );}
             | CHAR_CONSTANT {$ast = new CharLiteral($CHAR_CONSTANT.getCharPositionInLine()+1, $CHAR_CONSTANT.getLine(), LexerHelper.lexemeToChar($CHAR_CONSTANT.text));}
             | ID {$ast = new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text );}
@@ -97,6 +98,7 @@ expression returns [Expression ast] locals [List<Expression> param =  new ArrayL
             | expr1=expression '[' expr2=expression ']' {$ast = new ArrayAccess( $expr1.ast.getLine(), $expr1.ast.getColumn(), $expr1.ast, $expr2.ast );}
             | field=expression '.' ID {$ast = new FieldAcess($field.ast.getLine(),$field.ast.getColumn() ,$field.ast, $ID.text );}
             | '(' type=tipo ')' expr=expression {$ast = new Cast($type.ast.getLine(),$type.ast.getColumn() , $expr.ast, $type.ast );}
+            | '-' unary=expression {$ast = new UnaryMinus($unary.ast.getColumn(), $unary.ast.getLine(), $unary.ast);}
             | '!' exprNeg=expression {$ast = new Negative( $exprNeg.ast.getColumn(), $exprNeg.ast.getLine(), $exprNeg.ast);}
             | left=expression OP=('*' | '/' | '%') right=expression {$ast = new Aritmmetic($left.ast.getLine(),$left.ast.getColumn() ,$left.ast , $right.ast, $OP.text );}
             | left=expression OP=('+' | '-') right=expression {$ast = new Aritmmetic($left.ast.getLine(),$left.ast.getColumn() ,$left.ast , $right.ast, $OP.text );}

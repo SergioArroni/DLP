@@ -10,6 +10,7 @@ import ast.Type.*;
 import ast.Type.ComplexTypes.*;
 import ast.Type.SympleTypes.*;
 import ast.*;
+import java.util.*;
 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -60,8 +61,8 @@ public class PmmLexer extends Lexer {
 		return new String[] {
 			null, "'def'", "'main'", "'('", "')'", "':'", "','", "';'", "'struct'", 
 			"'{'", "'}'", "'['", "']'", "'char'", "'double'", "'int'", "'while'", 
-			"'if'", "'else'", "'return'", "'input'", "'print'", "'='", "'.'", "'!'", 
-			"'*'", "'/'", "'%'", "'+'", "'-'", "'=='", "'!='", "'>='", "'<'", "'>'", 
+			"'if'", "'else'", "'return'", "'input'", "'print'", "'='", "'.'", "'-'", 
+			"'!'", "'*'", "'/'", "'%'", "'+'", "'=='", "'!='", "'>='", "'<'", "'>'", 
 			"'<='", "'&&'", "'||'"
 		};
 	}
@@ -196,10 +197,10 @@ public class PmmLexer extends Lexer {
 		"\u00a9*\3\2\2\2\u00aa\u00ab\7r\2\2\u00ab\u00ac\7t\2\2\u00ac\u00ad\7k\2"+
 		"\2\u00ad\u00ae\7p\2\2\u00ae\u00af\7v\2\2\u00af,\3\2\2\2\u00b0\u00b1\7"+
 		"?\2\2\u00b1.\3\2\2\2\u00b2\u00b3\7\60\2\2\u00b3\60\3\2\2\2\u00b4\u00b5"+
-		"\7#\2\2\u00b5\62\3\2\2\2\u00b6\u00b7\7,\2\2\u00b7\64\3\2\2\2\u00b8\u00b9"+
-		"\7\61\2\2\u00b9\66\3\2\2\2\u00ba\u00bb\7\'\2\2\u00bb8\3\2\2\2\u00bc\u00bd"+
-		"\7-\2\2\u00bd:\3\2\2\2\u00be\u00bf\7/\2\2\u00bf<\3\2\2\2\u00c0\u00c1\7"+
-		"?\2\2\u00c1\u00c2\7?\2\2\u00c2>\3\2\2\2\u00c3\u00c4\7#\2\2\u00c4\u00c5"+
+		"\7/\2\2\u00b5\62\3\2\2\2\u00b6\u00b7\7#\2\2\u00b7\64\3\2\2\2\u00b8\u00b9"+
+		"\7,\2\2\u00b9\66\3\2\2\2\u00ba\u00bb\7\61\2\2\u00bb8\3\2\2\2\u00bc\u00bd"+
+		"\7\'\2\2\u00bd:\3\2\2\2\u00be\u00bf\7-\2\2\u00bf<\3\2\2\2\u00c0\u00c1"+
+		"\7?\2\2\u00c1\u00c2\7?\2\2\u00c2>\3\2\2\2\u00c3\u00c4\7#\2\2\u00c4\u00c5"+
 		"\7?\2\2\u00c5@\3\2\2\2\u00c6\u00c7\7@\2\2\u00c7\u00c8\7?\2\2\u00c8B\3"+
 		"\2\2\2\u00c9\u00ca\7>\2\2\u00caD\3\2\2\2\u00cb\u00cc\7@\2\2\u00ccF\3\2"+
 		"\2\2\u00cd\u00ce\7>\2\2\u00ce\u00cf\7?\2\2\u00cfH\3\2\2\2\u00d0\u00d1"+
