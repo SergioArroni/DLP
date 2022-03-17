@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.*;
 import ast.Program;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
+import semantic.TypeChekingVisitor;
 
 public class Main {
 
@@ -23,6 +24,9 @@ public class Main {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         PmmParser parser = new PmmParser(tokens);
         Program ast = parser.program().ast;
+
+        if (!EH.getEH().AnyErrors())
+            ast.Accept(new TypeChekingVisitor(), null);
 
         // * Check errors
         if (EH.getEH().AnyErrors()) {

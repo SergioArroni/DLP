@@ -11,75 +11,74 @@ import ast.Expression.Operator.Comparision;
 import ast.Expression.Operator.Logic;
 import ast.Program;
 import ast.Statement.*;
-import ast.Type.ComplexTypes.ArrayType;
-import ast.Type.ComplexTypes.FunctionType;
-import ast.Type.ComplexTypes.RecordField;
-import ast.Type.ComplexTypes.Struct;
+import ast.Type.ComplexTypes.*;
 import ast.Type.SympleTypes.CharType;
 import ast.Type.SympleTypes.DoubleType;
 import ast.Type.SympleTypes.IntType;
 import ast.Type.SympleTypes.VoidType;
 
-public interface Visitor<TP, TR> {
+public interface Visitor {
 
-    public TR visit(Program v, TP p);
+    public Object visit(Program v, Object p);
 
-    public TR visit(VarDefinition v, TP p);
+    public Object visit(VarDefinition v, Object p);
 
-    public TR visit(FuncDefinition v, TP p);
+    public Object visit(FuncDefinition v, Object p);
 
-    public TR visit(Variable v, TP p);
+    public Object visit(Variable v, Object p);
 
-    public TR visit(IntLiteral v, TP p);
+    public Object visit(IntLiteral v, Object p);
 
-    public TR visit(CharLiteral v, TP p);
+    public Object visit(CharLiteral v, Object p);
 
-    public TR visit(DoubleLiteral v, TP p);
+    public Object visit(DoubleLiteral v, Object p);
 
-    public TR visit(RecordField v, TP p);
+    public Object visit(RecordField v, Object p);
 
-    public TR visit(FunctionType v, TP p);
+    public Object visit(FunctionType v, Object p);
 
-    public TR visit(DoubleType v, TP p);
+    public Object visit(DoubleType v, Object p);
 
-    public TR visit(CharType v, TP p);
+    public Object visit(CharType v, Object p);
 
-    public TR visit(VoidType v, TP p);
+    public Object visit(VoidType v, Object p);
 
-    public TR visit(IntType v, TP p);
+    public Object visit(IntType v, Object p);
 
-    public TR visit(Struct v, TP p);
+    public Object visit(Struct v, Object p);
 
-    public TR visit(ArrayType v, TP p);
+    public Object visit(ArrayType v, Object p);
 
-    public TR visit(Aritmmetic v, TP p);
+    public Object visit(Aritmmetic v, Object p);
 
-    public TR visit(Comparision v, TP p);
+    public Object visit(Comparision v, Object p);
 
-    public TR visit(Logic v, TP p);
+    public Object visit(Logic v, Object p);
 
-    public TR visit(Negative v, TP p);
+    public Object visit(Negative v, Object p);
 
-    public TR visit(UnaryMinus v, TP p);
+    public Object visit(UnaryMinus v, Object p);
 
-    public TR visit(ArrayAccess v, TP p);
+    public Object visit(ArrayAccess v, Object p);
 
-    public TR visit(Cast v, TP p);
+    public Object visit(Cast v, Object p);
 
-    public TR visit(FieldAcess v, TP p);
+    public Object visit(FieldAcess v, Object p);
 
-    public TR visit(FunctionInvoke v, TP p);
+    public Object visit(FunctionInvoke v, Object p);
 
-    public TR visit(Return v, TP p);
+    public Object visit(Return v, Object p);
 
-    public TR visit(Assigmment v, TP p);
+    public Object visit(Assigmment v, Object p);
 
-    public TR visit(Condition v, TP p);
+    public Object visit(Condition v, Object p);
 
-    public TR visit(Write v, TP p);
+    public Object visit(Write v, Object p);
 
-    public TR visit(Read v, TP p);
+    public Object visit(Read v, Object p);
 
-    public TR visit(Iterative v, TP p);
+    public Object visit(Iterative v, Object p);
+
+    public Object visit(ErrorType v, Object p);
 
 }

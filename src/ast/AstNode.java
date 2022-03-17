@@ -8,6 +8,6 @@ public interface AstNode {
 
     public int getColumn();
 
-    public <TR, TP> TR Accept(Visitor v, TP p);
+    public Object Accept(Visitor v, Object p);
 
 }

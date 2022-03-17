@@ -41,7 +41,7 @@ public class Condition extends StatementAbs {
     }
 
     @Override
-    public <TR, TP> TR Accept(Visitor v, TP p) {
-        return null;
+    public Object Accept(Visitor v, Object p) {
+        return v.visit(this, p);
     }
 }

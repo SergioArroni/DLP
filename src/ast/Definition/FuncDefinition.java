@@ -17,6 +17,10 @@ public class FuncDefinition extends DefinitionAbs {
         this.statements = statements;
     }
 
+    public List<Statement> getStatements() {
+        return statements;
+    }
+
     @Override
     public String toString() {
         return "FuncDefinition{" +
@@ -25,7 +29,7 @@ public class FuncDefinition extends DefinitionAbs {
     }
 
     @Override
-    public <TR, TP> TR Accept(Visitor v, TP p) {
+    public Object Accept(Visitor v, Object p) {
         return v.visit(this, p);
     }
 }

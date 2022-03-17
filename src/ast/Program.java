@@ -24,8 +24,12 @@ public class Program implements AstNode {
         return 0;
     }
 
+    public List<Definition> getDefinitions() {
+        return definitions;
+    }
+
     @Override
-    public <TR, TP> TR Accept(Visitor v, TP p) {
+    public Object Accept(Visitor v, Object p) {
         return v.visit(this, p);
     }
 

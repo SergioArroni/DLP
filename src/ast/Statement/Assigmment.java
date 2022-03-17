@@ -33,8 +33,8 @@ public class Assigmment extends StatementAbs {
     }
 
     @Override
-    public <TR, TP> TR Accept(Visitor v, TP p) {
-        return v.visit(this,p);
+    public Object Accept(Visitor v, Object p) {
+        return v.visit(this, p);
     }
 
 }

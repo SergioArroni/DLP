@@ -18,15 +18,16 @@ public class ErrorType extends TypeAbs {
         return Message;
     }
 
+
     @Override
     public String toString() {
-        return "ErrorType{" +
-                "Message='" + getMessage() + '\'' +
-                '}';
+        return "ErrorType{" + "\n\tIn Line: " + this.getLine() + "; In Column: " + this.getColumn() +
+                "\tMessage='" + getMessage() + '\'' +
+                "\n\t\t  }";
     }
 
     @Override
-    public <TR, TP> TR Accept(Visitor v, TP p) {
-        return null;
+    public Object Accept(Visitor v, Object p) {
+        return v.visit(this, p);
     }
 }

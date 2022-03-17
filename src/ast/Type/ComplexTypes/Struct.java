@@ -42,6 +42,10 @@ public class Struct extends TypeAbs {
         }
     }
 
+    public List<RecordField> getFields() {
+        return fields;
+    }
+
     @Override
     public String toString() {
         return "Struct{" +
@@ -50,7 +54,7 @@ public class Struct extends TypeAbs {
     }
 
     @Override
-    public <TR, TP> TR Accept(Visitor v, TP p) {
-        return null;
+    public Object Accept(Visitor v, Object p) {
+        return v.visit(this, p);
     }
 }
