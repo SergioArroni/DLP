@@ -3,6 +3,7 @@ package ast.Type.ComplexTypes;
 import ast.Definition.VarDefinition;
 import ast.Type.Type;
 import ast.Type.TypeAbs;
+import visitor.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,5 +40,10 @@ public class FunctionType extends TypeAbs {
                 ", typeReturn=" + typeReturn +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return null;
     }
 }

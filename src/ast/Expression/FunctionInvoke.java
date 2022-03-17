@@ -1,6 +1,7 @@
 package ast.Expression;
 
 import ast.Statement.Statement;
+import visitor.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,11 @@ public class FunctionInvoke extends ExpressionAbs implements Statement {
 
     public Variable getFunction() {
         return function;
+    }
+
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return null;
     }
 
     @Override

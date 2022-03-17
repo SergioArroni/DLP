@@ -2,6 +2,7 @@ package ast.Type.ComplexTypes;
 
 import ast.Errors.EH;
 import ast.Type.TypeAbs;
+import visitor.Visitor;
 
 public class ErrorType extends TypeAbs {
 
@@ -22,5 +23,10 @@ public class ErrorType extends TypeAbs {
         return "ErrorType{" +
                 "Message='" + getMessage() + '\'' +
                 '}';
+    }
+
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return null;
     }
 }

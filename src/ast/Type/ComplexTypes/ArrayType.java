@@ -2,6 +2,7 @@ package ast.Type.ComplexTypes;
 
 import ast.Type.Type;
 import ast.Type.TypeAbs;
+import visitor.Visitor;
 
 public class ArrayType extends TypeAbs {
 
@@ -28,5 +29,10 @@ public class ArrayType extends TypeAbs {
                 "size=" + size +
                 ", of=" + of +
                 '}';
+    }
+
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return null;
     }
 }

@@ -1,6 +1,7 @@
 package ast.Statement;
 
 import ast.Expression.Expression;
+import visitor.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,5 +38,10 @@ public class Condition extends StatementAbs {
                 ", elseStatement=" + elseStatement +
                 ", condition=" + condition +
                 '}';
+    }
+
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return null;
     }
 }

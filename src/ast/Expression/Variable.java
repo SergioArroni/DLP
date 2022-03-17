@@ -1,5 +1,7 @@
 package ast.Expression;
 
+import visitor.Visitor;
+
 public class Variable extends ExpressionAbs {
 
     private String name;
@@ -11,6 +13,11 @@ public class Variable extends ExpressionAbs {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return null;
     }
 
     @Override

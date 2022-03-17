@@ -2,6 +2,7 @@ package ast.Type.ComplexTypes;
 
 import ast.Type.Type;
 import ast.Type.TypeAbs;
+import visitor.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,5 +47,10 @@ public class Struct extends TypeAbs {
         return "Struct{" +
                 "fields=" + fields +
                 '}';
+    }
+
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return null;
     }
 }

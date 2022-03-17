@@ -1,6 +1,7 @@
 package ast.Statement;
 
 import ast.Expression.Expression;
+import visitor.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,5 +31,10 @@ public class Iterative extends StatementAbs {
                 "loopStatement=" + loopStatement +
                 ", condition=" + condition +
                 '}';
+    }
+
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return null;
     }
 }

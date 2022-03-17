@@ -1,6 +1,7 @@
 package ast.Expression;
 
 import ast.Type.Type;
+import visitor.Visitor;
 
 public class Cast extends UnaryExpression {
 
@@ -20,5 +21,10 @@ public class Cast extends UnaryExpression {
         return "Cast{" +
                 "castType=" + castType +
                 '}';
+    }
+
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return null;
     }
 }

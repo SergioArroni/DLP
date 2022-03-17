@@ -2,6 +2,7 @@ package ast.Definition;
 
 import ast.Statement.Statement;
 import ast.Type.Type;
+import visitor.Visitor;
 
 public class VarDefinition extends DefinitionAbs implements Statement {
 
@@ -9,5 +10,8 @@ public class VarDefinition extends DefinitionAbs implements Statement {
         super(column, line, name, type);
     }
 
-
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return null;
+    }
 }

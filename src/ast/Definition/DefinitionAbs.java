@@ -29,18 +29,15 @@ public abstract class DefinitionAbs implements Definition {
         return type;
     }
 
+    @Override
     public int getColumn() {
         return colum;
     }
 
+    @Override
     public int getLine() {
         return line;
     }
-
-    public void CheckErrors(List<Definition> def){
-
-    }
-
 
     @Override
     public String toString() {

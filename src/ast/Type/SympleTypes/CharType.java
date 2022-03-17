@@ -1,6 +1,7 @@
 package ast.Type.SympleTypes;
 
 import ast.Type.TypeAbs;
+import visitor.Visitor;
 
 public class CharType extends TypeAbs {
     private static CharType instance;
@@ -17,6 +18,8 @@ public class CharType extends TypeAbs {
         return instance;
     }
 
-
-
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return null;
+    }
 }

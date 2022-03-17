@@ -1,6 +1,7 @@
 package ast.Statement;
 
 import ast.Expression.Expression;
+import visitor.Visitor;
 
 import java.util.ArrayList;
 
@@ -31,5 +32,9 @@ public class Assigmment extends StatementAbs {
                 '}';
     }
 
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return v.visit(this,p);
+    }
 
 }

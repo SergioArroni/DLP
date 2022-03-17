@@ -1,6 +1,7 @@
 package ast.Statement;
 
 import ast.Expression.Expression;
+import visitor.Visitor;
 
 public class Write extends StatementAbs {
 
@@ -20,5 +21,10 @@ public class Write extends StatementAbs {
         return "Write{" +
                 "expression=" + expression +
                 '}';
+    }
+
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return null;
     }
 }

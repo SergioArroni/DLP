@@ -1,6 +1,7 @@
 package ast.Expression.Literal;
 
 import ast.Expression.ExpressionAbs;
+import visitor.Visitor;
 
 public class IntLiteral extends ExpressionAbs {
 
@@ -20,5 +21,10 @@ public class IntLiteral extends ExpressionAbs {
         return "IntLiteral{" +
                 "value=" + value +
                 '}';
+    }
+
+    @Override
+    public <TR, TP> TR Accept(Visitor v, TP p) {
+        return null;
     }
 }
