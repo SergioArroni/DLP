@@ -37,30 +37,28 @@ public class TypeChekingVisitor extends VisitorAbs {
 
     @Override
     public Object visit(Aritmmetic v, Object p) {
-        v.getLeft().Accept(this, p);
-        v.getRight().Accept(this, p);
+        super.visit(v,p);
         v.setLValue(false);
         return null;
     }
 
     @Override
     public Object visit(Comparision v, Object p) {
-        v.getLeft().Accept(this, p);
-        v.getRight().Accept(this, p);
+        super.visit(v,p);
         v.setLValue(false);
         return null;
     }
 
     @Override
     public Object visit(Logic v, Object p) {
-        v.getLeft().Accept(this, p);
-        v.getRight().Accept(this, p);
+        super.visit(v,p);
         v.setLValue(false);
         return null;
     }
 
     @Override
     public Object visit(Negative v, Object p) {
+        super.visit(v,p);
         v.getExpression().Accept(this, p);
         v.setLValue(false);
         return null;
@@ -75,6 +73,7 @@ public class TypeChekingVisitor extends VisitorAbs {
 
     @Override
     public Object visit(ArrayAccess v, Object p) {
+        super.visit(v,p);
         v.getLeft().Accept(this, p);
         v.getRight().Accept(this, p);
         v.setLValue(true);
