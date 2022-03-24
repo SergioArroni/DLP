@@ -1,14 +1,14 @@
 grammar Pmm;
 
 @header{
-import ast.Definition.*;
-import ast.Expression.*;
-import ast.Expression.Literal.*;
-import ast.Expression.Operator.*;
-import ast.Statement.*;
-import ast.Type.*;
-import ast.Type.ComplexTypes.*;
-import ast.Type.SympleTypes.*;
+import ast.definition.*;
+import ast.expression.*;
+import ast.expression.literal.*;
+import ast.expression.operator.*;
+import ast.statement.*;
+import ast.type.*;
+import ast.type.complexTypes.*;
+import ast.type.sympleTypes.*;
 import ast.*;
 import java.util.*;
 }
@@ -106,9 +106,6 @@ expression returns [Expression ast] locals [List<Expression> param =  new ArrayL
             | left=expression OP=('&&' |'||') right=expression {$ast = new Logic($left.ast.getLine(),$left.ast.getColumn() ,$left.ast , $right.ast, $OP.text );}
             | ID '('parameters=params')' {$param.addAll($parameters.ast);} {$ast = new FunctionInvoke($ID.getCharPositionInLine()+1, $ID.getLine(), $param, new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text));}
             ;
-
-
-
   		 
 INT_CONSTANT: '0' | [1-9][0-9]* ;
 

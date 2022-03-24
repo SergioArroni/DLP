@@ -1,17 +1,6 @@
 // Generated from C:/Users/Sergio Arroni/IdeaProjects/DLP/src/parser\Pmm.g4 by ANTLR 4.9.2
 package parser;
 
-import ast.Definition.*;
-import ast.Expression.*;
-import ast.Expression.Literal.*;
-import ast.Expression.Operator.*;
-import ast.Statement.*;
-import ast.Type.*;
-import ast.Type.ComplexTypes.*;
-import ast.Type.SympleTypes.*;
-import ast.*;
-import java.util.*;
-
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**

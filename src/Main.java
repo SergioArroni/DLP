@@ -1,4 +1,5 @@
-import ast.Errors.EH;
+import ast.AstNode;
+import errorhandler.ErrorHandler;
 import parser.*;
 
 import org.antlr.v4.runtime.*;
@@ -6,7 +7,8 @@ import org.antlr.v4.runtime.*;
 import ast.Program;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorTree;
-import semantic.TypeChekingVisitor;
+import semantic.IdentificationVisitor;
+import semantic.TypeCheckingVisitor;
 
 public class Main {
 
@@ -25,13 +27,13 @@ public class Main {
         PmmParser parser = new PmmParser(tokens);
         Program ast = parser.program().ast;
 
-        if (!EH.getEH().AnyErrors())
-            ast.Accept(new TypeChekingVisitor(), null);
+        ast.Accept(new IdentificationVisitor(), null);
+        ast.Accept(new TypeCheckingVisitor(), null);
 
         // * Check errors
-        if (EH.getEH().AnyErrors()) {
+        if (ErrorHandler.getInstance().anyError()) {
             // * Show errors
-            EH.getEH().ShowErrors(System.err);
+            ErrorHandler.getInstance().showErrors(System.err);
         } else {
             // * The AST is shown
             IntrospectorModel model = new IntrospectorModel("Program", ast);

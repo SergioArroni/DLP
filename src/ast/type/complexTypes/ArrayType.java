@@ -1,0 +1,37 @@
+package ast.type.complexTypes;
+
+import ast.type.Type;
+import ast.type.TypeAbs;
+import visitor.Visitor;
+
+public class ArrayType extends TypeAbs {
+
+    private int size;
+    private Type of;
+
+    public ArrayType(int colum, int line, int size, Type of) {
+        super(colum, line);
+        this.size = size;
+        this.of = of;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public Type getOf() {
+        return of;
+    }
+
+    @Override
+    public String toString() {
+        return "ArrayType{" +
+                "size=" + size +
+                ", of=" + of +
+                '}';
+    }
+    @Override
+    public Object Accept(Visitor v, Object p) {
+        return v.visit(this, p);
+    }
+}
