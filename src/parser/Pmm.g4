@@ -1,16 +1,17 @@
 grammar Pmm;
 
 @header{
-import ast.Definition.*;
-import ast.Expression.*;
-import ast.Expression.Literal.*;
-import ast.Expression.Operator.*;
-import ast.Statement.*;
-import ast.Type.*;
-import ast.Type.ComplexTypes.*;
-import ast.Type.SympleTypes.*;
+import ast.definition.*;
+import ast.expression.*;
+import ast.expression.literal.*;
+import ast.expression.operator.*;
+import ast.statement.*;
+import ast.type.*;
+import ast.type.complexTypes.*;
+import ast.type.sympleTypes.*;
 import ast.*;
 import java.util.*;
+import symboltable.*;
 }
 
 program returns [Program ast] locals[ArrayList<Definition> defs =  new ArrayList<Definition>()]:
@@ -49,7 +50,7 @@ defFunction returns [List<FuncDefinition> ast =  new ArrayList<FuncDefinition>()
                 ;
 
 functionType returns [FunctionType ast] locals [Type tipoFunc = VoidType.getInstance(0,0), List<VarDefinition> parameter =  new ArrayList<VarDefinition>()]:
-                'def' OP=ID '(' var=functionTypeParametersAux ')' ':' (type=tipoSimple {$tipoFunc = $type.ast;})? {$ast =  new FunctionType($OP.getCharPositionInLine()+1, $OP.getLine(), $OP.text, $var.ast, $tipoFunc);}
+                'def' OP=ID '(' var=functionTypeParametersAux ')' ':' (type=tipoSimple {$tipoFunc = $type.ast;}) {$ast =  new FunctionType($OP.getCharPositionInLine()+1, $OP.getLine(), $OP.text, $var.ast, $tipoFunc);}
                 ;
 
 functionTypeParametersAux returns [List<VarDefinition> ast =  new ArrayList<VarDefinition>()] locals [List<VarDefinition> param =  new ArrayList<VarDefinition>()]:
@@ -57,7 +58,7 @@ functionTypeParametersAux returns [List<VarDefinition> ast =  new ArrayList<VarD
                                 ;
 
 tipoSimple returns [Type ast]:
-                 TYPE='char' {$ast = CharType.getInstance($TYPE.getCharPositionInLine()+1, $TYPE.getLine());}
+                | TYPE='char' {$ast = CharType.getInstance($TYPE.getCharPositionInLine()+1, $TYPE.getLine());}
                 | TYPE='double' {$ast = DoubleType.getInstance($TYPE.getCharPositionInLine()+1, $TYPE.getLine());}
                 | TYPE='int' {$ast = IntType.getInstance($TYPE.getCharPositionInLine()+1, $TYPE.getLine());}
                 ;
@@ -77,7 +78,7 @@ inBody returns [List<Statement> ast =  new ArrayList<Statement>()] :
                 ;
 
 statementbody returns [List<Statement> ast =  new ArrayList<Statement>()]:
-                    cuerpo=inBody {$ast.addAll($cuerpo.ast);}
+                    '{' (sta1=defVaribales {$ast.addAll($sta1.ast);})* (sta2=statement {$ast.add($sta2.ast);})* '}'
                     | stat1=statement {$ast.add($stat1.ast);}
                     ;
 
@@ -104,11 +105,8 @@ expression returns [Expression ast] locals [List<Expression> param =  new ArrayL
             | left=expression OP=('+' | '-') right=expression {$ast = new Aritmmetic($left.ast.getLine(),$left.ast.getColumn() ,$left.ast , $right.ast, $OP.text );}
             | left=expression OP=('==' | '!=' | '>=' | '<' | '>' | '<=') right=expression {$ast = new Comparision($left.ast.getLine(),$left.ast.getColumn() ,$left.ast , $right.ast, $OP.text );}
             | left=expression OP=('&&' |'||') right=expression {$ast = new Logic($left.ast.getLine(),$left.ast.getColumn() ,$left.ast , $right.ast, $OP.text );}
-            | ID '('parameters=params')' {$param.addAll($parameters.ast);} {$ast = new FunctionInvoke($ID.getCharPositionInLine()+1, $ID.getLine(), $param, new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text));}
+            | ID '('(parameters=params{$param.addAll($parameters.ast);})?')'  {$ast = new FunctionInvoke($ID.getCharPositionInLine()+1, $ID.getLine(), $param, new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text));}
             ;
-
-
-
   		 
 INT_CONSTANT: '0' | [1-9][0-9]* ;
 

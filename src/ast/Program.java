@@ -1,6 +1,6 @@
 package ast;
 
-import ast.Definition.Definition;
+import ast.definition.Definition;
 import visitor.Visitor;
 
 import java.util.ArrayList;

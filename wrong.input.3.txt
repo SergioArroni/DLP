@@ -1,0 +1,15 @@
+
+i:int;
+f:double;
+
+a:struct  {
+  a:int;
+};
+
+def main(): {
+  print i && f; 	# Error 1 no se puede hacer un and de dos numeros
+  print a >= 3; 	# Error 2 no se puede comparar un struct con un double
+  while f:     		# Error 3 tiene que ser logico
+    if f:      		# Error 4 tiene que ser logico
+      print !f;   	# Error 5 tiene que ser logico
+}
