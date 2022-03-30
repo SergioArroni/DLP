@@ -4,6 +4,7 @@ real, integer:double; # Error 1
 
 def p(a:int): {
   a:char;             # Error 2
+  integer:char;
 }
 
 def main(): {

@@ -1,5 +1,6 @@
 package ast.type.complexTypes;
 
+import ast.AstNode;
 import ast.type.Type;
 import ast.type.TypeAbs;
 import visitor.Visitor;
@@ -35,4 +36,6 @@ public class RecordField extends TypeAbs {
     public Object Accept(Visitor v, Object p) {
         return v.visit(this, p);
     }
+
+
 }

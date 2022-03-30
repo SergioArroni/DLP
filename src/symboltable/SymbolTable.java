@@ -12,7 +12,7 @@ public class SymbolTable {
     public SymbolTable() {
         table = new ArrayList<>();
         scope = 0;
-        set();
+        table.add(new HashMap<String, Definition>());
     }
 
     public void set() {
@@ -26,24 +26,19 @@ public class SymbolTable {
     }
 
     public boolean insert(Definition definition) {
-        if (table.get(scope).containsKey(definition)) {
+        if (findInCurrentScope(definition.getName()) != null) {
             return false;
         }
         table.get(scope).put(definition.getName(), definition);
-        if (table.get(scope).containsKey(definition)) {
-            return true;
-        }
-        return false;
+        definition.setScore(scope);
+
+        return true;
     }
 
     public Definition find(String id) {
-
         for (int i = scope; i >= 0; i--) {
-            Map<String, Definition> aux = table.get(i);
-
-            Definition vD = aux.get(id);
-            if (vD != null) {
-                return vD;
+            if (table.get(i).containsKey(id)) {
+                return table.get(i).get(id);
             }
         }
         return null;

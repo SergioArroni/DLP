@@ -1,0 +1,10 @@
+
+v:[10]int ;
+
+def main(): {
+  i:int;
+  i[0] = 0;			# Error 1	i no es una array
+  v[3] = 3.4;		# Error 2	3.4 no es un int
+  v[3] = 3;
+  v[1][2] = 'a';	# Error 3	v no es una matriz y no se le puede asignar un char
+}

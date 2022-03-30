@@ -3,6 +3,7 @@ package semantic;
 import ast.definition.FuncDefinition;
 import ast.definition.VarDefinition;
 import ast.expression.Variable;
+import ast.statement.Statement;
 import ast.type.complexTypes.ErrorType;
 import symboltable.SymbolTable;
 
@@ -16,30 +17,35 @@ public class IdentificationVisitor extends VisitorAbs {
 
     @Override
     public <TR, TP> TR visit(FuncDefinition v, TP p) {
-        super.visit(v, p);
+
         var insert = symbolTable.insert(v);
         if (!insert) {
-            new ErrorType(v.getLine(), v.getColumn(), "Error variable ya definida: " + v.getName());
+            new ErrorType(v.getColumn(), v.getLine(), "Error variable ya definida: " + v.getName());
         }
+        symbolTable.set();
+        v.getType().Accept(this, p);
+        for (Statement st : v.getStatements())
+            st.Accept(this, p);
+        symbolTable.reset();
         return null;
     }
 
     @Override
     public <TR, TP> TR visit(VarDefinition v, TP p) {
-        super.visit(v, p);
+        v.getType().Accept(this, p);
         var insert = symbolTable.insert(v);
         if (!insert) {
-            new ErrorType(v.getLine(), v.getColumn(), "Error variable ya definida: " + v.getName());
+            new ErrorType(v.getColumn(), v.getLine(), "Error variable ya definida: " + v.getName());
         }
         return null;
     }
 
     @Override
     public <TR, TP> TR visit(Variable v, TP p) {
-        super.visit(v, p);
         var find = symbolTable.find(v.getName());
         if (find == null) {
-            new ErrorType(v.getLine(), v.getColumn(), "Error variable no definida: " + v.getName());
+            var error = new ErrorType(v.getColumn(), v.getLine(), "Error variable no definida: " + v.getName());
+            v.setDefinition(new VarDefinition(v.getColumn(),v.getLine(),v.getName(),error));
             return null;
         }
         v.setDefinition(find);

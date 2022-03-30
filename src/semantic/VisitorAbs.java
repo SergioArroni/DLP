@@ -181,6 +181,7 @@ public abstract class VisitorAbs implements Visitor {
 
     @Override
     public <TR, TP> TR visit(Condition v, TP p) {
+        v.getCondition().Accept(this, p);
         for (Statement st : v.getIfStatement())
             st.Accept(this, p);
         for (Statement st : v.getElseStatement())
