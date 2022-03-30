@@ -1,7 +1,10 @@
 package ast.type.complexTypes;
 
+import ast.AstNode;
 import ast.type.Type;
 import ast.type.TypeAbs;
+import ast.type.sympleTypes.CharType;
+import ast.type.sympleTypes.IntType;
 import visitor.Visitor;
 
 public class ArrayType extends TypeAbs {
@@ -30,8 +33,30 @@ public class ArrayType extends TypeAbs {
                 ", of=" + of +
                 '}';
     }
+
     @Override
     public Object Accept(Visitor v, Object p) {
         return v.visit(this, p);
     }
+
+    @Override
+    public Type squareBrackets(Type other, AstNode node) {
+        if (other.equals(IntType.getInstance(other.getColumn(), other.getLine())) || other instanceof ErrorType) {
+            return other;
+        } else {
+            return super.logical(other, node);
+        }
+    }
+
+    @Override
+    public Type promotesTo(Type other, AstNode node) {
+        if (other instanceof ErrorType)
+            return other;
+        else if (other instanceof ArrayType && other.equals(CharType.getInstance(other.getColumn(), other.getLine())) && of.equals(CharType.getInstance(other.getColumn(), other.getLine()))) {
+            return of;
+        }
+        return super.promotesTo(other, node);
+    }
+
+
 }

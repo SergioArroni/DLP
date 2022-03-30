@@ -1,6 +1,8 @@
 package ast.type.complexTypes;
 
+import ast.AstNode;
 import ast.definition.VarDefinition;
+import ast.expression.Expression;
 import ast.type.Type;
 import ast.type.TypeAbs;
 import visitor.Visitor;
@@ -44,5 +46,13 @@ public class FunctionType extends TypeAbs {
     @Override
     public Object Accept(Visitor v, Object p) {
         return v.visit(this, p);
+    }
+
+    @Override
+    public Type parenthesis(List<Expression> parameters, AstNode node) {
+        if (parameters.equals(this.parameters)) {
+            return this;
+        }
+        return super.parenthesis(parameters, node);
     }
 }

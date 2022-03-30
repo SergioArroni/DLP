@@ -1,7 +1,9 @@
 package ast.type.complexTypes;
 
+import ast.AstNode;
 import ast.type.Type;
 import ast.type.TypeAbs;
+import ast.type.sympleTypes.IntType;
 import visitor.Visitor;
 
 import java.util.List;
@@ -56,4 +58,15 @@ public class Struct extends TypeAbs {
     public Object Accept(Visitor v, Object p) {
         return v.visit(this, p);
     }
+
+    @Override
+    public Type dot(AstNode node, String field) {
+        for (RecordField r : this.getFields()) {
+            if (r.getNameField().equals(field)) {
+                return this;
+            }
+        }
+        return super.dot(node, field);
+    }
+
 }
