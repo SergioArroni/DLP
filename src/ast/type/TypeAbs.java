@@ -41,52 +41,52 @@ public abstract class TypeAbs implements Type {
 
     @Override
     public Type aritmmetic(Type other, AstNode node) {
-        return new ErrorType(node.getColumn(), node.getLine(), "Error, no se puede realizar esa operacion aritmetica: { " + this.toString() + "\n" + other.toString() + " }");
+        return new ErrorType(node.getColumn(), node.getLine(), "Error, this arithmetic operation cannot be performed: { " + this.toString() + "\n" + other.toString() + " }");
     }
 
     @Override
     public Type aritmmetic(AstNode node) {
-        return new ErrorType(node.getColumn(), node.getLine(), "Error, no se puede realizar esa operacion aritmetica: { " + this.toString() + " }");
+        return new ErrorType(node.getColumn(), node.getLine(), "Error, this arithmetic operation cannot be performed: { " + this.toString() + " }");
     }
 
     @Override
     public Type comparision(Type other, AstNode node) {
-        return new ErrorType(node.getColumn(), node.getLine(), "Error, no se puede realizar esa operacion de comparacion: { " + this.toString() + "\n" + other.toString() + " }");
+        return new ErrorType(node.getColumn(), node.getLine(), "Error, this comparison operation cannot be performed: { " + this.toString() + "\n" + other.toString() + " }");
     }
 
     @Override
     public Type logical(Type other, AstNode node) {
-        return new ErrorType(node.getColumn(), node.getLine(), "Error, no se puede realizar esa operacion logica: { " + this.toString() + "\n" + other.toString() + " }");
+        return new ErrorType(node.getColumn(), node.getLine(), "Error, this logical operation cannot be performed: { " + this.toString() + "\n" + other.toString() + " }");
     }
 
     @Override
     public Type logical(AstNode node) {
-        return new ErrorType(node.getColumn(), node.getLine(), "Error, no se puede realizar esa operacion logica: { " + this.toString() + " }");
+        return new ErrorType(node.getColumn(), node.getLine(), "Error, this logical operation cannot be performed: { " + this.toString() + " }");
     }
 
     @Override
     public Type dot(AstNode node, String field) {
-        return new ErrorType(node.getColumn(), node.getLine(), "Error, no se puede realizar esa operacion de acceso a campo: { " + this.toString() + "\n" + field + " }");
+        return new ErrorType(node.getColumn(), node.getLine(), "Error, this field access operation cannot be performed: { " + this.toString() + "\n" + field + " }");
     }
 
     @Override
     public Type squareBrackets(Type other, AstNode node) {
-        return new ErrorType(node.getColumn(), node.getLine(), "Error, no se puede realizar esa operacion de acceso a un array: { " + this.toString() + "\n" + other.toString() + " }");
+        return new ErrorType(node.getColumn(), node.getLine(), "Error, this array access operation cannot be performed: { " + this.toString() + "\n" + other.toString() + " }");
     }
 
     @Override
     public Type canBeCast(Type other, AstNode node) {
-        return new ErrorType(node.getColumn(), node.getLine(), "Error, no se puede realizar esa operacion de cast: { " + this.toString() + "\n" + other.toString() + " }");
+        return new ErrorType(node.getColumn(), node.getLine(), "Error, this cast operation cannot be performed: { " + this.toString() + "\n" + other.toString() + " }");
     }
 
     @Override
     public Type promotesTo(Type other, AstNode node) {
-        return new ErrorType(node.getColumn(), node.getLine(), "Error, no se puede realizar esa operacion de promocion: { " + this.toString() + "\n" + other.toString() + " }");
+        return new ErrorType(node.getColumn(), node.getLine(), "Error, this promotion operation is not possible: { " + this.toString() + "\n" + other.toString() + " }");
     }
 
     @Override
     public Type parenthesis(List<Expression> parameters, AstNode node) {
-        return new ErrorType(node.getColumn(), node.getLine(), "Error, no se puede realizar esa operacion de acceso a funcion : { " + this.toString() + " }");
+        return new ErrorType(node.getColumn(), node.getLine(), "Error, this function access operation cannot be performed: { " + this.toString() + " }");
     }
 
     @Override

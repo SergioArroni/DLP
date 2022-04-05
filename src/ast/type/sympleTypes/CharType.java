@@ -55,7 +55,7 @@ public class CharType extends TypeAbs {
         if (other instanceof ErrorType || other.equals(CharType.getInstance(other.getColumn(), other.getLine())) || other.equals(IntType.getInstance(other.getColumn(), other.getLine())) || other.equals(DoubleType.getInstance(other.getColumn(), other.getLine())))
             return other;
         else
-            return super.canBeCast(other, node);
+            return super.promotesTo(other, node);
     }
 
     @Override
@@ -65,4 +65,10 @@ public class CharType extends TypeAbs {
         else
             return super.canBeCast(other, node);
     }
+
+    @Override
+    public String toString() {
+        return "CharType{Line: " + this.getLine() + "\t Column: " + this.getColumn() + "\t}";
+    }
+
 }

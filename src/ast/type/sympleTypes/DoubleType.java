@@ -55,7 +55,7 @@ public class DoubleType extends TypeAbs {
         if (other instanceof ErrorType || other.equals(DoubleType.getInstance(other.getColumn(), other.getLine())))
             return other;
         else
-            return super.canBeCast(other, node);
+            return super.promotesTo(other, node);
     }
 
     @Override
@@ -64,5 +64,10 @@ public class DoubleType extends TypeAbs {
             return other;
         else
             return super.canBeCast(other, node);
+    }
+
+    @Override
+    public String toString() {
+        return "DoubleType{Line: " + this.getLine() + "\t Column: " + this.getColumn() + "\t}";
     }
 }

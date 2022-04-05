@@ -10,7 +10,8 @@ def g(b:int, b:double): {		# Error 3
   return 3;						# Error 4 no tendria que devolver nada
 }
 
-def g(): {						# Error 5 duplicada
+def p(): {						# Error 5 duplicada
+    return 7;
 }
 
 def main(): {

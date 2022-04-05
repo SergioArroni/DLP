@@ -7,9 +7,9 @@ date: struct  {
 def main(): {
   o:int;
   o = 5;
-  o = 5.6;
+  o = 5.6;          # Error 2
   o = '5';
-  o = date;
-  input date.year;	# Error 2
+  o = date;         # Error 3
+  input date.year;	# Error 4
 }
 

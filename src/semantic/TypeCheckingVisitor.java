@@ -1,6 +1,5 @@
 package semantic;
 
-import ast.definition.Definition;
 import ast.expression.*;
 import ast.expression.literal.CharLiteral;
 import ast.expression.literal.DoubleLiteral;
@@ -9,10 +8,12 @@ import ast.expression.operator.Aritmmetic;
 import ast.expression.operator.Comparision;
 import ast.expression.operator.Logic;
 import ast.statement.*;
+import ast.type.Type;
 import ast.type.complexTypes.*;
 import ast.type.sympleTypes.CharType;
 import ast.type.sympleTypes.DoubleType;
 import ast.type.sympleTypes.IntType;
+import ast.type.sympleTypes.VoidType;
 
 public class TypeCheckingVisitor extends VisitorAbs {
 
@@ -47,7 +48,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
     @Override
     public <TR, TP> TR visit(Aritmmetic v, TP p) {
         super.visit(v, p);
-        v.setType(v.getLeft().getType().aritmmetic(v.getRight().getType(), v));
+        v.setType(v.getLeft().getType().aritmmetic(v.getRight().getType(), v.getLeft()));
         v.setLValue(false);
         return null;
     }
@@ -55,7 +56,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
     @Override
     public <TR, TP> TR visit(Comparision v, TP p) {
         super.visit(v, p);
-        v.setType(v.getLeft().getType().comparision(v.getRight().getType(), v));
+        v.setType(v.getLeft().getType().comparision(v.getRight().getType(), v.getLeft()));
         v.setLValue(false);
         return null;
     }
@@ -66,7 +67,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
         v.getCondition().Accept(this, p);
 
         if (!v.getCondition().getType().isLogical()) {
-            new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, esa condicion no es logica: { " + v.getCondition() + " }");
+            new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, that conditional expression: { " + v.getCondition() + " } is not logical");
         }
         for (Statement st : v.getIfStatement())
             st.Accept(this, p);
@@ -81,7 +82,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
         v.getCondition().Accept(this, p);
 
         if (!v.getCondition().getType().isLogical()) {
-            new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, esa condicion no es logica: { " + v.getCondition() + " }");
+            new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, that conditional expression: { " + v.getCondition() + " } is not logical");
         }
 
         for (Statement st : v.getLoopStatement())
@@ -93,7 +94,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
     @Override
     public <TR, TP> TR visit(Logic v, TP p) {
         super.visit(v, p);
-        v.setType(v.getLeft().getType().logical(v.getRight().getType(), v));
+        v.setType(v.getLeft().getType().logical(v.getRight().getType(), v.getLeft()));
         v.setLValue(false);
         return null;
     }
@@ -136,7 +137,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
     @Override
     public <TR, TP> TR visit(FieldAcess v, TP p) {
         super.visit(v, p);
-        v.setType(v.getExpression().getType().dot(v, v.getName()));
+        v.setType(v.getExpression().getType().dot(v.getExpression(), v.getName()));
         v.setLValue(true);
         return null;
     }
@@ -144,10 +145,10 @@ public class TypeCheckingVisitor extends VisitorAbs {
     @Override
     public <TR, TP> TR visit(Return v, TP p) {
         super.visit(v, p);
-        var returnType = v.getExpression().getType().promotesTo(v.getExpression().getType(), v);
-        if (returnType instanceof ErrorType)
-            v.getExpression().setType(returnType);
-
+        //var returnType = v.getExpression().getType().promotesTo(v.getExpression().getType(), v);
+        //if (p instanceof VoidType) {
+         //   v.getExpression().setType(new ErrorType(v.getColumn(), v.getLine(), "The return type of this function is Void. It shouldn't have a return statement"));
+       // }
         return null;
     }
 
@@ -156,7 +157,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
         super.visit(v, p);
         for (Expression ex : v.getExpressions()) {
             if ((!ex.getLValue())) {
-                new ErrorType(ex.getColumn(), ex.getLine(), "Error  en la parte izquierda de la invocacion de la funcion: no puede tener esas expresiones {" + ex + "}");
+                new ErrorType(ex.getColumn(), ex.getLine(), "Error, the invocation function: on the left side cannot have these expressions {" + ex + "}");
             }
         }
         v.setType(v.getFunction().getDefinition().getType().parenthesis(v.getExpressions(), v));
@@ -168,12 +169,11 @@ public class TypeCheckingVisitor extends VisitorAbs {
     public <TR, TP> TR visit(Assigmment v, TP p) {
         super.visit(v, p);
         if (!v.getLeft().getLValue()) {
-            new ErrorType(v.getLeft().getColumn(), v.getLeft().getLine(), "Error en la parte izquierda, de la asignacion:{" + v.getLeft() + "} no es asignable");
+            new ErrorType(v.getLeft().getColumn(), v.getLeft().getLine(), "Error, the assignment expression: the left part  {" + v.getLeft() + "} is not assignable");
         }
 
-
         if (v.getLeft().getType() != v.getRight().getType()) {
-            v.getRight().getType().promotesTo(v.getLeft().getType(), v);
+            v.getRight().getType().promotesTo(v.getLeft().getType(), v.getRight());
         }
 
 
@@ -184,15 +184,8 @@ public class TypeCheckingVisitor extends VisitorAbs {
     public <TR, TP> TR visit(Read v, TP p) {
         super.visit(v, p);
         if (!v.getExpression().getLValue())
-            new ErrorType(v.getColumn(), v.getLine(), "Error en el la expresion input, esa expresion input: no puede tener esas expresiones{" + v.getExpression() + "}");
+            new ErrorType(v.getColumn(), v.getLine(), "Error, the expression input: cannot have these expressions {" + v.getExpression() + "}");
         return null;
     }
-/**
- @Override public <TR, TP> TR visit(Write v, TP p) {
- super.visit(v, p);
- if (!v.getExpression().getLValue())
- new ErrorType(v.getColumn(), v.getLine(), "Error en el la expresion print, esa expresion print: no puede tener esas expresiones{" + v.getExpression() + "}");
- return null;
- }
- */
+
 }
