@@ -50,9 +50,13 @@ public class FunctionType extends TypeAbs {
 
     @Override
     public Type parenthesis(List<Expression> parameters, AstNode node) {
-        if (parameters.equals(this.parameters)) {
-            return this;
+        if (parameters.size() != this.parameters.size())
+            return new ErrorType(node.getColumn(), node.getLine(), "Error, the number of parameters entered: " + parameters.size() + ", is incorrect, it should be: " + this.parameters.size());
+
+        for (int i = 0; i < parameters.size(); i++) {
+            parameters.get(i).getType().promotesTo(this.parameters.get(i).getType(), parameters.get(i));
         }
-        return super.parenthesis(parameters, node);
+        return this.typeReturn;
     }
+
 }

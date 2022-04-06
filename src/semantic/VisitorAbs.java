@@ -1,5 +1,6 @@
 package semantic;
 
+import ast.type.Type;
 import ast.type.sympleTypes.VoidType;
 import ast.definition.Definition;
 import ast.definition.FuncDefinition;
@@ -167,7 +168,7 @@ public abstract class VisitorAbs implements Visitor {
     }
 
     @Override
-    public <TR, TP> TR visit(Return v, TP p) {
+    public Void visit(Return v, Type p) {
         v.getExpression().Accept(this, p);
         return null;
     }

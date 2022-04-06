@@ -3,7 +3,6 @@ package ast.type;
 import ast.AstNode;
 import ast.expression.Expression;
 import ast.type.complexTypes.ErrorType;
-import introspector.test.ast.ASTNode;
 
 import java.util.List;
 
@@ -12,6 +11,7 @@ public abstract class TypeAbs implements Type {
     private int colum;
     private int line;
     private boolean logical;
+    private byte numberOfBytes;
 
     public TypeAbs(int colum, int line) {
         this.colum = colum;
@@ -87,6 +87,16 @@ public abstract class TypeAbs implements Type {
     @Override
     public Type parenthesis(List<Expression> parameters, AstNode node) {
         return new ErrorType(node.getColumn(), node.getLine(), "Error, this function access operation cannot be performed: { " + this.toString() + " }");
+    }
+
+    @Override
+    public byte getNumberOfBytes() {
+        return numberOfBytes;
+    }
+
+    @Override
+    public void setNumberOfBytes(byte numberOfBytes) {
+        this.numberOfBytes = numberOfBytes;
     }
 
     @Override

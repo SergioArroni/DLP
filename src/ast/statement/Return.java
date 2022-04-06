@@ -1,6 +1,7 @@
 package ast.statement;
 
 import ast.expression.Expression;
+import ast.type.Type;
 import visitor.Visitor;
 
 public class Return extends StatementAbs {
@@ -25,6 +26,6 @@ public class Return extends StatementAbs {
 
     @Override
     public Object Accept(Visitor v, Object p) {
-        return v.visit(this, p);
+        return v.visit(this, (Type) p);
     }
 }

@@ -10,7 +10,6 @@ public class FuncDefinition extends DefinitionAbs {
 
     private List<Statement> statements;
 
-
     public FuncDefinition(int column, int line, String name, Type type, List<Statement> statements) {
         super(column, line, name, type);
         this.statements = statements;

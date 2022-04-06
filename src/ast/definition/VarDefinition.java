@@ -6,12 +6,22 @@ import visitor.Visitor;
 
 public class VarDefinition extends DefinitionAbs implements Statement {
 
-    public VarDefinition(int column, int line,String name, Type type) {
+    private int offset;
+
+    public VarDefinition(int column, int line, String name, Type type) {
         super(column, line, name, type);
     }
 
     @Override
     public Object Accept(Visitor v, Object p) {
         return v.visit(this, p);
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
     }
 }

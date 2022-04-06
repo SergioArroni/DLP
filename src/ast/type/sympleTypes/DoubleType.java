@@ -11,7 +11,6 @@ public class DoubleType extends TypeAbs {
 
     private DoubleType(int colum, int line) {
         super(colum, line);
-
     }
 
     public static DoubleType getInstance(int colum, int line) {

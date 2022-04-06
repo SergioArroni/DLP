@@ -2,7 +2,6 @@ package ast.type;
 
 import ast.AstNode;
 import ast.expression.Expression;
-import ast.expression.operator.Aritmmetic;
 
 import java.util.List;
 
@@ -10,6 +9,10 @@ public interface Type extends AstNode {
     public boolean isLogical();
 
     public void setLogical(boolean logical);
+
+    public byte getNumberOfBytes();
+
+    public void setNumberOfBytes(byte number);
 
     public Type aritmmetic(Type other, AstNode node);
 
@@ -30,7 +33,5 @@ public interface Type extends AstNode {
     public Type promotesTo(Type other, AstNode node);
 
     public Type parenthesis(List<Expression> parameters, AstNode node);
-
-
 
 }

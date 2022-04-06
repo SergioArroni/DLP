@@ -1,4 +1,4 @@
-package semantic;
+package codeGenerator;
 
 import ast.definition.FuncDefinition;
 import ast.expression.*;
@@ -10,13 +10,13 @@ import ast.expression.operator.Comparision;
 import ast.expression.operator.Logic;
 import ast.statement.*;
 import ast.type.Type;
-import ast.type.complexTypes.*;
+import ast.type.complexTypes.ErrorType;
 import ast.type.sympleTypes.CharType;
 import ast.type.sympleTypes.DoubleType;
 import ast.type.sympleTypes.IntType;
-import ast.type.sympleTypes.VoidType;
+import semantic.VisitorAbs;
 
-public class TypeCheckingVisitor extends VisitorAbs {
+public class OffSetVisitor extends VisitorAbs {
 
     @Override
     public <TR, TP> TR visit(Variable v, TP p) {
@@ -145,25 +145,30 @@ public class TypeCheckingVisitor extends VisitorAbs {
     @Override
     public Void visit(Return v, Type p) {
         super.visit(v, p);
-
-        v.getExpression().setType(v.getExpression().getType().promotesTo(p, v.getExpression()));
-
+        var returnType = v.getExpression().getType().promotesTo((Type) p, v);
+        //if (p instanceof VoidType) {
+        //    v.getExpression().setType(new ErrorType(v.getColumn(), v.getLine(), "The return type of this function is Void. It shouldn't have a return statement"));
+        // }
         return null;
     }
 
     @Override
     public <TR, TP> TR visit(FunctionInvoke v, TP p) {
         super.visit(v, p);
-        v.setType(v.getFunction().getDefinition().getType().parenthesis(v.getExpressions(), v.getFunction()));
+        for (Expression ex : v.getExpressions()) {
+            if ((!ex.getLValue())) {
+                new ErrorType(ex.getColumn(), ex.getLine(), "Error, the invocation function: on the left side cannot have these expressions {" + ex + "}");
+            }
+        }
+        v.setType(v.getFunction().getDefinition().getType().parenthesis(v.getExpressions(), v));
         v.setLValue(true);
         return null;
     }
 
     @Override
     public <TR, TP> TR visit(FuncDefinition v, TP p) {
-        v.getType().Accept(this, p);
         for (Statement st : v.getStatements())
-            st.Accept(this, ((FunctionType) v.getType()).getTypeReturn());
+            st.Accept(this, v.getType());
 
         return null;
     }

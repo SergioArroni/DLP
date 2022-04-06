@@ -9,7 +9,6 @@ public class VoidType extends TypeAbs {
 
     private VoidType(int colum, int line) {
         super(colum, line);
-
     }
 
     public static VoidType getInstance(int colum, int line) {
