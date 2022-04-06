@@ -1,198 +1,72 @@
 package codeGenerator;
 
 import ast.definition.FuncDefinition;
-import ast.expression.*;
-import ast.expression.literal.CharLiteral;
-import ast.expression.literal.DoubleLiteral;
-import ast.expression.literal.IntLiteral;
-import ast.expression.operator.Aritmmetic;
-import ast.expression.operator.Comparision;
-import ast.expression.operator.Logic;
-import ast.statement.*;
-import ast.type.Type;
-import ast.type.complexTypes.ErrorType;
-import ast.type.sympleTypes.CharType;
-import ast.type.sympleTypes.DoubleType;
-import ast.type.sympleTypes.IntType;
+import ast.definition.VarDefinition;
+import ast.type.complexTypes.FunctionType;
+import ast.type.complexTypes.RecordField;
+import ast.type.complexTypes.Struct;
 import semantic.VisitorAbs;
 
+import java.util.*;
+
 public class OffSetVisitor extends VisitorAbs {
+    private int globalVariablesOffset = 0;
+    private int localVariablesOffset = 0;
+    private int structsOffset = 0;
+    private int parametersOffset = 4;
 
     @Override
-    public <TR, TP> TR visit(Variable v, TP p) {
-        v.setLValue(true);
-        v.setType(v.getDefinition().getType());
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(IntLiteral v, TP p) {
-        v.setLValue(false);
-        v.setType(IntType.getInstance(v.getColumn(), v.getLine()));
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(CharLiteral v, TP p) {
-        v.setLValue(false);
-        v.setType(CharType.getInstance(v.getColumn(), v.getLine()));
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(DoubleLiteral v, TP p) {
-        v.setLValue(false);
-        v.setType(DoubleType.getInstance(v.getColumn(), v.getLine()));
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(Aritmmetic v, TP p) {
+    public <TR, TP> TR visit(VarDefinition v, TP p) {
         super.visit(v, p);
-        v.setType(v.getLeft().getType().aritmmetic(v.getRight().getType(), v.getLeft()));
-        v.setLValue(false);
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(Comparision v, TP p) {
-        super.visit(v, p);
-        v.setType(v.getLeft().getType().comparision(v.getRight().getType(), v.getLeft()));
-        v.setLValue(false);
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(Condition v, TP p) {
-        v.getCondition().Accept(this, p);
-
-        if (!v.getCondition().getType().isLogical()) {
-            new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, that conditional expression: { " + v.getCondition() + " } is not logical");
+        if (v.getScope() == 0) {
+            v.setOffset(globalVariablesOffset);
+            globalVariablesOffset += v.getType().getNumberOfBytes();
+        } else {
+            localVariablesOffset -= v.getType().getNumberOfBytes();
+            v.setOffset(-localVariablesOffset);
         }
-        for (Statement st : v.getIfStatement())
-            st.Accept(this, p);
-        for (Statement st : v.getElseStatement())
-            st.Accept(this, p);
-
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(Iterative v, TP p) {
-        v.getCondition().Accept(this, p);
-
-        if (!v.getCondition().getType().isLogical()) {
-            new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, that conditional expression: { " + v.getCondition() + " } is not logical");
-        }
-
-        for (Statement st : v.getLoopStatement())
-            st.Accept(this, p);
-
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(Logic v, TP p) {
-        super.visit(v, p);
-        v.setType(v.getLeft().getType().logical(v.getRight().getType(), v.getLeft()));
-        v.setLValue(false);
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(Negative v, TP p) {
-        super.visit(v, p);
-        v.getExpression().Accept(this, p);
-        v.setType(v.getExpression().getType().logical(v));
-        v.setLValue(false);
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(UnaryMinus v, TP p) {
-        v.getExpression().Accept(this, p);
-        v.setType(v.getType().aritmmetic(v));
-        v.setLValue(false);
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(ArrayAccess v, TP p) {
-        super.visit(v, p);
-        v.getLeft().Accept(this, p);
-        v.getRight().Accept(this, p);
-        v.setType(v.getLeft().getType().squareBrackets(v.getRight().getType(), v));
-        v.setLValue(true);
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(Cast v, TP p) {
-        super.visit(v, p);
-        v.setType(v.getType().canBeCast(v.getCastType(), v));
-        v.setLValue(true);
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(FieldAcess v, TP p) {
-        super.visit(v, p);
-        v.setType(v.getExpression().getType().dot(v.getExpression(), v.getName()));
-        v.setLValue(true);
-        return null;
-    }
-
-    @Override
-    public Void visit(Return v, Type p) {
-        super.visit(v, p);
-        var returnType = v.getExpression().getType().promotesTo((Type) p, v);
-        //if (p instanceof VoidType) {
-        //    v.getExpression().setType(new ErrorType(v.getColumn(), v.getLine(), "The return type of this function is Void. It shouldn't have a return statement"));
-        // }
-        return null;
-    }
-
-    @Override
-    public <TR, TP> TR visit(FunctionInvoke v, TP p) {
-        super.visit(v, p);
-        for (Expression ex : v.getExpressions()) {
-            if ((!ex.getLValue())) {
-                new ErrorType(ex.getColumn(), ex.getLine(), "Error, the invocation function: on the left side cannot have these expressions {" + ex + "}");
-            }
-        }
-        v.setType(v.getFunction().getDefinition().getType().parenthesis(v.getExpressions(), v));
-        v.setLValue(true);
         return null;
     }
 
     @Override
     public <TR, TP> TR visit(FuncDefinition v, TP p) {
-        for (Statement st : v.getStatements())
-            st.Accept(this, v.getType());
+
+        localVariablesOffset = 0;
+        parametersOffset = 4;
+
+        super.visit(v, p);
 
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(Assigmment v, TP p) {
+    public <TR, TP> TR visit(FunctionType v, TP p) {
         super.visit(v, p);
-        if (!v.getLeft().getLValue()) {
-            new ErrorType(v.getLeft().getColumn(), v.getLeft().getLine(), "Error, the assignment expression: the left part  {" + v.getLeft() + "} is not assignable");
+        List<VarDefinition> param = new ArrayList<>(v.getParameters());
+        Collections.reverse(param);
+        for (VarDefinition ele : param) {
+            ele.setOffset(parametersOffset);
+            parametersOffset += ele.getType().getNumberOfBytes();
         }
-
-        if (v.getLeft().getType() != v.getRight().getType()) {
-            v.getRight().getType().promotesTo(v.getLeft().getType(), v.getRight());
-        }
-
 
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(Read v, TP p) {
+    public <TR, TP> TR visit(Struct v, TP p) {
+        structsOffset = 0;
         super.visit(v, p);
-        if (!v.getExpression().getLValue())
-            new ErrorType(v.getColumn(), v.getLine(), "Error, the expression input: cannot have these expressions {" + v.getExpression() + "}");
+
+        return null;
+    }
+
+    @Override
+    public <TR, TP> TR visit(RecordField v, TP p) {
+        super.visit(v, p);
+
+        v.setOffset(structsOffset);
+        structsOffset += v.getNumberOfBytes();
+
         return null;
     }
 

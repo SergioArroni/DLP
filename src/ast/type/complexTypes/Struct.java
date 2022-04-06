@@ -3,6 +3,8 @@ package ast.type.complexTypes;
 import ast.AstNode;
 import ast.type.Type;
 import ast.type.TypeAbs;
+import ast.type.sympleTypes.CharType;
+import ast.type.sympleTypes.DoubleType;
 import ast.type.sympleTypes.IntType;
 import visitor.Visitor;
 
@@ -15,7 +17,11 @@ public class Struct extends TypeAbs {
 
     public Struct(int colum, int line, List<RecordField> fields) {
         super(colum, line);
-
+        int cont = 0;
+        for (RecordField ele : fields) {
+            cont += ele.getNumberOfBytes();
+        }
+        super.setNumberOfBytes(cont);
         this.fields = fields;
     }
 
@@ -63,10 +69,18 @@ public class Struct extends TypeAbs {
     public Type dot(AstNode node, String field) {
         for (RecordField r : this.getFields()) {
             if (r.getNameField().equals(field)) {
-                return this;
+                return r.getTypeField();
             }
         }
         return super.dot(node, field);
+    }
+
+    @Override
+    public Type promotesTo(Type other, AstNode node) {
+        if (other instanceof ErrorType || other instanceof  Struct)
+            return other;
+        else
+            return super.promotesTo(other, node);
     }
 
 }

@@ -13,6 +13,7 @@ public class IntType extends TypeAbs {
     private IntType(int colum, int line) {
         super(colum, line);
         setLogical(true);
+        super.setNumberOfBytes(2);
     }
 
     public static IntType getInstance(int colum, int line) {

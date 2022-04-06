@@ -64,6 +64,7 @@ public abstract class VisitorAbs implements Visitor {
 
     @Override
     public <TR, TP> TR visit(RecordField v, TP p) {
+        v.getTypeField().Accept(this, p);
         return null;
     }
 

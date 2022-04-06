@@ -13,7 +13,8 @@ public class RecordField extends TypeAbs {
     public RecordField(int colum, int line, String nameField, Type typeField) {
         super(colum, line);
         this.nameField = nameField;
-        this.typeFields = typeFields;
+        this.typeFields = typeField;
+        super.setNumberOfBytes(typeField.getNumberOfBytes());
     }
 
     public String getNameField() {

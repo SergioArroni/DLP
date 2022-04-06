@@ -3,11 +3,14 @@ i:int;
 
 def f(a:int):int {
   a:double;						# Error 1 variable duplicada
-  return 34;					# Error 2 	devuelvde un double
+  return 34.2;					# Error 2 	devuelvde un double
 }
 
 def g(b:int, b:double): {		# Error 3
   return 3;						# Error 4 no tendria que devolver nada
+}
+
+def g(): {						# Error 5 duplicada
 }
 
 def p(): {						# Error 5 duplicada

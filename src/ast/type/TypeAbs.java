@@ -11,7 +11,7 @@ public abstract class TypeAbs implements Type {
     private int colum;
     private int line;
     private boolean logical;
-    private byte numberOfBytes;
+    private int numberOfBytes;
 
     public TypeAbs(int colum, int line) {
         this.colum = colum;
@@ -90,12 +90,12 @@ public abstract class TypeAbs implements Type {
     }
 
     @Override
-    public byte getNumberOfBytes() {
+    public int getNumberOfBytes() {
         return numberOfBytes;
     }
 
     @Override
-    public void setNumberOfBytes(byte numberOfBytes) {
+    public void setNumberOfBytes(int numberOfBytes) {
         this.numberOfBytes = numberOfBytes;
     }
 

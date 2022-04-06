@@ -11,7 +11,7 @@ public class CharType extends TypeAbs {
 
     private CharType(int colum, int line) {
         super(colum, line);
-
+        super.setNumberOfBytes(1);
     }
 
     public static CharType getInstance(int colum, int line) {

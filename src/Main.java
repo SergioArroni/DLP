@@ -1,4 +1,5 @@
 import ast.AstNode;
+import codeGenerator.OffSetVisitor;
 import errorhandler.ErrorHandler;
 import parser.*;
 
@@ -29,6 +30,7 @@ public class Main {
 
         ast.Accept(new IdentificationVisitor(), null);
         ast.Accept(new TypeCheckingVisitor(), null);
+        ast.Accept(new OffSetVisitor(), null);
 
         // * Check errors
         if (ErrorHandler.getInstance().anyError()) {

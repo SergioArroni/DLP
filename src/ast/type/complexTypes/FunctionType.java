@@ -19,6 +19,11 @@ public class FunctionType extends TypeAbs {
         super(colum, line);
         this.parameters = parameters;
         this.typeReturn = typeReturn;
+        int cont = 0;
+        for (VarDefinition ele : parameters) {
+            cont += ele.getType().getNumberOfBytes();
+        }
+        super.setNumberOfBytes(cont);
         this.name = name;
     }
 

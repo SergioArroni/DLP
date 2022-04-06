@@ -10,9 +10,9 @@ public interface Type extends AstNode {
 
     public void setLogical(boolean logical);
 
-    public byte getNumberOfBytes();
+    public int getNumberOfBytes();
 
-    public void setNumberOfBytes(byte number);
+    public void setNumberOfBytes(int number);
 
     public Type aritmmetic(Type other, AstNode node);
 

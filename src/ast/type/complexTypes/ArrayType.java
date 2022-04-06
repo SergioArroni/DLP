@@ -16,6 +16,7 @@ public class ArrayType extends TypeAbs {
         super(colum, line);
         this.size = size;
         this.of = of;
+        super.setNumberOfBytes(size * of.getNumberOfBytes());
     }
 
     public int getSize() {
