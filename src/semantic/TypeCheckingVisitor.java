@@ -14,7 +14,6 @@ import ast.type.complexTypes.*;
 import ast.type.sympleTypes.CharType;
 import ast.type.sympleTypes.DoubleType;
 import ast.type.sympleTypes.IntType;
-import ast.type.sympleTypes.VoidType;
 
 public class TypeCheckingVisitor extends VisitorAbs {
 
@@ -129,8 +128,8 @@ public class TypeCheckingVisitor extends VisitorAbs {
     @Override
     public <TR, TP> TR visit(Cast v, TP p) {
         super.visit(v, p);
-        v.setType(v.getType().canBeCast(v.getCastType(), v));
-        v.setLValue(true);
+        v.setType(v.getExpression().getType().canBeCast(v.getCastType(), v));
+        v.setLValue(false);
         return null;
     }
 
@@ -143,10 +142,10 @@ public class TypeCheckingVisitor extends VisitorAbs {
     }
 
     @Override
-    public Void visit(Return v, Type p) {
+    public <TR, TP> TR visit(Return v, TP p) {
         super.visit(v, p);
 
-        v.getExpression().setType(v.getExpression().getType().promotesTo(p, v.getExpression()));
+        v.getExpression().setType(v.getExpression().getType().promotesTo(((Type)p), v.getExpression()));
 
         return null;
     }
@@ -178,16 +177,16 @@ public class TypeCheckingVisitor extends VisitorAbs {
         if (v.getLeft().getType() != v.getRight().getType()) {
             v.getRight().getType().promotesTo(v.getLeft().getType(), v.getRight());
         }
-
-
         return null;
     }
 
     @Override
     public <TR, TP> TR visit(Read v, TP p) {
-        super.visit(v, p);
-        if (!v.getExpression().getLValue())
-            new ErrorType(v.getColumn(), v.getLine(), "Error, the expression input: cannot have these expressions {" + v.getExpression() + "}");
+        for (Expression e : v.getExpression()) {
+            e.Accept(this, p);
+            if (!e.getLValue())
+                new ErrorType(v.getColumn(), v.getLine(), "Error, the expression input: cannot have these expressions {" + v.getExpression() + "}");
+        }
         return null;
     }
 

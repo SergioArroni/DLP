@@ -1,0 +1,100 @@
+
+#source	"input.txt"
+
+	' * Type: { IntType{Line: 2	 Column: 4	} }, Name: { i }, Offset: { 0 }
+	' * Type: { DoubleType{Line: 3	 Column: 4	} }, Name: { r }, Offset: { 2 }
+	' * Type: { CharType{Line: 4	 Column: 4	} }, Name: { c }, Offset: { 6 }
+	' * Invocation to the main function
+	CALL main
+	HALT
+
+#line	7
+f:	
+	ENTER	6
+	' * Type: { DoubleType{Line: 3	 Column: 4	} }, Name: { lr }, Offset: { -4 }
+	' * Type: { IntType{Line: 2	 Column: 4	} }, Name: { li }, Offset: { -6 }
+
+#line	11
+	' * Assignment
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSH	BP
+	PUSHI	8
+	ADDI
+	LOADI
+	STOREI
+
+#line	12
+	' * Assignment
+	PUSH	BP
+	PUSHI	-4
+	ADDI
+	PUSH	BP
+	PUSHI	4
+	ADDI
+	LOADF
+	STOREF
+
+#line	13
+	' * Return
+	PUSH	BP
+	PUSHI	8
+	ADDI
+	LOADI
+	RET	2, 6, 6
+
+#line	17
+main:	
+	ENTER	3
+	' * Type: { Struct{fields=[RecordField{nameField='integer', typeFields=IntType{Line: 2	 Column: 4	}}, RecordField{nameField='character', typeFields=CharType{Line: 4	 Column: 4	}}]} }, Name: { pair }, Offset: { -3 }
+
+#line	23
+	' * Assignment
+	PUSHA	0
+	PUSHI	3
+	STOREI
+
+#line	24
+	' * Assignment
+	PUSHA	6
+	PUSHB	97
+	STOREB
+
+#line	25
+	' * Assignment
+	PUSHA	2
+	PUSHF	3.8
+	STOREF
+
+#line	26
+	' * Assignment
+	PUSH	BP
+	PUSHI	-3
+	ADDI
+	PUSHI	0
+	ADDI
+	PUSHA	0
+	LOADI
+	STOREI
+
+#line	27
+	' * Assignment
+	PUSH	BP
+	PUSHI	-3
+	ADDI
+	PUSHI	2
+	ADDI
+	PUSHA	6
+	LOADB
+	STOREB
+
+#line	28
+	' * FunctionInvoke
+	PUSHA	0
+	LOADI
+	PUSHA	2
+	LOADF
+	CALL	f
+	POPI
+	RET	0, 3, 0

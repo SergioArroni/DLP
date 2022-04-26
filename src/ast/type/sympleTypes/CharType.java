@@ -58,12 +58,18 @@ public class CharType extends TypeAbs {
             return super.promotesTo(other, node);
     }
 
+
     @Override
     public Type canBeCast(Type other, AstNode node) {
         if (other instanceof ErrorType || other.equals(CharType.getInstance(other.getColumn(), other.getLine())) || other.equals(IntType.getInstance(other.getColumn(), other.getLine())) || other.equals(DoubleType.getInstance(other.getColumn(), other.getLine())))
             return other;
         else
             return super.canBeCast(other, node);
+    }
+
+    @Override
+    public char suffix() {
+        return 'B';
     }
 
     @Override

@@ -22,7 +22,7 @@ public class OffSetVisitor extends VisitorAbs {
             v.setOffset(globalVariablesOffset);
             globalVariablesOffset += v.getType().getNumberOfBytes();
         } else {
-            localVariablesOffset -= v.getType().getNumberOfBytes();
+            localVariablesOffset += v.getType().getNumberOfBytes();
             v.setOffset(-localVariablesOffset);
         }
         return null;
@@ -30,11 +30,14 @@ public class OffSetVisitor extends VisitorAbs {
 
     @Override
     public <TR, TP> TR visit(FuncDefinition v, TP p) {
+        v.getType().Accept(this,p);
 
         localVariablesOffset = 0;
         parametersOffset = 4;
 
         super.visit(v, p);
+
+        v.setLocalOffsetAux(-localVariablesOffset);
 
         return null;
     }

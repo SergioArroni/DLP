@@ -12,7 +12,7 @@ public class LexerHelper {
 		return -1;
 	}
 
-	public static Double lexemeToReal(String str) {
+	public static double lexemeToReal(String str) {
 		try {
 			return Double.parseDouble(str);
 		}
@@ -22,9 +22,18 @@ public class LexerHelper {
 		return -1.;
 	}
 
-	public static Character lexemeToChar(String str) {
+	public static char lexemeToChar(String str) {
 		try {
-			return str.charAt(0);
+			if (str.equals("'\\n'"))
+				return '\n';
+			if (str.equals("'\\t'"))
+				return '\t';
+			if (str.equals("'\\r'"))
+				return '\r';
+			if (str.startsWith("\'\\"))
+				return (char)(Integer.parseInt(str.substring(2,str.length()-1)));
+
+			return str.substring(1,str.length()-1).charAt(0);
 		}
 		catch(NumberFormatException e) {
 			System.out.println(e);

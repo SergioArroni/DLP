@@ -100,6 +100,11 @@ public abstract class TypeAbs implements Type {
     }
 
     @Override
+    public char suffix() {
+        throw new IllegalStateException();
+    }
+
+    @Override
     public String toString() {
         return "TypeAbs{" +
                 "colum=" + colum +

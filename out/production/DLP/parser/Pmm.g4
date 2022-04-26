@@ -64,13 +64,13 @@ tipoSimple returns [Type ast]:
                 ;
 
 statement returns [Statement ast] locals [List<Expression> param =  new ArrayList<Expression>(), List<Expression> parameter =  new ArrayList<Expression>(), List<Statement> elses =  new ArrayList<Statement>()]:
-                    'while' exprWhile=expression ':' cuerpo=statementbody {$ast = new Iterative($exprWhile.ast.getLine(), $exprWhile.ast.getColumn(), $exprWhile.ast, $cuerpo.ast);}
+                    'while' exprWhile=expression ':' cuerpo=statementbody {$ast = new Iterative($exprWhile.ast.getColumn(), $exprWhile.ast.getLine(), $exprWhile.ast, $cuerpo.ast);}
                    | 'if' exprIf=expression ':' stateIf=statementbody ('else' statelse=statementbody{$elses = $statelse.ast;})? {$ast= new Condition($exprIf.ast.getLine(), $exprIf.ast.getColumn(), $exprIf.ast, $stateIf.ast, $elses);}
-                   | 'return' stat3=expression ';' {$ast = new Return($stat3.ast.getLine(), $stat3.ast.getColumn(), $stat3.ast);}
-                   | 'input' stateRead=inoutBody ';'{$ast = new Read($stateRead.ast.getLine(), $stateRead.ast.getColumn(), $stateRead.ast);}
-                   | 'print' stateWrite=inoutBody ';'{$ast = new Write($stateWrite.ast.getLine(), $stateWrite.ast.getColumn(), $stateWrite.ast);}
-                   | left=expression ('=') right=expression ';' {$ast = new Assigmment($left.ast.getLine(), $right.ast.getColumn(), $left.ast, $right.ast);}
-                   | ID '('(expr1=params{$parameter = $expr1.ast;})*')'';' {$param.addAll($parameter);} {$ast = new FunctionInvoke($ID.getCharPositionInLine()+1, $ID.getLine(), $param, new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text));}
+                   | 'return' stat3=expression ';' {$ast = new Return($stat3.ast.getColumn(), $stat3.ast.getLine(), $stat3.ast);}
+                   | AUX='input' stateRead=listExpression ';'{$ast = new Read($AUX.getCharPositionInLine()+1, $AUX.getLine(), $stateRead.ast);}
+                   | AUX='print' stateWrite=listExpression ';'{$ast = new Write($AUX.getCharPositionInLine()+1, $AUX.getLine(), $stateWrite.ast);}
+                   | left=expression ('=') right=expression ';' {$ast = new Assigmment($left.ast.getColumn(), $left.ast.getLine(), $left.ast, $right.ast);}
+                   | ID '('(expr1=listExpression{$parameter = $expr1.ast;})*')'';' {$param.addAll($parameter);} {$ast = new FunctionInvoke($ID.getCharPositionInLine()+1, $ID.getLine(), $param, new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text));}
                    ;
 
 inBody returns [List<Statement> ast =  new ArrayList<Statement>()] :
@@ -82,12 +82,8 @@ statementbody returns [List<Statement> ast =  new ArrayList<Statement>()]:
                     | stat1=statement {$ast.add($stat1.ast);}
                     ;
 
-params returns [List<Expression> ast =  new ArrayList<Expression>()]:
+listExpression returns [List<Expression> ast =  new ArrayList<Expression>()]:
                 expr1=expression {$ast.add($expr1.ast);} (',' expr2=expression {$ast.add($expr2.ast);})*
-                ;
-
-inoutBody returns [Expression ast]:
-                expr1=expression {$ast = $expr1.ast;} (',' expr2=expression {$ast = $expr2.ast;})*
                 ;
 
 expression returns [Expression ast] locals [List<Expression> param =  new ArrayList<Expression>()]:
@@ -96,16 +92,16 @@ expression returns [Expression ast] locals [List<Expression> param =  new ArrayL
             | CHAR_CONSTANT {$ast = new CharLiteral($CHAR_CONSTANT.getCharPositionInLine()+1, $CHAR_CONSTANT.getLine(), LexerHelper.lexemeToChar($CHAR_CONSTANT.text));}
             | ID {$ast = new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text );}
             | '(' expr=expression ')' {$ast = $expr.ast;}
-            | expr1=expression '[' expr2=expression ']' {$ast = new ArrayAccess( $expr1.ast.getLine(), $expr1.ast.getColumn(), $expr1.ast, $expr2.ast );}
-            | field=expression '.' ID {$ast = new FieldAcess($field.ast.getLine(),$field.ast.getColumn() ,$field.ast, $ID.text );}
-            | '(' type=tipo ')' expr=expression {$ast = new Cast($type.ast.getLine(),$type.ast.getColumn() , $expr.ast, $type.ast );}
+            | expr1=expression '[' expr2=expression ']' {$ast = new ArrayAccess( $expr1.ast.getColumn(), $expr1.ast.getLine(), $expr1.ast, $expr2.ast );}
+            | field=expression '.' ID {$ast = new FieldAcess($field.ast.getColumn(),$field.ast.getLine() ,$field.ast, $ID.text );}
+            | '(' type=tipo ')' expr=expression {$ast = new Cast($type.ast.getColumn(),$type.ast.getLine() , $expr.ast, $type.ast );}
             | '-' unary=expression {$ast = new UnaryMinus($unary.ast.getColumn(), $unary.ast.getLine(), $unary.ast);}
             | '!' exprNeg=expression {$ast = new Negative( $exprNeg.ast.getColumn(), $exprNeg.ast.getLine(), $exprNeg.ast);}
-            | left=expression OP=('*' | '/' | '%') right=expression {$ast = new Aritmmetic($left.ast.getLine(),$left.ast.getColumn() ,$left.ast , $right.ast, $OP.text );}
-            | left=expression OP=('+' | '-') right=expression {$ast = new Aritmmetic($left.ast.getLine(),$left.ast.getColumn() ,$left.ast , $right.ast, $OP.text );}
-            | left=expression OP=('==' | '!=' | '>=' | '<' | '>' | '<=') right=expression {$ast = new Comparision($left.ast.getLine(),$left.ast.getColumn() ,$left.ast , $right.ast, $OP.text );}
-            | left=expression OP=('&&' |'||') right=expression {$ast = new Logic($left.ast.getLine(),$left.ast.getColumn() ,$left.ast , $right.ast, $OP.text );}
-            | ID '('(parameters=params{$param.addAll($parameters.ast);})?')'  {$ast = new FunctionInvoke($ID.getCharPositionInLine()+1, $ID.getLine(), $param, new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text));}
+            | left=expression OP=('*' | '/' | '%') right=expression {$ast = new Aritmmetic($left.ast.getColumn(),$left.ast.getLine() ,$left.ast , $right.ast, $OP.text );}
+            | left=expression OP=('+' | '-') right=expression {$ast = new Aritmmetic($left.ast.getColumn(),$left.ast.getLine() ,$left.ast , $right.ast, $OP.text );}
+            | left=expression OP=('==' | '!=' | '>=' | '<' | '>' | '<=') right=expression {$ast = new Comparision($left.ast.getColumn(),$left.ast.getLine() ,$left.ast , $right.ast, $OP.text );}
+            | left=expression OP=('&&' |'||') right=expression {$ast = new Logic($left.ast.getColumn(),$left.ast.getLine() ,$left.ast , $right.ast, $OP.text );}
+            | ID '('(parameters=listExpression{$param.addAll($parameters.ast);})?')'  {$ast = new FunctionInvoke($ID.getCharPositionInLine()+1, $ID.getLine(), $param, new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text));}
             ;
   		 
 INT_CONSTANT: '0' | [1-9][0-9]* ;

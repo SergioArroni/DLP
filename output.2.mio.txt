@@ -1,0 +1,223 @@
+
+#source	"input.txt"
+
+	' * Type: { CharType{Line: 1	 Column: 4	} }, Name: { c }, Offset: { 0 }
+	' * Type: { IntType{Line: 2	 Column: 4	} }, Name: { i }, Offset: { 1 }
+	' * Type: { DoubleType{Line: 3	 Column: 4	} }, Name: { r }, Offset: { 3 }
+	' * Invocation to the main function
+	CALL main
+	HALT
+
+#line	5
+main:	
+	ENTER	4
+	' * Type: { IntType{Line: 2	 Column: 4	} }, Name: { a }, Offset: { -2 }
+	' * Type: { IntType{Line: 2	 Column: 4	} }, Name: { i }, Offset: { -4 }
+
+#line	8
+	' * Assignment
+	PUSHA	0
+	PUSHB	97
+	STOREB
+
+#line	9
+	' * Write
+	PUSHA	0
+	LOADB
+	OUTB
+
+#line	9
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	11
+	' * Assignment
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	PUSHI	1
+	STOREI
+
+#line	12
+	' * Assignment
+	PUSH	BP
+	PUSHI	-4
+	ADDI
+	PUSHB	48
+	b2i	
+	PUSHI	3
+	MULI
+	STOREI
+
+#line	13
+	' * Write
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	OUTI
+
+#line	13
+	' * Write
+	PUSHB	32
+	OUTB
+
+#line	13
+	' * Write
+	PUSH	BP
+	PUSHI	-4
+	ADDI
+	LOADI
+	OUTI
+
+#line	13
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	15
+	' * Read
+	PUSHA	3
+	INF
+	STOREF
+
+#line	16
+	' * Write
+	PUSHI	2
+	i2f	
+	PUSHA	3
+	LOADF
+	MULF
+	OUTF
+
+#line	16
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	18
+	' * Write
+	PUSHI	3
+	i2f	
+	PUSHF	4.5
+	SUBF
+	OUTF
+
+#line	18
+	' * Write
+	PUSHB	32
+	OUTB
+
+#line	18
+	' * Write
+	PUSHB	48
+	b2i	
+	i2f	
+	PUSHF	48.0
+	DIVF
+	OUTF
+
+#line	18
+	' * Write
+	PUSHB	32
+	OUTB
+
+#line	18
+	' * Write
+	PUSHB	48
+	b2i	
+	PUSHB	49
+	b2i	
+	MODI	
+	OUTI
+
+#line	18
+	' * Write
+	PUSHB	32
+	OUTB
+
+#line	18
+	' * Write
+	PUSHI	0
+	PUSHB	49
+	b2i	
+	ADDI
+	OUTI
+
+#line	18
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	22
+	' * Write
+	PUSHI	1
+	PUSHI	2
+	LTI
+	OUTI
+
+#line	22
+	' * Write
+	PUSHB	32
+	OUTB
+
+#line	22
+	' * Write
+	PUSHI	4
+	PUSHI	3
+	GEI
+	OUTI
+
+#line	22
+	' * Write
+	PUSHB	32
+	OUTB
+
+#line	22
+	' * Write
+	PUSHI	5
+	PUSHI	5
+	EQI
+	OUTI
+
+#line	22
+	' * Write
+	PUSHB	32
+	OUTB
+
+#line	22
+	' * Write
+	PUSHI	1
+	PUSHI	2
+	AND	
+	OUTI
+
+#line	22
+	' * Write
+	PUSHB	32
+	OUTB
+
+#line	22
+	' * Write
+	PUSHI	0
+	PUSHI	3
+	OR	
+	OUTI
+
+#line	22
+	' * Write
+	PUSHB	32
+	OUTB
+
+#line	22
+	' * Write
+	PUSHI	0
+	NOT	
+	OUTI
+
+#line	22
+	' * Write
+	PUSHB	10
+	OUTB
+	RET	0, 4, 0

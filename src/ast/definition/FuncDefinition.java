@@ -9,6 +9,7 @@ import java.util.List;
 public class FuncDefinition extends DefinitionAbs {
 
     private List<Statement> statements;
+    private int localOffsetAux;
 
     public FuncDefinition(int column, int line, String name, Type type, List<Statement> statements) {
         super(column, line, name, type);
@@ -24,6 +25,14 @@ public class FuncDefinition extends DefinitionAbs {
         return "FuncDefinition{" +
                 ", statements=" + statements +
                 '}';
+    }
+
+    public int getLocalOffsetAux() {
+        return localOffsetAux;
+    }
+
+    public void setLocalOffsetAux(int localOffsetAux) {
+        this.localOffsetAux = localOffsetAux;
     }
 
     @Override

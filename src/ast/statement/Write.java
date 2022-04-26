@@ -3,16 +3,18 @@ package ast.statement;
 import ast.expression.Expression;
 import visitor.Visitor;
 
+import java.util.List;
+
 public class Write extends StatementAbs {
 
-    private Expression expression;
+    private List<Expression> expression;
 
-    public Write(int colum, int line, Expression expression) {
+    public Write(int colum, int line, List<Expression> expression) {
         super(colum, line);
         this.expression = expression;
     }
 
-    public Expression getExpression() {
+    public List<Expression> getExpression() {
         return expression;
     }
 

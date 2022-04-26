@@ -68,7 +68,7 @@ public interface Visitor {
 
     public <TR, TP> TR visit(FunctionInvoke v, TP p);
 
-    public Void visit(Return v, Type p);
+    public <TR, TP> TR visit(Return v, TP p);
 
     public <TR, TP> TR visit(Assigmment v, TP p);
 

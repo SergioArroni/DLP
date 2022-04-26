@@ -14,6 +14,7 @@ public class FunctionType extends TypeAbs {
     private List<VarDefinition> parameters;
     private Type typeReturn;
     private String name;
+    private int paramOffset;
 
     public FunctionType(int colum, int line, String name, List<VarDefinition> parameters, Type typeReturn) {
         super(colum, line);

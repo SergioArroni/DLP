@@ -1,4 +1,6 @@
 import ast.AstNode;
+import codeGenerator.CodeGenerator;
+import codeGenerator.ExecuteCGVisitor;
 import codeGenerator.OffSetVisitor;
 import errorhandler.ErrorHandler;
 import parser.*;
@@ -30,7 +32,7 @@ public class Main {
 
         ast.Accept(new IdentificationVisitor(), null);
         ast.Accept(new TypeCheckingVisitor(), null);
-        ast.Accept(new OffSetVisitor(), null);
+
 
         // * Check errors
         if (ErrorHandler.getInstance().anyError()) {
@@ -38,8 +40,10 @@ public class Main {
             ErrorHandler.getInstance().showErrors(System.err);
         } else {
             // * The AST is shown
-            IntrospectorModel model = new IntrospectorModel("Program", ast);
-            new IntrospectorTree("Introspector", model);
+            ast.Accept(new OffSetVisitor(), null);
+            ast.Accept(new ExecuteCGVisitor(new CodeGenerator(args[1], args[0])), null);
+            //IntrospectorModel model = new IntrospectorModel("Program", ast);
+            //new IntrospectorTree("Introspector", model);
         }
     }
 }

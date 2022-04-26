@@ -67,6 +67,11 @@ public class DoubleType extends TypeAbs {
     }
 
     @Override
+    public char suffix() {
+        return 'F';
+    }
+
+    @Override
     public String toString() {
         return "DoubleType{Line: " + this.getLine() + "\t Column: " + this.getColumn() + "\t}";
     }

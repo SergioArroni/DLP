@@ -4,10 +4,10 @@ r: double;
 c: char; 			
 
 # Functions
-def f(pi:int, pr:double): int {		
-  lr:double; 				
+def f(pi:int, pr:double): int {
+  lr:double;
   li:int;
-  
+
   li = pi;
   lr = pr;
   return pi;
@@ -15,11 +15,11 @@ def f(pi:int, pr:double): int {
 
 # Main program
 def main(): {
-  pair: struct { 		   
-    integer:int;			
-    character:char;			
+  pair: struct {
+    integer:int;
+    character:char;
   };
-	
+
   i = 3;
   c = 'a';
   r = 3.8;

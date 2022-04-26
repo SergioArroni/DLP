@@ -82,6 +82,11 @@ public class IntType extends TypeAbs {
     }
 
     @Override
+    public char suffix() {
+        return 'I';
+    }
+
+    @Override
     public String toString() {
         return "IntType{Line: " + this.getLine() + "\t Column: " + this.getColumn() + "\t}";
     }

@@ -26,6 +26,6 @@ public class Return extends StatementAbs {
 
     @Override
     public Object Accept(Visitor v, Object p) {
-        return v.visit(this, (Type) p);
+        return v.visit(this, p);
     }
 }

@@ -34,4 +34,6 @@ public interface Type extends AstNode {
 
     public Type parenthesis(List<Expression> parameters, AstNode node);
 
+    public char suffix();
+
 }
