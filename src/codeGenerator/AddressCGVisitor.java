@@ -9,7 +9,7 @@ import ast.type.complexTypes.RecordField;
 import ast.type.complexTypes.Struct;
 import ast.type.sympleTypes.IntType;
 
-public class AddressCGVisitor extends VisitorCGAbs {
+public class AddressCGVisitor extends VisitorCGAbs<Void, Void> {
 
     private CodeGenerator cg;
     private ValueCGVisitor valueVisitor;
@@ -30,7 +30,7 @@ public class AddressCGVisitor extends VisitorCGAbs {
      *      }
      */
     @Override
-    public <TR, TP> TR visit(Variable v, TP p) {
+    public Void visit(Variable v, Void p) {
         if(v.getDefinition().getScope()==0){
             cg.pushA(((VarDefinition)v.getDefinition()).getOffset());
         }else {
@@ -50,7 +50,7 @@ public class AddressCGVisitor extends VisitorCGAbs {
      *      <ADDI>
      */
     @Override
-    public <TR, TP> TR visit(ArrayAccess v, TP p) {
+    public Void visit(ArrayAccess v, Void p) {
         v.getLeft().Accept(this, p);
         v.getRight().Accept(this.valueVisitor, p);
         cg.push(v.getLeft().getType().getNumberOfBytes());
@@ -68,7 +68,7 @@ public class AddressCGVisitor extends VisitorCGAbs {
      *              <ADDI>
      */
     @Override
-    public <TR, TP> TR visit(FieldAcess v, TP p) {
+    public Void visit(FieldAcess v, Void p) {
         v.getExpression().Accept(this,p);
         if(v.getExpression().getType() instanceof  Struct){
             for (RecordField rf: ((Struct)v.getExpression().getType()).getFields() ) {

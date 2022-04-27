@@ -9,14 +9,14 @@ import semantic.VisitorAbs;
 
 import java.util.*;
 
-public class OffSetVisitor extends VisitorAbs {
+public class OffSetVisitor extends VisitorAbs<Void, Void> {
     private int globalVariablesOffset = 0;
     private int localVariablesOffset = 0;
     private int structsOffset = 0;
     private int parametersOffset = 4;
 
     @Override
-    public <TR, TP> TR visit(VarDefinition v, TP p) {
+    public Void visit(VarDefinition v, Void p) {
         super.visit(v, p);
         if (v.getScope() == 0) {
             v.setOffset(globalVariablesOffset);
@@ -29,7 +29,7 @@ public class OffSetVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(FuncDefinition v, TP p) {
+    public Void visit(FuncDefinition v, Void p) {
         v.getType().Accept(this,p);
 
         localVariablesOffset = 0;
@@ -43,7 +43,7 @@ public class OffSetVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(FunctionType v, TP p) {
+    public Void visit(FunctionType v, Void p) {
         super.visit(v, p);
         List<VarDefinition> param = new ArrayList<>(v.getParameters());
         Collections.reverse(param);
@@ -56,7 +56,7 @@ public class OffSetVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(Struct v, TP p) {
+    public Void visit(Struct v, Void p) {
         structsOffset = 0;
         super.visit(v, p);
 
@@ -64,7 +64,7 @@ public class OffSetVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(RecordField v, TP p) {
+    public Void visit(RecordField v, Void p) {
         super.visit(v, p);
 
         v.setOffset(structsOffset);

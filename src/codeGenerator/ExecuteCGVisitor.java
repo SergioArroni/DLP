@@ -7,11 +7,10 @@ import ast.definition.VarDefinition;
 import ast.expression.Expression;
 import ast.expression.FunctionInvoke;
 import ast.statement.*;
-import ast.type.Type;
 import ast.type.complexTypes.FunctionType;
 import ast.type.sympleTypes.VoidType;
 
-public class ExecuteCGVisitor extends VisitorCGAbs {
+public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
 
     private CodeGenerator cg;
     private AddressCGVisitor addrVisitor;
@@ -39,7 +38,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs {
      *      }
      */
     @Override
-    public <TR, TP> TR visit(Program v, TP p) {
+    public Void visit(Program v, FuncDefinition p) {
         for (Definition d: v.getDefinitions()) {
             if(d instanceof VarDefinition){
                 d.Accept(this, p);
@@ -56,12 +55,13 @@ public class ExecuteCGVisitor extends VisitorCGAbs {
         }
         return null;
     }
+
     /**
      * Execute[[VarDefinition: defVar -> ID type ]]()=
      *          < ' * > "Type: { "+v.getType().toString() + " }, Name: { " + v.getName() + " }, Offset: { "+ v.getOffset()+" }"
      */
     @Override
-    public <TR, TP> TR visit(VarDefinition v, TP p) {
+    public Void visit(VarDefinition v, FuncDefinition p) {
         cg.comment("Type: { "+v.getType().toString() + " }, Name: { " + v.getName() + " }, Offset: { "+ v.getOffset()+" }");
         return null;
     }
@@ -76,7 +76,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs {
      *          <RET> 0, defFunc.localOffsetAux , defFunc.getNumBytes
      */
     @Override
-    public <TR, TP> TR visit(FuncDefinition v, TP p) {
+    public Void visit(FuncDefinition v, FuncDefinition p) {
         cg.line(v);
         cg.label(v.getName());
         cg.enter(v.getLocalOffsetAux());
@@ -88,13 +88,13 @@ public class ExecuteCGVisitor extends VisitorCGAbs {
             }else{
                 s.Accept(this,p);
             }
-
         }
         if(((FunctionType)v.getType()).getTypeReturn() instanceof VoidType){
             cg.ret(((FunctionType)v.getType()).getTypeReturn().getNumberOfBytes(),v.getLocalOffsetAux(), v.getType().getNumberOfBytes());
         }
         return null;
     }
+
     /**
      * Execute[[Assigmment: assig -> left right ]]()=
      *
@@ -104,7 +104,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs {
      *      <STORE>left.type.suffix()
      */
     @Override
-    public <TR, TP> TR visit(Assigmment v, TP p) {
+    public Void visit(Assigmment v, FuncDefinition p) {
         cg.line(v);
         cg.comment("Assignment");
         v.getLeft().Accept(this.addrVisitor, p);
@@ -121,7 +121,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs {
      *      <OUT> exp.type.suffixe
      */
     @Override
-    public <TR, TP> TR visit(Write v, TP p) {
+    public Void visit(Write v, FuncDefinition p) {
         for (Expression e: v.getExpression()) {
             cg.line(v);
             cg.comment("Write");
@@ -140,7 +140,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs {
      *      <STORE> exp.type.suffixe
      */
     @Override
-    public <TR, TP> TR visit(Read v, TP p) {
+    public Void visit(Read v, FuncDefinition p) {
         for (Expression e: v.getExpression()) {
             cg.line(v);
             cg.comment("Read");
@@ -163,7 +163,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs {
      *
      */
     @Override
-    public <TR, TP> TR visit(FunctionInvoke v, TP p) {
+    public Void visit(FunctionInvoke v, FuncDefinition p) {
         cg.line(v);
         cg.comment("FunctionInvoke");
 
@@ -176,6 +176,102 @@ public class ExecuteCGVisitor extends VisitorCGAbs {
 
         return null;
     }
+
+    /**
+     * Execute[[Iterative:Statement -> condition loopStatement*]]()=
+     *      int condition = cg.getLabel();
+     *      int end = cg.getLabel();
+     *      <Label_>condition<:>
+     *      Value[[condition]]()
+     *      <JZ Label_> end
+     *
+     *      for(Statement s: loopStatement){
+     *          Execute[[s]]()
+     *      }
+     *
+     *      <JMP Label_> condition
+     *
+     *      <Label_>end<:>
+     *
+     */
+    @Override
+    public Void visit(Iterative v, FuncDefinition p) {
+        cg.line(v);
+        cg.comment("While");
+
+        int condition = cg.getLabel();
+        int end = cg.getLabel();
+
+        cg.label("Label" + condition);
+
+        v.getCondition().Accept(this.valueVisitor, p);
+        cg.jz("Label" + end);
+
+        for (Statement s : v.getLoopStatement()) {
+            s.Accept(this, p);
+        }
+
+        cg.jmp("Label" + condition);
+
+        cg.label("Label" + end);
+
+        return null;
+    }
+
+    /**
+     * Execute[[Condition:Statement -> condition:expression ifStatement:statement* elseStatement:statement*]]()=
+     *      int else = cg.getLabel();
+     *      int end = cg.getLabel();
+     *
+     *      Value[[condition]]()
+     *      <JZ Label_> else
+     *
+     *      for(Statement s: ifStatement){
+     *          Execute[[s]]()
+     *      }
+     *      <JMP Label_> end
+     *
+     *      <Label_>else<:>
+     *      for(Statement s: elseStatement){
+     *          Execute[[s]]()
+     *      }
+     *
+     *      <JMP Label_> end
+     *      <Label_>end<:>
+     *
+     */
+    @Override
+    public Void visit(Condition v, FuncDefinition p) {
+        cg.line(v);
+        cg.comment("If");
+
+        int else_ = cg.getLabel();
+        int end = cg.getLabel();
+
+        v.getCondition().Accept(this.valueVisitor, p);
+
+        cg.jz("Label" + else_);
+
+        cg.comment("If Body");
+        for (Statement s : v.getIfStatement()) {
+            s.Accept(this, p);
+        }
+
+        cg.jmp("Label" + end);
+
+        cg.comment("Else");
+
+        cg.label("Label" + else_);
+        cg.comment("Else Body");
+        for (Statement s : v.getElseStatement()) {
+            s.Accept(this, p);
+        }
+
+        cg.label("Label" + end);
+
+        return null;
+    }
+
 /**
  * TODO:Return
  */
@@ -187,13 +283,13 @@ public class ExecuteCGVisitor extends VisitorCGAbs {
      *
      */
     @Override
-    public <TR, TP> TR visit(Return v, TP p) {
+    public Void visit(Return v, FuncDefinition p) {
         cg.line(v);
         cg.comment("Return");
 
         v.getExpression().Accept(this.valueVisitor,null);
 
-        cg.ret(((FunctionType) ((FuncDefinition) p).getType()).getTypeReturn().getNumberOfBytes(), ((FuncDefinition) p).getLocalOffsetAux(), ((FuncDefinition) p).getType().getNumberOfBytes());
+        cg.ret(((FunctionType)p.getType()).getTypeReturn().getNumberOfBytes(), ((FuncDefinition) p).getLocalOffsetAux(), ((FuncDefinition) p).getType().getNumberOfBytes());
         return null;
     }
 

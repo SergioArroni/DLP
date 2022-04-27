@@ -60,7 +60,7 @@ public class DoubleType extends TypeAbs {
 
     @Override
     public Type canBeCast(Type other, AstNode node) {
-        if (other instanceof ErrorType || other.equals(CharType.getInstance(other.getColumn(), other.getLine())) || other.equals(IntType.getInstance(other.getColumn(), other.getLine())) || other.equals(DoubleType.getInstance(other.getColumn(), other.getLine())))
+        if (other instanceof ErrorType || other instanceof IntType || other instanceof DoubleType || other instanceof CharType)
             return other;
         else
             return super.canBeCast(other, node);

@@ -13,7 +13,7 @@ import ast.type.sympleTypes.CharType;
 import ast.type.sympleTypes.DoubleType;
 import ast.type.sympleTypes.IntType;
 
-public class ValueCGVisitor extends VisitorCGAbs {
+public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
 
     private CodeGenerator cg;
     private AddressCGVisitor addrVisitor;
@@ -29,7 +29,7 @@ public class ValueCGVisitor extends VisitorCGAbs {
      *      <LOAD>expression.type.suffixe
      */
     @Override
-    public <TR, TP> TR visit(Variable v, TP p) {
+    public Void visit(Variable v, Void p) {
         v.Accept(this.addrVisitor,p);
         cg.load(v.getType());
         return null;
@@ -52,7 +52,7 @@ public class ValueCGVisitor extends VisitorCGAbs {
      *      <MOD>
      */
     @Override
-    public <TR, TP> TR visit(Aritmmetic v, TP p) {
+    public Void visit(Aritmmetic v, Void p) {
         v.getLeft().Accept(this, null);
         v.getRight().Accept(this, null);
 
@@ -87,7 +87,7 @@ public class ValueCGVisitor extends VisitorCGAbs {
      *      <MUL> aritmmetic.getType().getsuffix()
      */
     @Override
-    public <TR, TP> TR visit(Comparision v, TP p) {
+    public Void visit(Comparision v, Void p) {
         v.getLeft().Accept(this, null);
         v.getRight().Accept(this, null);
 
@@ -116,7 +116,7 @@ public class ValueCGVisitor extends VisitorCGAbs {
      *      <OR>
      */
     @Override
-    public <TR, TP> TR visit(Logic v, TP p) {
+    public Void visit(Logic v, Void p) {
 
         v.getLeft().Accept(this, null);
         v.getRight().Accept(this, null);
@@ -134,7 +134,7 @@ public class ValueCGVisitor extends VisitorCGAbs {
      *  <NOT>
      */
     @Override
-    public <TR, TP> TR visit(Negative v, TP p) {
+    public Void visit(Negative v, Void p) {
 
         v.getExpression().Accept(this, null);
         cg.not();
@@ -150,7 +150,7 @@ public class ValueCGVisitor extends VisitorCGAbs {
      *
      */
     @Override
-    public <TR, TP> TR visit(UnaryMinus v, TP p) {
+    public Void visit(UnaryMinus v, Void p) {
         cg.push(0);
         v.getExpression().Accept(this, null);
         cg.sub(v.getType());
@@ -173,7 +173,7 @@ public class ValueCGVisitor extends VisitorCGAbs {
      *          <b2i>
      */
     @Override
-    public <TR, TP> TR visit(Cast v, TP p) {
+    public Void visit(Cast v, Void p) {
         v.getExpression().Accept(this,p);
 
         if (v.getExpression().getType().getClass().equals(IntType.getInstance(v.getExpression().getType().getColumn(),v.getExpression().getType().getLine()).getClass())){
@@ -207,7 +207,7 @@ public class ValueCGVisitor extends VisitorCGAbs {
      *      <LOAD>right.getType.getSuffix()
      */
     @Override
-    public <TR, TP> TR visit(ArrayAccess v, TP p) {
+    public Void visit(ArrayAccess v, Void p) {
         v.getLeft().Accept(this.addrVisitor, p);
         v.getRight().Accept(this, p);
         cg.load(v.getRight().getType());
@@ -222,7 +222,7 @@ public class ValueCGVisitor extends VisitorCGAbs {
      *              <LOAD>rf.getType.getSuffix()
      */
     @Override
-    public <TR, TP> TR visit(FieldAcess v, TP p) {
+    public Void visit(FieldAcess v, Void p) {
         v.Accept(this.addrVisitor,p);
         if(v.getExpression().getType() instanceof Struct){
             for (RecordField rf: ((Struct)v.getExpression().getType()).getFields() ) {
@@ -235,7 +235,7 @@ public class ValueCGVisitor extends VisitorCGAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(FunctionInvoke v, TP p) {
+    public Void visit(FunctionInvoke v, Void p) {
         return null;
     }
 
@@ -244,7 +244,7 @@ public class ValueCGVisitor extends VisitorCGAbs {
      *      <PUSHI> value
      */
     @Override
-    public <TR, TP> TR visit(IntLiteral v, TP p) {
+    public Void visit(IntLiteral v, Void p) {
         cg.push(v.getValue());
         return null;
     }
@@ -254,7 +254,7 @@ public class ValueCGVisitor extends VisitorCGAbs {
      *      <PUSHB> value
      */
     @Override
-    public <TR, TP> TR visit(CharLiteral v, TP p) {
+    public Void visit(CharLiteral v, Void p) {
         cg.push(v.getValue());
         return null;
     }
@@ -264,7 +264,7 @@ public class ValueCGVisitor extends VisitorCGAbs {
      *      <PUSHF> value
      */
     @Override
-    public <TR, TP> TR visit(DoubleLiteral v, TP p) {
+    public Void visit(DoubleLiteral v, Void p) {
         cg.push(v.getValue());
         return null;
     }

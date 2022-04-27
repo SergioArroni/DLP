@@ -7,7 +7,7 @@ import ast.statement.Statement;
 import ast.type.complexTypes.ErrorType;
 import symboltable.SymbolTable;
 
-public class IdentificationVisitor extends VisitorAbs {
+public class IdentificationVisitor extends VisitorAbs<Void, Void> {
 
     private final SymbolTable symbolTable;
 
@@ -16,7 +16,7 @@ public class IdentificationVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(FuncDefinition v, TP p) {
+    public Void visit(FuncDefinition v, Void p) {
 
         var insert = symbolTable.insert(v);
         if (!insert) {
@@ -31,7 +31,7 @@ public class IdentificationVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(VarDefinition v, TP p) {
+    public Void visit(VarDefinition v, Void p) {
         v.getType().Accept(this, p);
         var insert = symbolTable.insert(v);
         if (!insert) {
@@ -41,7 +41,7 @@ public class IdentificationVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(Variable v, TP p) {
+    public Void visit(Variable v, Void p) {
         var find = symbolTable.find(v.getName());
         if (find == null) {
             var error = new ErrorType(v.getColumn(), v.getLine(), "Error, variable not defined: " + v.getName());

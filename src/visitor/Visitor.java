@@ -18,68 +18,68 @@ import ast.type.sympleTypes.DoubleType;
 import ast.type.sympleTypes.IntType;
 import ast.type.sympleTypes.VoidType;
 
-public interface Visitor {
+public interface Visitor<TR, TP> {
 
-    public <TR, TP> TR visit(Program v, TP p);
+    public TR visit(Program v, TP p);
 
-    public <TR, TP> TR visit(VarDefinition v, TP p);
+    public TR visit(VarDefinition v, TP p);
 
-    public <TR, TP> TR visit(FuncDefinition v, TP p);
+    public TR visit(FuncDefinition v, TP p);
 
-    public <TR, TP> TR visit(Variable v, TP p);
+    public TR visit(Variable v, TP p);
 
-    public <TR, TP> TR visit(IntLiteral v, TP p);
+    public TR visit(IntLiteral v, TP p);
 
-    public <TR, TP> TR visit(CharLiteral v, TP p);
+    public TR visit(CharLiteral v, TP p);
 
-    public <TR, TP> TR visit(DoubleLiteral v, TP p);
+    public TR visit(DoubleLiteral v, TP p);
 
-    public <TR, TP> TR visit(RecordField v, TP p);
+    public TR visit(RecordField v, TP p);
 
-    public <TR, TP> TR visit(FunctionType v, TP p);
+    public TR visit(FunctionType v, TP p);
 
-    public <TR, TP> TR visit(DoubleType v, TP p);
+    public TR visit(DoubleType v, TP p);
 
-    public <TR, TP> TR visit(CharType v, TP p);
+    public TR visit(CharType v, TP p);
 
-    public <TR, TP> TR visit(VoidType v, TP p);
+    public TR visit(VoidType v, TP p);
 
-    public <TR, TP> TR visit(IntType v, TP p);
+    public TR visit(IntType v, TP p);
 
-    public <TR, TP> TR visit(Struct v, TP p);
+    public TR visit(Struct v, TP p);
 
-    public <TR, TP> TR visit(ArrayType v, TP p);
+    public TR visit(ArrayType v, TP p);
 
-    public <TR, TP> TR visit(Aritmmetic v, TP p);
+    public TR visit(Aritmmetic v, TP p);
 
-    public <TR, TP> TR visit(Comparision v, TP p);
+    public TR visit(Comparision v, TP p);
 
-    public <TR, TP> TR visit(Logic v, TP p);
+    public TR visit(Logic v, TP p);
 
-    public <TR, TP> TR visit(Negative v, TP p);
+    public TR visit(Negative v, TP p);
 
-    public <TR, TP> TR visit(UnaryMinus v, TP p);
+    public TR visit(UnaryMinus v, TP p);
 
-    public <TR, TP> TR visit(ArrayAccess v, TP p);
+    public TR visit(ArrayAccess v, TP p);
 
-    public <TR, TP> TR visit(Cast v, TP p);
+    public TR visit(Cast v, TP p);
 
-    public <TR, TP> TR visit(FieldAcess v, TP p);
+    public TR visit(FieldAcess v, TP p);
 
-    public <TR, TP> TR visit(FunctionInvoke v, TP p);
+    public TR visit(FunctionInvoke v, TP p);
 
-    public <TR, TP> TR visit(Return v, TP p);
+    public TR visit(Return v, TP p);
 
-    public <TR, TP> TR visit(Assigmment v, TP p);
+    public TR visit(Assigmment v, TP p);
 
-    public <TR, TP> TR visit(Condition v, TP p);
+    public TR visit(Condition v, TP p);
 
-    public <TR, TP> TR visit(Write v, TP p);
+    public TR visit(Write v, TP p);
 
-    public <TR, TP> TR visit(Read v, TP p);
+    public TR visit(Read v, TP p);
 
-    public <TR, TP> TR visit(Iterative v, TP p);
+    public TR visit(Iterative v, TP p);
 
-    public <TR, TP> TR visit(ErrorType v, TP p);
+    public TR visit(ErrorType v, TP p);
 
 }

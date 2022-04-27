@@ -20,148 +20,150 @@ import ast.type.sympleTypes.DoubleType;
 import ast.type.sympleTypes.IntType;
 import visitor.Visitor;
 
-public abstract class VisitorAbs implements Visitor {
+public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
 
     @Override
-    public <TR, TP> TR visit(Program v, TP p) {
+    public TR visit(Program v, TP p) {
         for (Definition c : v.getDefinitions())
             c.Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(VarDefinition v, TP p) {
+    public TR visit(VarDefinition v, TP p) {
         v.getType().Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(FuncDefinition v, TP p) {
+    public TR visit(FuncDefinition v, TP p) {
+        v.getType().Accept(this, p);
+
         for (Statement st : v.getStatements())
             st.Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(Variable v, TP p) {
+    public TR visit(Variable v, TP p) {
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(IntLiteral v, TP p) {
+    public TR visit(IntLiteral v, TP p) {
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(CharLiteral v, TP p) {
+    public TR visit(CharLiteral v, TP p) {
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(DoubleLiteral v, TP p) {
+    public TR visit(DoubleLiteral v, TP p) {
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(RecordField v, TP p) {
+    public TR visit(RecordField v, TP p) {
         v.getTypeField().Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(FunctionType v, TP p) {
+    public TR visit(FunctionType v, TP p) {
         for (Definition st : v.getParameters())
             st.Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(DoubleType v, TP p) {
+    public TR visit(DoubleType v, TP p) {
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(CharType v, TP p) {
+    public TR visit(CharType v, TP p) {
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(VoidType v, TP p) {
+    public TR visit(VoidType v, TP p) {
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(IntType v, TP p) {
+    public TR visit(IntType v, TP p) {
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(Struct v, TP p) {
+    public TR visit(Struct v, TP p) {
         for (RecordField st : v.getFields())
             st.Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(ArrayType v, TP p) {
+    public TR visit(ArrayType v, TP p) {
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(Aritmmetic v, TP p) {
+    public TR visit(Aritmmetic v, TP p) {
         v.getLeft().Accept(this, p);
         v.getRight().Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(Comparision v, TP p) {
+    public TR visit(Comparision v, TP p) {
         v.getLeft().Accept(this, p);
         v.getRight().Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(Logic v, TP p) {
+    public TR visit(Logic v, TP p) {
         v.getLeft().Accept(this, p);
         v.getRight().Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(Negative v, TP p) {
+    public TR visit(Negative v, TP p) {
         v.getExpression().Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(UnaryMinus v, TP p) {
+    public TR visit(UnaryMinus v, TP p) {
         v.getExpression().Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(ArrayAccess v, TP p) {
+    public TR visit(ArrayAccess v, TP p) {
         v.getLeft().Accept(this, p);
         v.getRight().Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(Cast v, TP p) {
+    public TR visit(Cast v, TP p) {
         v.getCastType().Accept(this, p);
         v.getExpression().Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(FieldAcess v, TP p) {
+    public TR visit(FieldAcess v, TP p) {
         v.getExpression().Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(FunctionInvoke v, TP p) {
+    public TR visit(FunctionInvoke v, TP p) {
         for (Expression st : v.getExpressions())
             st.Accept(this, p);
         v.getFunction().Accept(this, p);
@@ -169,20 +171,20 @@ public abstract class VisitorAbs implements Visitor {
     }
 
     @Override
-    public <TR, TP> TR visit(Return v, TP p) {
+    public TR visit(Return v, TP p) {
         v.getExpression().Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(Assigmment v, TP p) {
+    public TR visit(Assigmment v, TP p) {
         v.getLeft().Accept(this, p);
         v.getRight().Accept(this, p);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(Condition v, TP p) {
+    public TR visit(Condition v, TP p) {
         v.getCondition().Accept(this, p);
         for (Statement st : v.getIfStatement())
             st.Accept(this, p);
@@ -193,7 +195,7 @@ public abstract class VisitorAbs implements Visitor {
     }
 
     @Override
-    public <TR, TP> TR visit(Write v, TP p) {
+    public TR visit(Write v, TP p) {
         for (Expression e : v.getExpression()) {
             e.Accept(this, p);
         }
@@ -201,7 +203,7 @@ public abstract class VisitorAbs implements Visitor {
     }
 
     @Override
-    public <TR, TP> TR visit(Read v, TP p) {
+    public TR visit(Read v, TP p) {
         for (Expression e : v.getExpression()) {
             e.Accept(this, p);
         }
@@ -209,7 +211,7 @@ public abstract class VisitorAbs implements Visitor {
     }
 
     @Override
-    public <TR, TP> TR visit(Iterative v, TP p) {
+    public TR visit(Iterative v, TP p) {
         for (Statement st : v.getLoopStatement())
             st.Accept(this, p);
         v.getCondition().Accept(this, p);
@@ -217,7 +219,7 @@ public abstract class VisitorAbs implements Visitor {
     }
 
     @Override
-    public <TR, TP> TR visit(ErrorType v, TP p) {
+    public TR visit(ErrorType v, TP p) {
         return null;
     }
 }

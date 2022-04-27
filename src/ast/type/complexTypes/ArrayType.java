@@ -42,11 +42,10 @@ public class ArrayType extends TypeAbs {
 
     @Override
     public Type squareBrackets(Type other, AstNode node) {
-        if (other.equals(IntType.getInstance(other.getColumn(), other.getLine())) || other instanceof ErrorType) {
-            return other;
-        } else {
-            return super.logical(other, node);
+        if (other instanceof IntType || other instanceof ErrorType) {
+            return of;
         }
+        return super.squareBrackets(other,node);
     }
 
     @Override

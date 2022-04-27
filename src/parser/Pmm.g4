@@ -41,11 +41,11 @@ tipo returns [Type ast] locals [List<RecordField> fields =  new ArrayList<Record
                 | '['INT_CONSTANT']' of=tipo {$ast = new ArrayType($INT_CONSTANT.getCharPositionInLine()+1, $INT_CONSTANT.getLine(), LexerHelper.lexemeToInt($INT_CONSTANT.text) , $of.ast);}
                 ;
 
-recordField returns [List<RecordField> ast =  new ArrayList<RecordField>()]:
-                    OP1=ID (',' OP2=ID)* ':' type=tipo ';' {$ast.add(new RecordField($OP1.getCharPositionInLine()+1, $OP1.getLine(),$OP1.text, $type.ast));}
+recordField returns [List<RecordField> ast =  new ArrayList<RecordField>()] locals [List<String> fields =  new ArrayList<String>()] :
+                    OP1=ID{$fields.add($OP1.text);} (',' OP2=ID {$fields.add($OP2.text);})* ':' type=tipo ';' {for(String elem : $fields) { $ast.add(new RecordField($OP1.getCharPositionInLine()+1, $OP1.getLine(),elem, $type.ast));}}
                     ;
 
-defFunction returns [List<FuncDefinition> ast =  new ArrayList<FuncDefinition>()]:
+defFunction returns [List<FuncDefinition> ast =  new ArrayList<FuncDefinition>()] :
                 (aux=functionType cuerpo=inBody {$ast.add(new FuncDefinition($functionType.ast.getColumn(),$functionType.ast.getLine(),$aux.ast.getName(), $aux.ast ,$cuerpo.ast));})+
                 ;
 

@@ -15,38 +15,38 @@ import ast.type.sympleTypes.CharType;
 import ast.type.sympleTypes.DoubleType;
 import ast.type.sympleTypes.IntType;
 
-public class TypeCheckingVisitor extends VisitorAbs {
+public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
 
     @Override
-    public <TR, TP> TR visit(Variable v, TP p) {
+    public Void visit(Variable v, Type p) {
         v.setLValue(true);
         v.setType(v.getDefinition().getType());
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(IntLiteral v, TP p) {
+    public Void visit(IntLiteral v, Type p) {
         v.setLValue(false);
         v.setType(IntType.getInstance(v.getColumn(), v.getLine()));
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(CharLiteral v, TP p) {
+    public Void visit(CharLiteral v, Type p) {
         v.setLValue(false);
         v.setType(CharType.getInstance(v.getColumn(), v.getLine()));
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(DoubleLiteral v, TP p) {
+    public Void visit(DoubleLiteral v, Type p) {
         v.setLValue(false);
         v.setType(DoubleType.getInstance(v.getColumn(), v.getLine()));
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(Aritmmetic v, TP p) {
+    public Void visit(Aritmmetic v, Type p) {
         super.visit(v, p);
         v.setType(v.getLeft().getType().aritmmetic(v.getRight().getType(), v.getLeft()));
         v.setLValue(false);
@@ -54,7 +54,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(Comparision v, TP p) {
+    public Void visit(Comparision v, Type p) {
         super.visit(v, p);
         v.setType(v.getLeft().getType().comparision(v.getRight().getType(), v.getLeft()));
         v.setLValue(false);
@@ -62,7 +62,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(Condition v, TP p) {
+    public Void visit(Condition v, Type p) {
         v.getCondition().Accept(this, p);
 
         if (!v.getCondition().getType().isLogical()) {
@@ -77,7 +77,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(Iterative v, TP p) {
+    public Void visit(Iterative v, Type p) {
         v.getCondition().Accept(this, p);
 
         if (!v.getCondition().getType().isLogical()) {
@@ -91,7 +91,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(Logic v, TP p) {
+    public Void visit(Logic v, Type p) {
         super.visit(v, p);
         v.setType(v.getLeft().getType().logical(v.getRight().getType(), v.getLeft()));
         v.setLValue(false);
@@ -99,7 +99,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(Negative v, TP p) {
+    public Void visit(Negative v, Type p) {
         super.visit(v, p);
         v.getExpression().Accept(this, p);
         v.setType(v.getExpression().getType().logical(v));
@@ -108,15 +108,15 @@ public class TypeCheckingVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(UnaryMinus v, TP p) {
+    public Void visit(UnaryMinus v, Type p) {
         v.getExpression().Accept(this, p);
-        v.setType(v.getType().aritmmetic(v));
+        v.setType(v.getExpression().getType().aritmmetic(v));
         v.setLValue(false);
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(ArrayAccess v, TP p) {
+    public Void visit(ArrayAccess v, Type p) {
         super.visit(v, p);
         v.getLeft().Accept(this, p);
         v.getRight().Accept(this, p);
@@ -126,7 +126,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(Cast v, TP p) {
+    public Void visit(Cast v, Type p) {
         super.visit(v, p);
         v.setType(v.getExpression().getType().canBeCast(v.getCastType(), v));
         v.setLValue(false);
@@ -134,7 +134,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(FieldAcess v, TP p) {
+    public Void visit(FieldAcess v, Type p) {
         super.visit(v, p);
         v.setType(v.getExpression().getType().dot(v.getExpression(), v.getName()));
         v.setLValue(true);
@@ -142,16 +142,16 @@ public class TypeCheckingVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(Return v, TP p) {
+    public Void visit(Return v, Type p) {
         super.visit(v, p);
 
-        v.getExpression().setType(v.getExpression().getType().promotesTo(((Type)p), v.getExpression()));
+        v.getExpression().setType(v.getExpression().getType().promotesTo(p, v.getExpression()));
 
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(FunctionInvoke v, TP p) {
+    public Void visit(FunctionInvoke v, Type p) {
         super.visit(v, p);
         v.setType(v.getFunction().getDefinition().getType().parenthesis(v.getExpressions(), v.getFunction()));
         v.setLValue(true);
@@ -159,17 +159,20 @@ public class TypeCheckingVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(FuncDefinition v, TP p) {
+    public Void visit(FuncDefinition v, Type p) {
         v.getType().Accept(this, p);
         for (Statement st : v.getStatements())
             st.Accept(this, ((FunctionType) v.getType()).getTypeReturn());
+
 
         return null;
     }
 
     @Override
-    public <TR, TP> TR visit(Assigmment v, TP p) {
-        super.visit(v, p);
+    public Void visit(Assigmment v, Type p) {
+        v.getLeft().Accept(this, p);
+        v.getRight().Accept(this, p);
+
         if (!v.getLeft().getLValue()) {
             new ErrorType(v.getLeft().getColumn(), v.getLeft().getLine(), "Error, the assignment expression: the left part  {" + v.getLeft() + "} is not assignable");
         }
@@ -181,7 +184,7 @@ public class TypeCheckingVisitor extends VisitorAbs {
     }
 
     @Override
-    public <TR, TP> TR visit(Read v, TP p) {
+    public Void visit(Read v, Type p) {
         for (Expression e : v.getExpression()) {
             e.Accept(this, p);
             if (!e.getLValue())

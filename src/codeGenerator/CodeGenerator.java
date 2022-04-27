@@ -9,8 +9,10 @@ import java.io.PrintWriter;
 
 public class CodeGenerator {
     private PrintWriter out;
+    private int count;
 
     public CodeGenerator(String outputFilename, String sourceFilename) {
+        count = 0;
         try {
             this.out = new PrintWriter(outputFilename);
         } catch (IOException e) {
@@ -211,6 +213,21 @@ public class CodeGenerator {
     public void pop() {
         out.println("\tPOPI");
         out.flush();
+    }
+
+    public void jz(String name) {
+        out.println("\tJZ\t" + name);
+        out.flush();
+    }
+
+    public void jmp(String name) {
+        out.println("\tJMP\t" + name);
+        out.flush();
+    }
+
+    public int getLabel() {
+
+        return count++;
     }
 
     public void ret(int returns, int locals, int params) {
