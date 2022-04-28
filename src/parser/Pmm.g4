@@ -65,7 +65,7 @@ tipoSimple returns [Type ast]:
 
 statement returns [Statement ast] locals [List<Expression> param =  new ArrayList<Expression>(), List<Expression> parameter =  new ArrayList<Expression>(), List<Statement> elses =  new ArrayList<Statement>()]:
                     'while' exprWhile=expression ':' cuerpo=statementbody {$ast = new Iterative($exprWhile.ast.getColumn(), $exprWhile.ast.getLine(), $exprWhile.ast, $cuerpo.ast);}
-                   | 'if' exprIf=expression ':' stateIf=statementbody ('else' statelse=statementbody{$elses = $statelse.ast;})? {$ast= new Condition($exprIf.ast.getLine(), $exprIf.ast.getColumn(), $exprIf.ast, $stateIf.ast, $elses);}
+                   | 'if' exprIf=expression ':' stateIf=statementbody ('else' statelse=statementbody{$elses = $statelse.ast;})? {$ast= new Condition($exprIf.ast.getColumn(), $exprIf.ast.getLine(), $exprIf.ast, $stateIf.ast, $elses);}
                    | 'return' stat3=expression ';' {$ast = new Return($stat3.ast.getColumn(), $stat3.ast.getLine(), $stat3.ast);}
                    | AUX='input' stateRead=listExpression ';'{$ast = new Read($AUX.getCharPositionInLine()+1, $AUX.getLine(), $stateRead.ast);}
                    | AUX='print' stateWrite=listExpression ';'{$ast = new Write($AUX.getCharPositionInLine()+1, $AUX.getLine(), $stateWrite.ast);}

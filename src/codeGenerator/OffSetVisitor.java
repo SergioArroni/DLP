@@ -2,6 +2,7 @@ package codeGenerator;
 
 import ast.definition.FuncDefinition;
 import ast.definition.VarDefinition;
+import ast.statement.Statement;
 import ast.type.complexTypes.FunctionType;
 import ast.type.complexTypes.RecordField;
 import ast.type.complexTypes.Struct;
@@ -35,7 +36,8 @@ public class OffSetVisitor extends VisitorAbs<Void, Void> {
         localVariablesOffset = 0;
         parametersOffset = 4;
 
-        super.visit(v, p);
+        for(Statement s : v.getStatements())
+            s.Accept(this, p);
 
         v.setLocalOffsetAux(-localVariablesOffset);
 

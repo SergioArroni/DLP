@@ -5,6 +5,8 @@ import ast.expression.ArrayAccess;
 import ast.expression.Cast;
 import ast.expression.FieldAcess;
 import ast.expression.Variable;
+import ast.type.complexTypes.ArrayType;
+import ast.type.complexTypes.ErrorType;
 import ast.type.complexTypes.RecordField;
 import ast.type.complexTypes.Struct;
 import ast.type.sympleTypes.IntType;
@@ -53,9 +55,14 @@ public class AddressCGVisitor extends VisitorCGAbs<Void, Void> {
     public Void visit(ArrayAccess v, Void p) {
         v.getLeft().Accept(this, p);
         v.getRight().Accept(this.valueVisitor, p);
-        cg.push(v.getLeft().getType().getNumberOfBytes());
-        cg.mul(IntType.getInstance(v.getColumn(),v.getLine()));
-        cg.add(IntType.getInstance(v.getColumn(),v.getLine()));
+        if(v.getLeft().getType() instanceof ArrayType){
+            cg.push(((ArrayType)v.getLeft().getType()).getOf().getNumberOfBytes());
+            cg.mul(v.getRight().getType());
+            cg.add(v.getRight().getType());
+        }else {
+            new ErrorType(v.getLeft().getColumn(), v.getLeft().getLine(), "Error, v.getLeft().getType() not is ArrayType");
+        }
+
         return null;
     }
 
@@ -77,6 +84,8 @@ public class AddressCGVisitor extends VisitorCGAbs<Void, Void> {
                     cg.add(IntType.getInstance(rf.getColumn(), rf.getLine()));
                 }
             }
+        }else{
+            new ErrorType(v.getExpression().getColumn(), v.getExpression().getLine(), "Error, v.getExpression().getType() not is a struct");
         }
         return null;
     }

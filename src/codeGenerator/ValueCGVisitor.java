@@ -7,6 +7,8 @@ import ast.expression.literal.IntLiteral;
 import ast.expression.operator.Aritmmetic;
 import ast.expression.operator.Comparision;
 import ast.expression.operator.Logic;
+import ast.type.complexTypes.ArrayType;
+import ast.type.complexTypes.ErrorType;
 import ast.type.complexTypes.RecordField;
 import ast.type.complexTypes.Struct;
 import ast.type.sympleTypes.CharType;
@@ -203,14 +205,17 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
     /**
      * value[[ArrayAccess : Expression -> left right ]]() =
      *      Address[[left]]()
-     *  Value[[right]]()
+     *      Value[[right]]()
      *      <LOAD>right.getType.getSuffix()
      */
     @Override
     public Void visit(ArrayAccess v, Void p) {
         v.getLeft().Accept(this.addrVisitor, p);
         v.getRight().Accept(this, p);
-        cg.load(v.getRight().getType());
+        cg.push(((ArrayType)v.getLeft().getType()).getOf().getNumberOfBytes());
+        cg.mul(v.getRight().getType());
+        cg.add(v.getRight().getType());
+        cg.load(((ArrayType)v.getLeft().getType()).getOf());
         return null;
     }
 
@@ -230,12 +235,32 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
                     cg.load(rf.getTypeField());
                 }
             }
+        }else{
+            new ErrorType(v.getExpression().getColumn(), v.getExpression().getLine(), "Error, v.getExpression().getType() not is a struct");
         }
         return null;
     }
 
+    /**
+     * Value[[FunctionInvoke:Statement -> expressions* function]]()=
+     *     for(Expressions e: exprfessions){
+     *         Value[[e]]()
+     *     }
+     *
+     *      <CALL> function
+     *
+     */
     @Override
     public Void visit(FunctionInvoke v, Void p) {
+        cg.line(v);
+        cg.comment("FunctionInvoke");
+
+        for (Expression e:v.getExpressions()) {
+            e.Accept(this,p);
+        }
+        cg.call(v.getFunction().getName());
+
+
         return null;
     }
 

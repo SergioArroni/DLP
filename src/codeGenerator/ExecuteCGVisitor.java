@@ -7,6 +7,7 @@ import ast.definition.VarDefinition;
 import ast.expression.Expression;
 import ast.expression.FunctionInvoke;
 import ast.statement.*;
+import ast.type.complexTypes.ErrorType;
 import ast.type.complexTypes.FunctionType;
 import ast.type.sympleTypes.VoidType;
 
@@ -272,14 +273,11 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
         return null;
     }
 
-/**
- * TODO:Return
- */
     /**
      * Execute[[Return:Statement -> expression]](p)=
      *      Value[[expression]]()
      *
-     *      <RET> expression.getType.getNumBytes.
+     *      <RET> p.getType()).getTypeReturn().getNumberOfBytes() , p.getLocalOffsetAux() , p.getType().getNumberOfBytes()
      *
      */
     @Override
@@ -287,10 +285,15 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
         cg.line(v);
         cg.comment("Return");
 
-        v.getExpression().Accept(this.valueVisitor,null);
+        v.getExpression().Accept(this.valueVisitor, null);
 
-        cg.ret(((FunctionType)p.getType()).getTypeReturn().getNumberOfBytes(), ((FuncDefinition) p).getLocalOffsetAux(), ((FuncDefinition) p).getType().getNumberOfBytes());
-        return null;
+        if (p.getType() instanceof FunctionType) {
+            cg.ret(((FunctionType) p.getType()).getTypeReturn().getNumberOfBytes(), p.getLocalOffsetAux(), p.getType().getNumberOfBytes());
+
+        }else{
+            new ErrorType(p.getType().getColumn(), p.getType().getLine(), "Error, p.getType().getColumn() not is a FuncType");
+        }
+       return null;
     }
 
 }

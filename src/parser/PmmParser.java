@@ -978,7 +978,7 @@ public class PmmParser extends Parser {
 					}
 					break;
 				}
-				((StatementContext)_localctx).ast =  new Condition(((StatementContext)_localctx).exprIf.ast.getLine(), ((StatementContext)_localctx).exprIf.ast.getColumn(), ((StatementContext)_localctx).exprIf.ast, ((StatementContext)_localctx).stateIf.ast, _localctx.elses);
+				((StatementContext)_localctx).ast =  new Condition(((StatementContext)_localctx).exprIf.ast.getColumn(), ((StatementContext)_localctx).exprIf.ast.getLine(), ((StatementContext)_localctx).exprIf.ast, ((StatementContext)_localctx).stateIf.ast, _localctx.elses);
 				}
 				break;
 			case 3:

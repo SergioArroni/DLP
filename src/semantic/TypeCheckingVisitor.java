@@ -164,7 +164,6 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
         for (Statement st : v.getStatements())
             st.Accept(this, ((FunctionType) v.getType()).getTypeReturn());
 
-
         return null;
     }
 
