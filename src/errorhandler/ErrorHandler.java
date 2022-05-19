@@ -12,7 +12,7 @@ public class ErrorHandler {
     private List<ErrorType> errors;
 
     private ErrorHandler() {
-        this.errors = new ArrayList<ErrorType>();
+        this.errors = new ArrayList<>();
 
     }
 
