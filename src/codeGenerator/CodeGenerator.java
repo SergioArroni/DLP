@@ -210,8 +210,8 @@ public class CodeGenerator {
         out.flush();
     }
 
-    public void pop() {
-        out.println("\tPOPI");
+    public void pop(Type type) {
+        out.println("\tPOP" + type.suffix());
         out.flush();
     }
 

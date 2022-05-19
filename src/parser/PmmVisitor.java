@@ -30,12 +30,6 @@ public interface PmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(PmmParser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link PmmParser#listDef}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitListDef(PmmParser.ListDefContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link PmmParser#main}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -53,18 +47,6 @@ public interface PmmVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitDefVaribales(PmmParser.DefVaribalesContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PmmParser#tipo}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTipo(PmmParser.TipoContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PmmParser#recordField}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRecordField(PmmParser.RecordFieldContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PmmParser#defFunction}.
 	 * @param ctx the parse tree
@@ -84,11 +66,23 @@ public interface PmmVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctionTypeParametersAux(PmmParser.FunctionTypeParametersAuxContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PmmParser#tipo}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTipo(PmmParser.TipoContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PmmParser#tipoSimple}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitTipoSimple(PmmParser.TipoSimpleContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PmmParser#recordField}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRecordField(PmmParser.RecordFieldContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PmmParser#statement}.
 	 * @param ctx the parse tree

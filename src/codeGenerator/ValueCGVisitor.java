@@ -146,14 +146,20 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
     /**
      * Value[[UnaryMinus: Expression -> expression]]()=
      *
-     *  <PUSHI> 0
+     *  <PUSH> 0
      *  Value[[expression]]()
      *  <SUB> exppression.getType().getSuffixe()
      *
      */
     @Override
     public Void visit(UnaryMinus v, Void p) {
-        cg.push(0);
+
+        if(v.getType() instanceof  DoubleType){
+            cg.push(0.0);
+        }else{
+            cg.push(0);
+        }
+
         v.getExpression().Accept(this, null);
         cg.sub(v.getType());
         return  null;
@@ -242,8 +248,8 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
     }
 
     /**
-     * Value[[FunctionInvoke:Statement -> expressions* function]]()=
-     *     for(Expressions e: exprfessions){
+     * Value[[FunctionInvoke:Expression -> expressions* function]]()=
+     *     for(Expressions e: expressions){
      *         Value[[e]]()
      *     }
      *
@@ -259,7 +265,6 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
             e.Accept(this,p);
         }
         cg.call(v.getFunction().getName());
-
 
         return null;
     }

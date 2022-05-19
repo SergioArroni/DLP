@@ -14,11 +14,17 @@
 #line	12
 p:	
 	ENTER	0
+	' * Parameters
+	' * Local variables
 	RET	0, 0, 0
 
 #line	14
 f:	
 	ENTER	5
+	' * Parameters
+	' * Type: { DoubleType{Line: 14	 Column: 9	} }, Name: { r }, Offset: { 6 }
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { e }, Offset: { 4 }
+	' * Local variables
 	' * Type: { DoubleType{Line: 14	 Column: 9	} }, Name: { real }, Offset: { -4 }
 	' * Type: { CharType{Line: 4	 Column: 3	} }, Name: { c }, Offset: { -5 }
 
@@ -72,6 +78,11 @@ f:
 #line	24
 fill:	
 	ENTER	4
+	' * Parameters
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { row }, Offset: { 8 }
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { value }, Offset: { 6 }
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { increment }, Offset: { 4 }
+	' * Local variables
 	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { i }, Offset: { -2 }
 	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { inc }, Offset: { -4 }
 
@@ -168,6 +179,9 @@ Label1:
 #line	35
 show:	
 	ENTER	2
+	' * Parameters
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { row }, Offset: { 4 }
+	' * Local variables
 	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { i }, Offset: { -2 }
 
 #line	37
@@ -274,12 +288,13 @@ Label3:
 #line	46
 main:	
 	ENTER	2
+	' * Parameters
+	' * Local variables
 	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { i }, Offset: { -2 }
 
 #line	49
 	' * FunctionInvoke
 	CALL	p
-	POPI
 
 #line	50
 	' * Assignment
@@ -371,7 +386,6 @@ Label4:
 	LOADI
 	PUSHI	1
 	CALL	fill
-	POPI
 
 #line	61
 	' * FunctionInvoke
@@ -380,7 +394,6 @@ Label4:
 	ADDI
 	LOADI
 	CALL	show
-	POPI
 
 #line	62
 	' * Assignment

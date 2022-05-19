@@ -32,7 +32,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
      *      }
      *
      *      <CALL Main>
-     *      <HALT></HALT>
+     *      <HALT>
      *
      *      For(Definition d:Definition*){
      *              Execute[[d]]()
@@ -81,8 +81,11 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
         cg.line(v);
         cg.label(v.getName());
         cg.enter(v.getLocalOffsetAux());
-        //cg.comment("Parameters");
-        //cg.comment("Local variables");
+        cg.comment("Parameters");
+        for (VarDefinition vd:((FunctionType)v.getType()).getParameters()) {
+            cg.comment("Type: { "+vd.getType().toString() + " }, Name: { " + vd.getName() + " }, Offset: { "+ vd.getOffset()+" }");
+        }
+        cg.comment("Local variables");
         for (Statement s:v.getStatements()) {
             if(s instanceof Return){
                 s.Accept(this,v);
@@ -154,26 +157,23 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
 
     /**
      * Execute[[FunctionInvoke:Statement -> expressions* function]]()=
-     *     for(Expressions e: exprfessions){
-     *         Value[[e]]()
-     *     }
      *
-     *      <CALL> function
+     *      Value[[(Expression)Statement]])
      *
-     *      <POPI>
+     *      if(((Expression)Statement).type == VOID){
+     *          <POP>((Expression)Statement).type.suffixe()
+     *      }
      *
      */
     @Override
     public Void visit(FunctionInvoke v, FuncDefinition p) {
-        cg.line(v);
-        cg.comment("FunctionInvoke");
 
-        for (Expression e:v.getExpressions()) {
-            e.Accept(this.valueVisitor,p);
+        v.Accept(this.valueVisitor,p);
+
+        if(!(v.getType() instanceof VoidType)){
+            cg.pop(v.getType());
         }
-        cg.call(v.getFunction().getName());
 
-        cg.pop();
 
         return null;
     }
@@ -289,7 +289,6 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
 
         if (p.getType() instanceof FunctionType) {
             cg.ret(((FunctionType) p.getType()).getTypeReturn().getNumberOfBytes(), p.getLocalOffsetAux(), p.getType().getNumberOfBytes());
-
         }else{
             new ErrorType(p.getType().getColumn(), p.getType().getLine(), "Error, p.getType().getColumn() not is a FuncType");
         }
