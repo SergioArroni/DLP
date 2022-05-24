@@ -91,7 +91,6 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
     public Void visit(Comparision v, Void p) {
         castChar(v.getLeft(), v.getColumn(), v.getLine(), v.getRight());
 
-
         if (v.getOperator().equals("<"))
             cg.lt(v.getType());
         else if (v.getOperator().equals(">"))
@@ -118,8 +117,9 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
      */
     @Override
     public Void visit(Logic v, Void p) {
+        v.getLeft().Accept(this, null);
 
-        castChar(v.getLeft(), v.getColumn(), v.getLine(), v.getRight());
+        v.getRight().Accept(this, null);
 
         if(v.getOperator().equals("&&"))
             cg.and();
@@ -138,10 +138,6 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
 
         v.getExpression().Accept(this, null);
 
-        if (v.getExpression().getType() == CharType.getInstance(v.getExpression().getColumn(), v.getExpression().getLine())) {
-            cg.b2i();
-        }
-
         cg.not();
         return  null;
     }
@@ -157,7 +153,7 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
     @Override
     public Void visit(UnaryMinus v, Void p) {
 
-        if(v.getType() instanceof  DoubleType){
+        if(v.getType() ==  DoubleType.getInstance(v.getColumn(),v.getLine())){
             cg.push(0.0);
         }else{
             cg.push(0);

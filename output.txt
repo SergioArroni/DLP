@@ -13,12 +13,12 @@ main:
 
 #line	5
 	' * Write
-	PUSHB	97
-	b2i	
 	PUSHB	98
 	b2i	
-	ADDB
-	OUTB
+	PUSHB	97
+	b2i	
+	ADDI
+	OUTI
 
 #line	6
 	' * If

@@ -2,7 +2,7 @@
 # Main program
 def main(): {
 
-    print 'a' + 'b';
+    print 'b' + 'a';
     if 1 && 2 : {
     print 'a';
     }

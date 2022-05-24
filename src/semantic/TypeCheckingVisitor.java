@@ -48,7 +48,9 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
     @Override
     public Void visit(Aritmmetic v, Type p) {
         super.visit(v, p);
+
         v.setType(v.getLeft().getType().aritmmetic(v.getRight().getType(), v.getLeft()));
+
         v.setLValue(false);
         return null;
     }
