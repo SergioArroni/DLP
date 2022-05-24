@@ -55,8 +55,7 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
      */
     @Override
     public Void visit(Aritmmetic v, Void p) {
-        v.getLeft().Accept(this, null);
-        v.getRight().Accept(this, null);
+        castChar(v.getLeft(), v.getColumn(), v.getLine(), v.getRight());
 
         if(v.getOperator().equals("+"))
            cg.add(v.getType());
@@ -90,20 +89,20 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
      */
     @Override
     public Void visit(Comparision v, Void p) {
-        v.getLeft().Accept(this, null);
-        v.getRight().Accept(this, null);
+        castChar(v.getLeft(), v.getColumn(), v.getLine(), v.getRight());
 
-        if(v.getOperator().equals("<"))
+
+        if (v.getOperator().equals("<"))
             cg.lt(v.getType());
-        else if(v.getOperator().equals(">"))
+        else if (v.getOperator().equals(">"))
             cg.gt(v.getType());
-        else if(v.getOperator().equals("<="))
+        else if (v.getOperator().equals("<="))
             cg.le(v.getType());
-        else if(v.getOperator().equals(">="))
+        else if (v.getOperator().equals(">="))
             cg.ge(v.getType());
-        else if(v.getOperator().equals("=="))
+        else if (v.getOperator().equals("=="))
             cg.eq(v.getType());
-        else if(v.getOperator().equals("!="))
+        else if (v.getOperator().equals("!="))
             cg.ne(v.getType());
         return null;
     }
@@ -120,8 +119,7 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
     @Override
     public Void visit(Logic v, Void p) {
 
-        v.getLeft().Accept(this, null);
-        v.getRight().Accept(this, null);
+        castChar(v.getLeft(), v.getColumn(), v.getLine(), v.getRight());
 
         if(v.getOperator().equals("&&"))
             cg.and();
@@ -139,6 +137,11 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
     public Void visit(Negative v, Void p) {
 
         v.getExpression().Accept(this, null);
+
+        if (v.getExpression().getType() == CharType.getInstance(v.getExpression().getColumn(), v.getExpression().getLine())) {
+            cg.b2i();
+        }
+
         cg.not();
         return  null;
     }
@@ -298,5 +301,20 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
         cg.push(v.getValue());
         return null;
     }
+
+
+    private void castChar(Expression left, int column, int line, Expression right) {
+        left.Accept(this, null);
+        if (left.getType() == CharType.getInstance(column, line)) {
+            cg.b2i();
+        }
+
+        right.Accept(this, null);
+
+        if (right.getType() == CharType.getInstance(column, line)) {
+            cg.b2i();
+        }
+    }
+
 
 }

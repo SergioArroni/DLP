@@ -1,0 +1,10 @@
+
+# Main program
+def main(): {
+
+    print 'a' + 'b';
+    if 1 && 2 : {
+    print 'a';
+    }
+}
+

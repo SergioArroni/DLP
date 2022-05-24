@@ -36,7 +36,7 @@ public class IntType extends TypeAbs {
     @Override
     public Type comparision(Type other, AstNode node) {
         if (other.equals(IntType.getInstance(other.getColumn(), other.getLine())) || other instanceof ErrorType) {
-            return other;
+            return IntType.getInstance(getColumn(), getLine());
         } else {
             return super.comparision(other, node);
         }
@@ -75,7 +75,7 @@ public class IntType extends TypeAbs {
 
     @Override
     public Type canBeCast(Type other, AstNode node) {
-        if (other instanceof ErrorType || other instanceof IntType || other instanceof DoubleType || other instanceof CharType)
+        if (other instanceof ErrorType || other.equals(IntType.getInstance(other.getColumn(), other.getLine())) || other.equals(DoubleType.getInstance(other.getColumn(), other.getLine())) || other.equals(CharType.getInstance(other.getColumn(), other.getLine())))
             return other;
         else
             return super.canBeCast(other, node);
