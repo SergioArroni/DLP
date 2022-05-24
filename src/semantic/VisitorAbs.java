@@ -222,4 +222,15 @@ public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
     public TR visit(ErrorType v, TP p) {
         return null;
     }
+
+    /**
+    @Override
+    public TR visit(Ternaria v, TP p) {
+        v.getCondition().Accept(this, p);
+        v.getExprIf().Accept(this, p);
+        v.getExprElse().Accept(this, p);
+
+        return null;
+    }
+    */
 }

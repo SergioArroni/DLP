@@ -1,0 +1,9 @@
+
+# Main program
+def main(): {
+
+    if 'a' > 'b':{
+    print 'a';
+    }
+
+}

@@ -1,11 +1,15 @@
 package ast.type.complexTypes;
 
 import ast.AstNode;
+import ast.expression.Expression;
 import ast.type.Type;
 import ast.type.TypeAbs;
 import ast.type.sympleTypes.CharType;
 import ast.type.sympleTypes.IntType;
 import visitor.Visitor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ArrayType extends TypeAbs {
 

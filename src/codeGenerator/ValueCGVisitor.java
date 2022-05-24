@@ -166,6 +166,37 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
     }
 
     /**
+     * Value[[Ternaria: Expression -> exprIf exprElse condition]]()=
+     *
+     *      int saltoElse = cg.getLabel();
+     *      int saltoFinal = cg.getLabel();
+     *
+     *  Value[[condition]]()
+     *
+     *  <JZ Label_> saltoElse
+     *  Value[[exprIf]]();
+     *  <JMP Label_> saltoFin
+     *  <Label_>saltoElse<:>
+     *  Value[[exprElse]]();
+     *  <Label_>saltoFin<:>
+     *
+
+    @Override
+    public Void visit(Ternaria v, Void p) {
+        int saltoElse = cg.getLabel();
+        int saltoFinal = cg.getLabel();
+        v.getCondition().Accept(this, p);
+        cg.jz("Label_" + saltoElse);
+        v.getExprIf().Accept(this, p);
+        cg.jmp("Label_" + saltoFinal);
+        cg.label("Label_" + saltoElse);
+        v.getExprElse().Accept(this, p);
+        cg.label("Label_" + saltoFinal);
+        return null;
+    }
+    */
+
+    /**
      *  value[[Cast : Expression -> expression type ]]() =
      *      Value[[expression]]()
      *  if(v.getExpression().getType().equals(IntType))

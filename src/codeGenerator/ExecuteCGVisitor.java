@@ -7,8 +7,10 @@ import ast.definition.VarDefinition;
 import ast.expression.Expression;
 import ast.expression.FunctionInvoke;
 import ast.statement.*;
+import ast.type.complexTypes.ArrayType;
 import ast.type.complexTypes.ErrorType;
 import ast.type.complexTypes.FunctionType;
+import ast.type.sympleTypes.IntType;
 import ast.type.sympleTypes.VoidType;
 
 public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
@@ -64,6 +66,13 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
     @Override
     public Void visit(VarDefinition v, FuncDefinition p) {
         cg.comment("Type: { "+v.getType().toString() + " }, Name: { " + v.getName() + " }, Offset: { "+ v.getOffset()+" }");
+        if (v.getExpr() != null) {
+
+            v.Accept(this.addrVisitor, p);
+            v.getExpr().Accept(this.valueVisitor,p);
+
+            cg.store(v.getType());
+        }
         return null;
     }
 
@@ -113,7 +122,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
         cg.comment("Assignment");
         v.getLeft().Accept(this.addrVisitor, p);
         v.getRight().Accept(this.valueVisitor,p);
-        v.getLeft().getType().promotesTo(v.getRight().getType(),v);
+
         cg.store(v.getLeft().getType());
         return null;
     }
@@ -122,15 +131,36 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
      * Execute[[Write:Statement -> expression]]()=
      *      value[[exp]]()
      *
-     *      <OUT> exp.type.suffixe
+     *      if(exp.type==Array){
+     *          for(i=0;i<expr.type.size;i++){
+     *              value[[exp[i]]]()
+     *          }
+     *      }
+     *      else
+     *          <OUT> exp.type.suffixe
      */
     @Override
     public Void visit(Write v, FuncDefinition p) {
-        for (Expression e: v.getExpression()) {
+        for (Expression e : v.getExpression()) {
             cg.line(v);
             cg.comment("Write");
-            e.Accept(this.valueVisitor,p);
-            cg.out(e.getType());
+
+            if (e.getType() instanceof ArrayType) {
+                for (int i = 0;i<((ArrayType)e.getType()).getSize();i++) {
+
+                    e.Accept(this.addrVisitor, p);
+                    cg.push(i);
+                    cg.push(((ArrayType)e.getType()).getOf().getNumberOfBytes());
+                    cg.mul(IntType.getInstance(e.getColumn(),e.getLine()));
+                    cg.add(IntType.getInstance(e.getColumn(),e.getLine()));
+                    cg.load(((ArrayType)e.getType()).getOf());
+                    cg.out(((ArrayType)e.getType()).getOf());
+                }
+            } else {
+                e.Accept(this.valueVisitor, p);
+                cg.out(e.getType());
+            }
+
         }
         return null;
     }

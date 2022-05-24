@@ -27,8 +27,8 @@ def returns [List<Definition> ast =  new ArrayList<>()]:
             | defFunc=defFunction {$ast.addAll($defFunc.ast);}
             ;
 
-defVaribales returns [List<VarDefinition> ast =  new ArrayList<>()] locals [List<String> idList =  new ArrayList<>(),List<String> common =  new ArrayList<>() ]:
-                    OP1=ID {$idList.add($OP1.text);} (',' OP2=ID {$idList.add($OP2.text);})* ':' type=tipo ';' {for(String elem : $idList) { if(!$common.contains(elem)){ $ast.add(new VarDefinition($OP1.getCharPositionInLine()+1, $OP1.getLine(), elem, $type.ast)); $common.add(elem);}else{new ErrorType($OP1.getCharPositionInLine()+1, $OP1.getLine(), "The variable named " + elem + " is already being used");} } }
+defVaribales returns [List<VarDefinition> ast =  new ArrayList<>()] locals [List<String> idList =  new ArrayList<>(),List<String> common =  new ArrayList<>(), Expression expr = null ]:
+                    OP1=ID {$idList.add($OP1.text);} (',' OP2=ID {$idList.add($OP2.text);})* ':' type=tipo ('=' expression {$expr = $expression.ast;})?';' {for(String elem : $idList) { if(!$common.contains(elem)){ $ast.add(new VarDefinition($OP1.getCharPositionInLine()+1, $OP1.getLine(), elem, $type.ast, $expr)); $common.add(elem);}else{new ErrorType($OP1.getCharPositionInLine()+1, $OP1.getLine(), "The variable named " + elem + " is already being used");} } }
                     ;
 
 defFunction returns [List<FuncDefinition> ast =  new ArrayList<>()] :
@@ -40,7 +40,7 @@ functionType returns [FunctionType ast] locals [Type tipoFunc = VoidType.getInst
                 ;
 
 functionTypeParametersAux returns [List<VarDefinition> ast =  new ArrayList<>()]:
-                                (OP1=ID ':' type1=tipoSimple {$ast.add(new VarDefinition($OP1.getCharPositionInLine()+1, $OP1.getLine(), $OP1.text,$type1.ast));} (',' OP2=ID ':' type2=tipoSimple {$ast.add(new VarDefinition($OP2.getCharPositionInLine()+1, $OP2.getLine(), $OP2.text,$type2.ast));})* )*
+                                (OP1=ID ':' type1=tipoSimple {$ast.add(new VarDefinition($OP1.getCharPositionInLine()+1, $OP1.getLine(), $OP1.text,$type1.ast, null));} (',' OP2=ID ':' type2=tipoSimple {$ast.add(new VarDefinition($OP2.getCharPositionInLine()+1, $OP2.getLine(), $OP2.text,$type2.ast,null));})* )*
                                 ;
 
 tipo returns [Type ast] locals [List<RecordField> fields =  new ArrayList<>()]  :
@@ -82,7 +82,7 @@ listExpression returns [List<Expression> ast =  new ArrayList<>()]:
                 expr1=expression {$ast.add($expr1.ast);} (',' expr2=expression {$ast.add($expr2.ast);})*
                 ;
 
-expression returns [Expression ast] locals [List<Expression> param =  new ArrayList<>()]:
+ expression returns [Expression ast] locals [List<Expression> param =  new ArrayList<>()]:
               INT_CONSTANT {$ast = new IntLiteral($INT_CONSTANT.getCharPositionInLine()+1, $INT_CONSTANT.getLine(), LexerHelper.lexemeToInt($INT_CONSTANT.text) );}
             | REAL_CONSTANT {$ast = new DoubleLiteral($REAL_CONSTANT.getCharPositionInLine()+1, $REAL_CONSTANT.getLine(), LexerHelper.lexemeToReal($REAL_CONSTANT.text) );}
             | CHAR_CONSTANT {$ast = new CharLiteral($CHAR_CONSTANT.getCharPositionInLine()+1, $CHAR_CONSTANT.getLine(), LexerHelper.lexemeToChar($CHAR_CONSTANT.text));}
@@ -98,6 +98,7 @@ expression returns [Expression ast] locals [List<Expression> param =  new ArrayL
             | left=expression OP=('==' | '!=' | '>=' | '<' | '>' | '<=') right=expression {$ast = new Comparision($left.ast.getColumn(),$left.ast.getLine() ,$left.ast , $right.ast, $OP.text );}
             | left=expression OP=('&&' |'||') right=expression {$ast = new Logic($left.ast.getColumn(),$left.ast.getLine() ,$left.ast , $right.ast, $OP.text );}
             | ID '('(parameters=listExpression{$param.addAll($parameters.ast);})?')'  {$ast = new FunctionInvoke($ID.getCharPositionInLine()+1, $ID.getLine(), $param, new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text));}
+           // | condition=expression '?' exprIf=expression  ':' exprElse=expression {$ast = new Ternaria($exprIf.ast.getColumn(), $exprIf.ast.getLine(), $exprIf.ast, $exprElse.ast, $condition.ast);}
             ;
 
 INT_CONSTANT: [0-9]+ ;

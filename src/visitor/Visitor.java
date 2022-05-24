@@ -82,4 +82,8 @@ public interface Visitor<TR, TP> {
 
     public TR visit(ErrorType v, TP p);
 
+    /**
+    public TR visit(Ternaria v, TP p);
+     */
+
 }

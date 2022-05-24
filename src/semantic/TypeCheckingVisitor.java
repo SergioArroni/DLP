@@ -1,6 +1,7 @@
 package semantic;
 
 import ast.definition.FuncDefinition;
+import ast.definition.VarDefinition;
 import ast.expression.*;
 import ast.expression.literal.CharLiteral;
 import ast.expression.literal.DoubleLiteral;
@@ -56,6 +57,7 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
     @Override
     public Void visit(Comparision v, Type p) {
         super.visit(v, p);
+
         v.setType(v.getLeft().getType().comparision(v.getRight().getType(), v.getLeft()));
         v.setLValue(false);
         return null;
@@ -93,6 +95,7 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
     @Override
     public Void visit(Logic v, Type p) {
         super.visit(v, p);
+
         v.setType(v.getLeft().getType().logical(v.getRight().getType(), v.getLeft()));
         v.setLValue(false);
         return null;
@@ -101,6 +104,7 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
     @Override
     public Void visit(Negative v, Type p) {
         super.visit(v, p);
+
         v.getExpression().Accept(this, p);
         v.setType(v.getExpression().getType().logical(v));
         v.setLValue(false);
@@ -183,6 +187,23 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
     }
 
     @Override
+    public Void visit(VarDefinition v, Type p) {
+        if (v.getExpr() != null) {
+            v.getExpr().Accept(this, p);
+
+            if (!(v.getType() instanceof CharType || v.getType() instanceof DoubleType || v.getType() instanceof IntType)) {
+                new ErrorType(v.getColumn(), v.getLine(), "Error, the assignment expression: the left part  {" + v + "} is not assignable");
+            }
+
+            if (v.getType() != v.getExpr().getType()) {
+                v.getExpr().getType().promotesTo(v.getType(), v.getExpr());
+            }
+        }
+
+        return null;
+    }
+
+    @Override
     public Void visit(Read v, Type p) {
         for (Expression e : v.getExpression()) {
             e.Accept(this, p);
@@ -192,4 +213,27 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
         return null;
     }
 
+    @Override
+    public Void visit(Write v, Type p) {
+        for (Expression e : v.getExpression()) {
+            e.Accept(this, p);
+            if (e.getType() instanceof ArrayType) {
+                if (!(((ArrayType) e.getType()).getOf() instanceof CharType)) {
+                    new ErrorType(v.getColumn(), v.getLine(), "Error, the expression input: cannot have these expressions {" + v.getExpression() + "}");
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     @Override public Void visit(Ternaria v, Type p) {
+     super.visit(v, p);
+     if (!v.getCondition().getType().isLogical()) {
+     new ErrorType(v.getColumn(), v.getLine(), "Error, the expression ternaria: cannot have these expression {" + v.getCondition() + "}");
+     }
+     v.setType(v.getExprIf().getType());
+     return null;
+     }
+     */
 }
