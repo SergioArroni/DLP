@@ -176,6 +176,16 @@ public abstract class VisitorCGAbs<TR, TP> implements Visitor<TR, TP> {
     public TR visit(ErrorType v, TP p) {
         throw new IllegalStateException();
     }
+
+    @Override
+    public TR visit(Case v, TP p) {
+        return null;
+    }
+
+    @Override
+    public TR visit(Switch v, TP p) {
+       return null;
+    }
 /**
     @Override
     public TR visit(Ternaria v, TP p) {

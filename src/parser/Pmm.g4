@@ -62,12 +62,22 @@ recordField returns [List<RecordField> ast =  new ArrayList<>()] locals [List<St
 statement returns [Statement ast] locals [List<Expression> param =  new ArrayList<>(), List<Expression> parameter =  new ArrayList<>(), List<Statement> elses =  new ArrayList<>()]:
                     'while' exprWhile=expression ':' cuerpo=statementbody {$ast = new Iterative($exprWhile.ast.getColumn(), $exprWhile.ast.getLine(), $exprWhile.ast, $cuerpo.ast);}
                    | 'if' exprIf=expression ':' stateIf=statementbody ('else' statelse=statementbody{$elses = $statelse.ast;})? {$ast= new Condition($exprIf.ast.getColumn(), $exprIf.ast.getLine(), $exprIf.ast, $stateIf.ast, $elses);}
+                   | AUX='switch' '(' expression ')' '{' swtichbody  DEFA='default' ':' defState=statement temporal '}' {$ast = new Switch($AUX.getCharPositionInLine()+1, $AUX.getLine(), $expression.ast, $swtichbody.ast, new Case($DEFA.getCharPositionInLine()+1, $DEFA.getLine(), null, $defState.ast, $temporal.ast)) ;}
                    | 'return' stat3=expression ';' {$ast = new Return($stat3.ast.getColumn(), $stat3.ast.getLine(), $stat3.ast);}
                    | AUX='input' stateRead=listExpression ';'{$ast = new Read($AUX.getCharPositionInLine()+1, $AUX.getLine(), $stateRead.ast);}
                    | AUX='print' stateWrite=listExpression ';'{$ast = new Write($AUX.getCharPositionInLine()+1, $AUX.getLine(), $stateWrite.ast);}
                    | left=expression ('=') right=expression ';' {$ast = new Assigmment($left.ast.getColumn(), $left.ast.getLine(), $left.ast, $right.ast);}
                    | ID '('(expr1=listExpression{$parameter = $expr1.ast;})*')'';' {$param.addAll($parameter);} {$ast = new FunctionInvoke($ID.getCharPositionInLine()+1, $ID.getLine(), $param, new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text));}
                    ;
+
+swtichbody returns [List<Case> ast =  new ArrayList<>()]:
+            (AUX='case' expression ':' statement temporal {$ast.add(new Case($AUX.getCharPositionInLine()+1, $AUX.getLine(), $expression.ast, $statement.ast, $temporal.ast ));})+
+            ;
+
+temporal returns [String ast]:
+        AUX='break' ';'  {$ast = $AUX.text;}
+        | AUX='continue' ';'{$ast = $AUX.text;}
+        ;
 
 inBody returns [List<Statement> ast =  new ArrayList<>()] :
                 '{' (sta1=defVaribales {$ast.addAll($sta1.ast);})* (sta2=statement {$ast.add($sta2.ast);})* '}'

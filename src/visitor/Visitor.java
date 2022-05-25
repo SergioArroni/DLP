@@ -11,7 +11,6 @@ import ast.expression.operator.Comparision;
 import ast.expression.operator.Logic;
 import ast.Program;
 import ast.statement.*;
-import ast.type.Type;
 import ast.type.complexTypes.*;
 import ast.type.sympleTypes.CharType;
 import ast.type.sympleTypes.DoubleType;
@@ -81,6 +80,10 @@ public interface Visitor<TR, TP> {
     public TR visit(Iterative v, TP p);
 
     public TR visit(ErrorType v, TP p);
+
+    public TR visit(Case v, TP p);
+
+    public TR visit(Switch v, TP p);
 
     /**
     public TR visit(Ternaria v, TP p);

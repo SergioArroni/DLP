@@ -134,10 +134,10 @@ public class CodeGenerator {
     }
 
     public void eq(Type type) {
-        if (!type.getClass().equals(CharType.getInstance(type.getColumn(), type.getLine()).getClass())) {
+
             out.println("\tEQ" + type.suffix());
             out.flush();
-        }
+
     }
 
     public void ne(Type type) {

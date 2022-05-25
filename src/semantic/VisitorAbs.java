@@ -1,6 +1,5 @@
 package semantic;
 
-import ast.type.Type;
 import ast.type.sympleTypes.VoidType;
 import ast.definition.Definition;
 import ast.definition.FuncDefinition;
@@ -190,7 +189,26 @@ public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
             st.Accept(this, p);
         for (Statement st : v.getElseStatement())
             st.Accept(this, p);
+        return null;
+    }
+
+    @Override
+    public TR visit(Case v, TP p) {
+        if(v.getCondition() != null){
+            v.getCondition().Accept(this, p);
+        }
+        v.getCaseBody().Accept(this, p);
+
+        return null;
+    }
+
+    @Override
+    public TR visit(Switch v, TP p) {
         v.getCondition().Accept(this, p);
+        for (Statement st : v.getSwitchBody())
+            st.Accept(this, p);
+
+        v.getDefaulta().Accept(this, p);
         return null;
     }
 
@@ -224,13 +242,12 @@ public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
     }
 
     /**
-    @Override
-    public TR visit(Ternaria v, TP p) {
-        v.getCondition().Accept(this, p);
-        v.getExprIf().Accept(this, p);
-        v.getExprElse().Accept(this, p);
+     @Override public TR visit(Ternaria v, TP p) {
+     v.getCondition().Accept(this, p);
+     v.getExprIf().Accept(this, p);
+     v.getExprElse().Accept(this, p);
 
-        return null;
-    }
-    */
+     return null;
+     }
+     */
 }

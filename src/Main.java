@@ -42,8 +42,8 @@ public class Main {
             // * The AST is shown
             ast.Accept(new OffSetVisitor(), null);
             ast.Accept(new ExecuteCGVisitor(new CodeGenerator(args[1], args[0])), null);
-            IntrospectorModel model = new IntrospectorModel("Program", ast);
-            new IntrospectorTree("Introspector", model);
+            //IntrospectorModel model = new IntrospectorModel("Program", ast);
+            //new IntrospectorTree("Introspector", model);
         }
     }
 }
