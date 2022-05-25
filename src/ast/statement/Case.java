@@ -3,20 +3,22 @@ package ast.statement;
 import ast.expression.Expression;
 import visitor.Visitor;
 
+import java.util.List;
+
 public class Case extends StatementAbs {
 
-    private Statement caseBody;
+    private List<Statement> caseBody;
     private String temporal;
     private Expression condition;
 
-    public Case(int colum, int line, Expression condition, Statement caseBody, String temporal) {
+    public Case(int colum, int line, Expression condition, List<Statement> caseBody, String temporal) {
         super(colum, line);
         this.condition = condition;
         this.temporal = temporal;
         this.caseBody = caseBody;
     }
 
-    public Statement getCaseBody() {
+    public List<Statement> getCaseBody() {
         return caseBody;
     }
 

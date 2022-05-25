@@ -136,6 +136,11 @@ public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
     }
 
     @Override
+    public TR visit(VariablePlus v, TP p) {
+        return null;
+    }
+
+    @Override
     public TR visit(UnaryMinus v, TP p) {
         v.getExpression().Accept(this, p);
         return null;
@@ -194,10 +199,13 @@ public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
 
     @Override
     public TR visit(Case v, TP p) {
-        if(v.getCondition() != null){
+        if (v.getCondition() != null) {
             v.getCondition().Accept(this, p);
         }
-        v.getCaseBody().Accept(this, p);
+        for (Statement st : v.getCaseBody()){
+            st.Accept(this, p);
+        }
+
 
         return null;
     }

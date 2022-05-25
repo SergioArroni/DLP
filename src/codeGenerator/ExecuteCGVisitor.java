@@ -6,6 +6,7 @@ import ast.definition.FuncDefinition;
 import ast.definition.VarDefinition;
 import ast.expression.Expression;
 import ast.expression.FunctionInvoke;
+import ast.expression.VariablePlus;
 import ast.statement.*;
 import ast.type.complexTypes.ArrayType;
 import ast.type.complexTypes.ErrorType;
@@ -105,6 +106,28 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
         if(((FunctionType)v.getType()).getTypeReturn() instanceof VoidType){
             cg.ret(((FunctionType)v.getType()).getTypeReturn().getNumberOfBytes(),v.getLocalOffsetAux(), v.getType().getNumberOfBytes());
         }
+        return null;
+    }
+
+    /**
+     * Execute[[VariablePlus: Expression -> ID]]()=
+     *      address[[expression]]
+     *      <LOAD>expression.type.suffixe
+     */
+    @Override
+    public Void visit(VariablePlus v, FuncDefinition p) {
+        cg.line(v);
+        cg.comment("VariablePlus");
+        v.Accept(this.addrVisitor,p);
+        v.Accept(this.addrVisitor,p);
+        cg.load(v.getType());
+        cg.push(1);
+        if(v.getOperator().equals("++")){
+            cg.add(v.getType());
+        }else if(v.getOperator().equals("--")){
+            cg.sub(v.getType());
+        }
+        cg.store(v.getType());
         return null;
     }
 
@@ -249,6 +272,8 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
         return null;
     }
 
+    private boolean defaults = true;
+
     /**
      * Execute[[Switch:Statement -> condition switchBody* defaults]]()=
      *      int condition = cg.getLabel();
@@ -271,42 +296,65 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
         cg.line(v);
         cg.comment("Switch");
 
-        int finals = cg.getLabel();
-
         for (Case s : v.getSwitchBody()) {
-
-            cg.line(s);
-            cg.comment("Case");
 
             v.getCondition().Accept(this.valueVisitor, p);
 
+            s.Accept(this,p);
+
+        }
+
+            cg.line(v.getDefaulta());
+            cg.comment("Case - Default");
+            for (Statement st : v.getDefaulta().getCaseBody()) {
+                st.Accept(this, p);
+            }
+
+        return null;
+    }
+    /**
+     * Execute[[Case:Statement -> condition switchBody* defaults]]()=
+     *      int condition = cg.getLabel();
+     *      int end = cg.getLabel();
+     *      <Label_>condition<:>
+     *      Value[[condition]]()
+     *      <JZ Label_> end
+     *
+     *      for(Statement s: loopStatement){
+     *          Execute[[s]]()
+     *      }
+     *
+     *      <JMP Label_> condition
+     *
+     *      <Label_>end<:>
+     *
+     */
+    @Override
+    public Void visit(Case v, FuncDefinition p) {
+            cg.line(v);
+            cg.comment("Case");
+
             int siguiente = cg.getLabel();
 
-            s.getCondition().Accept(this.valueVisitor, p);
+            v.getCondition().Accept(this.valueVisitor, p);
 
-            cg.eq(s.getCondition().getType());
+            cg.eq(v.getCondition().getType());
 
             cg.jz("Label" + siguiente);
 
-            s.getCaseBody().Accept(this,p);
+            for(Statement st : v.getCaseBody()){
+                st.Accept(this,p);
+            }
 
-            if(s.getTemporal().equals("break")){
-                cg.jmp("Label" + finals);
+            if(v.getTemporal().equals("break")){
+                defaults = false;
             }
 
             cg.label("Label" + siguiente);
 
-        }
-
-        cg.line(v.getDefaulta());
-        cg.comment("Case - Default");
-        v.getDefaulta().getCaseBody().Accept(this,p);
-        cg.jmp("Label" + finals);
-
-        cg.label("Label" + finals);
-
         return null;
     }
+
 
 
 

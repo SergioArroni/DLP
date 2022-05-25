@@ -85,6 +85,8 @@ public interface Visitor<TR, TP> {
 
     public TR visit(Switch v, TP p);
 
+    public TR visit(VariablePlus v, TP p);
+
     /**
     public TR visit(Ternaria v, TP p);
      */

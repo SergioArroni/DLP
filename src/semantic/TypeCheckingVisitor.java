@@ -26,6 +26,14 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
     }
 
     @Override
+    public Void visit(VariablePlus v, Type p) {
+        v.setLValue(false);
+        v.setType(v.getDefinition().getType());
+
+        return null;
+    }
+
+    @Override
     public Void visit(IntLiteral v, Type p) {
         v.setLValue(false);
         v.setType(IntType.getInstance(v.getColumn(), v.getLine()));

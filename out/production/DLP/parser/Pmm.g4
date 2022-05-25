@@ -59,19 +59,20 @@ recordField returns [List<RecordField> ast =  new ArrayList<>()] locals [List<St
                     OP1=ID{$fields.add($OP1.text);} (',' OP2=ID {$fields.add($OP2.text);})* ':' type=tipo ';' {for(String elem : $fields) { $ast.add(new RecordField($OP1.getCharPositionInLine()+1, $OP1.getLine(),elem, $type.ast));}}
                     ;
 
-statement returns [Statement ast] locals [List<Expression> param =  new ArrayList<>(), List<Expression> parameter =  new ArrayList<>(), List<Statement> elses =  new ArrayList<>()]:
+statement returns [Statement ast] locals [List<Expression> param =  new ArrayList<>(), List<Expression> parameter =  new ArrayList<>(), List<Statement> elses =  new ArrayList<>(), List<Statement> defaults=  new ArrayList<>()]:
                     'while' exprWhile=expression ':' cuerpo=statementbody {$ast = new Iterative($exprWhile.ast.getColumn(), $exprWhile.ast.getLine(), $exprWhile.ast, $cuerpo.ast);}
                    | 'if' exprIf=expression ':' stateIf=statementbody ('else' statelse=statementbody{$elses = $statelse.ast;})? {$ast= new Condition($exprIf.ast.getColumn(), $exprIf.ast.getLine(), $exprIf.ast, $stateIf.ast, $elses);}
-                   | AUX='switch' '(' expression ')' '{' swtichbody  DEFA='default' ':' defState=statement temporal '}' {$ast = new Switch($AUX.getCharPositionInLine()+1, $AUX.getLine(), $expression.ast, $swtichbody.ast, new Case($DEFA.getCharPositionInLine()+1, $DEFA.getLine(), null, $defState.ast, $temporal.ast)) ;}
+                   | AUX='switch' '(' expression ')' '{' swtichbody  DEFA='default' ':' (defState=statement {$defaults.add($defState.ast);})* temporal '}' {$ast = new Switch($AUX.getCharPositionInLine()+1, $AUX.getLine(), $expression.ast, $swtichbody.ast, new Case($DEFA.getCharPositionInLine()+1, $DEFA.getLine(), null, $defaults, $temporal.ast)) ;}
                    | 'return' stat3=expression ';' {$ast = new Return($stat3.ast.getColumn(), $stat3.ast.getLine(), $stat3.ast);}
                    | AUX='input' stateRead=listExpression ';'{$ast = new Read($AUX.getCharPositionInLine()+1, $AUX.getLine(), $stateRead.ast);}
                    | AUX='print' stateWrite=listExpression ';'{$ast = new Write($AUX.getCharPositionInLine()+1, $AUX.getLine(), $stateWrite.ast);}
                    | left=expression ('=') right=expression ';' {$ast = new Assigmment($left.ast.getColumn(), $left.ast.getLine(), $left.ast, $right.ast);}
                    | ID '('(expr1=listExpression{$parameter = $expr1.ast;})*')'';' {$param.addAll($parameter);} {$ast = new FunctionInvoke($ID.getCharPositionInLine()+1, $ID.getLine(), $param, new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text));}
+                   | ID OP=('++' | '--') ';'{$ast = new VariablePlus($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text, $OP.text );}
                    ;
 
-swtichbody returns [List<Case> ast =  new ArrayList<>()]:
-            (AUX='case' expression ':' statement temporal {$ast.add(new Case($AUX.getCharPositionInLine()+1, $AUX.getLine(), $expression.ast, $statement.ast, $temporal.ast ));})+
+swtichbody returns [List<Case> ast =  new ArrayList<>()] locals [List<Statement> states =  new ArrayList<>()]:
+            (AUX='case' expression ':' (statement {$states.add($statement.ast);})* temporal {$ast.add(new Case($AUX.getCharPositionInLine()+1, $AUX.getLine(), $expression.ast, $states, $temporal.ast ));})+
             ;
 
 temporal returns [String ast]:
@@ -96,6 +97,7 @@ listExpression returns [List<Expression> ast =  new ArrayList<>()]:
               INT_CONSTANT {$ast = new IntLiteral($INT_CONSTANT.getCharPositionInLine()+1, $INT_CONSTANT.getLine(), LexerHelper.lexemeToInt($INT_CONSTANT.text) );}
             | REAL_CONSTANT {$ast = new DoubleLiteral($REAL_CONSTANT.getCharPositionInLine()+1, $REAL_CONSTANT.getLine(), LexerHelper.lexemeToReal($REAL_CONSTANT.text) );}
             | CHAR_CONSTANT {$ast = new CharLiteral($CHAR_CONSTANT.getCharPositionInLine()+1, $CHAR_CONSTANT.getLine(), LexerHelper.lexemeToChar($CHAR_CONSTANT.text));}
+            | ID OP=('++' | '--') {$ast = new VariablePlus($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text, $OP.text );}
             | ID {$ast = new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text );}
             | '(' expr=expression ')' {$ast = $expr.ast;}
             | expr1=expression '[' expr2=expression ']' {$ast = new ArrayAccess( $expr1.ast.getColumn(), $expr1.ast.getLine(), $expr1.ast, $expr2.ast );}
@@ -106,7 +108,7 @@ listExpression returns [List<Expression> ast =  new ArrayList<>()]:
             | left=expression OP=('*' | '/' | '%') right=expression {$ast = new Aritmmetic($left.ast.getColumn(),$left.ast.getLine() ,$left.ast , $right.ast, $OP.text );}
             | left=expression OP=('+' | '-') right=expression {$ast = new Aritmmetic($left.ast.getColumn(),$left.ast.getLine() ,$left.ast , $right.ast, $OP.text );}
             | left=expression OP=('==' | '!=' | '>=' | '<' | '>' | '<=') right=expression {$ast = new Comparision($left.ast.getColumn(),$left.ast.getLine() ,$left.ast , $right.ast, $OP.text );}
-            | left=expression OP=('&&' |'||') right=expression {$ast = new Logic($left.ast.getColumn(),$left.ast.getLine() ,$left.ast , $right.ast, $OP.text );}
+            | left=expression OP=('&&' |'||' | '^') right=expression {$ast = new Logic($left.ast.getColumn(),$left.ast.getLine() ,$left.ast , $right.ast, $OP.text );}
             | ID '('(parameters=listExpression{$param.addAll($parameters.ast);})?')'  {$ast = new FunctionInvoke($ID.getCharPositionInLine()+1, $ID.getLine(), $param, new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text));}
            // | condition=expression '?' exprIf=expression  ':' exprElse=expression {$ast = new Ternaria($exprIf.ast.getColumn(), $exprIf.ast.getLine(), $exprIf.ast, $exprElse.ast, $condition.ast);}
             ;

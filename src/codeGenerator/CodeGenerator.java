@@ -220,6 +220,11 @@ public class CodeGenerator {
         out.flush();
     }
 
+    public void jnz(String name) {
+        out.println("\tJNZ\t" + name);
+        out.flush();
+    }
+
     public void jmp(String name) {
         out.println("\tJMP\t" + name);
         out.flush();

@@ -1,10 +1,7 @@
 package codeGenerator;
 
 import ast.definition.VarDefinition;
-import ast.expression.ArrayAccess;
-import ast.expression.Cast;
-import ast.expression.FieldAcess;
-import ast.expression.Variable;
+import ast.expression.*;
 import ast.type.complexTypes.ArrayType;
 import ast.type.complexTypes.ErrorType;
 import ast.type.complexTypes.RecordField;
@@ -33,6 +30,28 @@ public class AddressCGVisitor extends VisitorCGAbs<Void, Void> {
      */
     @Override
     public Void visit(Variable v, Void p) {
+        if(v.getDefinition().getScope()==0){
+            cg.pushA(((VarDefinition)v.getDefinition()).getOffset());
+        }else {
+            cg.pushBP();
+            cg.push(((VarDefinition)v.getDefinition()).getOffset());
+            cg.add(IntType.getInstance(v.getColumn(),v.getLine()));
+        }
+        return null;
+    }
+
+    /**
+     * Address[[Variable:Expression -> ID]]()=
+     *      if(Expression.def.getScope()==0){
+     *          <PUSHA> Expression.type.offset
+     *      }else{
+     *          <PUSH BP>
+     *          <PUSHI> Expression.type.offset
+     *          <ADD>
+     *      }
+     */
+    @Override
+    public Void visit(VariablePlus v, Void p) {
         if(v.getDefinition().getScope()==0){
             cg.pushA(((VarDefinition)v.getDefinition()).getOffset());
         }else {

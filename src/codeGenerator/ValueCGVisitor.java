@@ -38,6 +38,24 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
     }
 
     /**
+     * Value[[VariablePlus: Expression -> ID]]()=
+     *      address[[expression]]
+     *      <LOAD>expression.type.suffixe
+     */
+    @Override
+    public Void visit(VariablePlus v, Void p) {
+        v.Accept(this.addrVisitor,p);
+        cg.load(v.getType());
+        cg.push(1);
+        if(v.getOperator().equals("++")){
+            cg.add(v.getType());
+        }else if(v.getOperator().equals("--")){
+            cg.sub(v.getType());
+        }
+        return null;
+    }
+
+    /**
      * Value[[Aritmmetic: Expression -> left right operator]]()=
      *  Value[[left]]
      *  Value[[right]]
@@ -119,14 +137,41 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
      */
     @Override
     public Void visit(Logic v, Void p) {
-
+        int end = cg.getLabel();
+        int end2 = cg.getLabel();
+        int finals2 = cg.getLabel();
+        int finals = cg.getLabel();
         v.getLeft().Accept(this, null);
+        if(v.getOperator().equals("&&")){
+            cg.jz("Label_"+end);
+        }else if(v.getOperator().equals("||")){
+            cg.jnz("Label_"+end2);
+        }
+
         v.getRight().Accept(this, null);
 
-        if(v.getOperator().equals("&&"))
-            cg.and();
-        else if(v.getOperator().equals("||"))
+        if(v.getOperator().equals("&&")){
+            cg.jz("Label_"+end);
+            cg.push(1);
+            cg.jmp("Label_"+finals);
+            cg.label("Label_" + end);
+            cg.push(0);
+            cg.label("Label_"+finals);
+        }
+        else if(v.getOperator().equals("||")){
+            cg.jnz("Label_"+end2);
+            cg.push(0);
+            cg.jmp("Label_"+finals2);
+            cg.label("Label_" + end2);
+            cg.push(1);
+            cg.label("Label_"+finals2);
+        }
+
+        else if(v.getOperator().equals("^")){
             cg.or();
+            cg.not();
+        }
+
         return null;
     }
 

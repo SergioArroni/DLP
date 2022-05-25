@@ -183,8 +183,13 @@ public abstract class VisitorCGAbs<TR, TP> implements Visitor<TR, TP> {
     }
 
     @Override
+    public TR visit(VariablePlus v, TP p) {
+        throw new IllegalStateException();
+    }
+
+    @Override
     public TR visit(Switch v, TP p) {
-       return null;
+        throw new IllegalStateException();
     }
 /**
     @Override

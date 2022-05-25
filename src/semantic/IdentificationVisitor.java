@@ -3,6 +3,7 @@ package semantic;
 import ast.definition.FuncDefinition;
 import ast.definition.VarDefinition;
 import ast.expression.Variable;
+import ast.expression.VariablePlus;
 import ast.statement.Statement;
 import ast.type.complexTypes.ErrorType;
 import symboltable.SymbolTable;
@@ -42,6 +43,18 @@ public class IdentificationVisitor extends VisitorAbs<Void, Void> {
 
     @Override
     public Void visit(Variable v, Void p) {
+        var find = symbolTable.find(v.getName());
+        if (find == null) {
+            var error = new ErrorType(v.getColumn(), v.getLine(), "Error, variable not defined: " + v.getName());
+            v.setDefinition(new VarDefinition(v.getColumn(), v.getLine(), v.getName(), error,v));
+            return null;
+        }
+        v.setDefinition(find);
+        return null;
+    }
+
+    @Override
+    public Void visit(VariablePlus v, Void p) {
         var find = symbolTable.find(v.getName());
         if (find == null) {
             var error = new ErrorType(v.getColumn(), v.getLine(), "Error, variable not defined: " + v.getName());

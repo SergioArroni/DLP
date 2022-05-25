@@ -5,154 +5,34 @@
 	CALL main
 	HALT
 
-#line	2
+#line	16
 main:	
 	ENTER	3
 	' * Parameters
 	' * Local variables
-	' * Type: { IntType{Line: 4	 Column: 15	} }, Name: { month }, Offset: { -2 }
-	' * Type: { CharType{Line: 5	 Column: 21	} }, Name: { monthString }, Offset: { -3 }
+	' * Type: { IntType{Line: 17	 Column: 15	} }, Name: { month }, Offset: { -2 }
+	' * Type: { CharType{Line: 18	 Column: 21	} }, Name: { monthString }, Offset: { -3 }
 
-#line	6
+#line	19
 	' * Assignment
 	PUSH	BP
 	PUSHI	-2
 	ADDI
-	PUSHI	20
+	PUSHI	4
 	STOREI
 
-#line	8
+#line	20
 	' * Switch
-
-#line	9
-	' * Case
 	PUSH	BP
 	PUSHI	-2
 	ADDI
 	LOADI
+
+#line	21
+	' * Case
 	PUSHI	1
 	EQI
-	JZ	Label1
-
-#line	9
-	' * Assignment
-	PUSH	BP
-	PUSHI	-3
-	ADDI
-	PUSHB	74
-	STOREB
-	JMP	Label0
-Label1:	
-
-#line	11
-	' * Case
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
-	PUSHI	2
-	EQI
-	JZ	Label2
-
-#line	11
-	' * Assignment
-	PUSH	BP
-	PUSHI	-3
-	ADDI
-	PUSHB	70
-	STOREB
-	JMP	Label0
-Label2:	
-
-#line	13
-	' * Case
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
-	PUSHI	3
-	EQI
-	JZ	Label3
-
-#line	13
-	' * Assignment
-	PUSH	BP
-	PUSHI	-3
-	ADDI
-	PUSHB	77
-	STOREB
-	JMP	Label0
-Label3:	
-
-#line	15
-	' * Case
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
-	PUSHI	4
-	EQI
-	JZ	Label4
-
-#line	15
-	' * Assignment
-	PUSH	BP
-	PUSHI	-3
-	ADDI
-	PUSHB	65
-	STOREB
-	JMP	Label0
-Label4:	
-
-#line	17
-	' * Case
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
-	PUSHI	5
-	EQI
-	JZ	Label5
-
-#line	17
-	' * Assignment
-	PUSH	BP
-	PUSHI	-3
-	ADDI
-	PUSHB	77
-	STOREB
-	JMP	Label0
-Label5:	
-
-#line	19
-	' * Case
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
-	PUSHI	6
-	EQI
-	JZ	Label6
-
-#line	19
-	' * Assignment
-	PUSH	BP
-	PUSHI	-3
-	ADDI
-	PUSHB	74
-	STOREB
-	JMP	Label0
-Label6:	
-
-#line	21
-	' * Case
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
-	PUSHI	7
-	EQI
-	JZ	Label7
+	JZ	Label0
 
 #line	21
 	' * Assignment
@@ -161,123 +41,17 @@ Label6:
 	ADDI
 	PUSHB	74
 	STOREB
-	JMP	Label0
-Label7:	
 
-#line	23
-	' * Case
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
-	PUSHI	8
-	EQI
-	JZ	Label8
-
-#line	23
+#line	22
 	' * Assignment
 	PUSH	BP
 	PUSHI	-3
 	ADDI
-	PUSHB	65
+	PUSHB	80
 	STOREB
-	JMP	Label0
-Label8:	
-
-#line	25
-	' * Case
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
-	PUSHI	9
-	EQI
-	JZ	Label9
-
-#line	25
-	' * Assignment
-	PUSH	BP
-	PUSHI	-3
-	ADDI
-	PUSHB	83
-	STOREB
-	JMP	Label0
-Label9:	
-
-#line	27
-	' * Case
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
-	PUSHI	10
-	EQI
-	JZ	Label10
-
-#line	27
-	' * Assignment
-	PUSH	BP
-	PUSHI	-3
-	ADDI
-	PUSHB	79
-	STOREB
-	JMP	Label0
-Label10:	
-
-#line	29
-	' * Case
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
-	PUSHI	11
-	EQI
-	JZ	Label11
-
-#line	29
-	' * Assignment
-	PUSH	BP
-	PUSHI	-3
-	ADDI
-	PUSHB	78
-	STOREB
-	JMP	Label0
-Label11:	
-
-#line	31
-	' * Case
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
-	PUSHI	12
-	EQI
-	JZ	Label12
-
-#line	31
-	' * Assignment
-	PUSH	BP
-	PUSHI	-3
-	ADDI
-	PUSHB	68
-	STOREB
-	JMP	Label0
-Label12:	
-
-#line	33
-	' * Case - Default
-
-#line	33
-	' * Assignment
-	PUSH	BP
-	PUSHI	-3
-	ADDI
-	PUSHB	73
-	STOREB
-	JMP	Label0
 Label0:	
 
-#line	37
+#line	28
 	' * Write
 	PUSH	BP
 	PUSHI	-3
