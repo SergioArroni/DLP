@@ -16,6 +16,8 @@ public class OffSetVisitor extends VisitorAbs<Void, Void> {
     private int structsOffset = 0;
     private int parametersOffset = 4;
 
+    //===============DEF===============
+
     @Override
     public Void visit(VarDefinition v, Void p) {
         super.visit(v, p);
@@ -43,6 +45,8 @@ public class OffSetVisitor extends VisitorAbs<Void, Void> {
 
         return null;
     }
+
+    //===============TYPE===============
 
     @Override
     public Void visit(FunctionType v, Void p) {

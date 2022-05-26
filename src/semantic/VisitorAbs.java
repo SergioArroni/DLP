@@ -22,12 +22,16 @@ import visitor.Visitor;
 
 public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
 
+    //===============PROGRAM===============
+
     @Override
     public TR visit(Program v, TP p) {
         for (Definition c : v.getDefinitions())
             c.Accept(this, p);
         return null;
     }
+
+    //===============DEF===============
 
     @Override
     public TR visit(VarDefinition v, TP p) {
@@ -44,31 +48,7 @@ public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
         return null;
     }
 
-    @Override
-    public TR visit(Variable v, TP p) {
-        return null;
-    }
-
-    @Override
-    public TR visit(IntLiteral v, TP p) {
-        return null;
-    }
-
-    @Override
-    public TR visit(CharLiteral v, TP p) {
-        return null;
-    }
-
-    @Override
-    public TR visit(DoubleLiteral v, TP p) {
-        return null;
-    }
-
-    @Override
-    public TR visit(RecordField v, TP p) {
-        v.getTypeField().Accept(this, p);
-        return null;
-    }
+    //===============TYPE===============
 
     @Override
     public TR visit(FunctionType v, TP p) {
@@ -106,6 +86,39 @@ public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
 
     @Override
     public TR visit(ArrayType v, TP p) {
+        return null;
+    }
+
+    @Override
+    public TR visit(ErrorType v, TP p) {
+        return null;
+    }
+
+    //===============EXPRESSIONS===============
+
+    @Override
+    public TR visit(Variable v, TP p) {
+        return null;
+    }
+
+    @Override
+    public TR visit(IntLiteral v, TP p) {
+        return null;
+    }
+
+    @Override
+    public TR visit(CharLiteral v, TP p) {
+        return null;
+    }
+
+    @Override
+    public TR visit(DoubleLiteral v, TP p) {
+        return null;
+    }
+
+    @Override
+    public TR visit(RecordField v, TP p) {
+        v.getTypeField().Accept(this, p);
         return null;
     }
 
@@ -161,6 +174,8 @@ public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
         v.getExpression().Accept(this, p);
         return null;
     }
+
+    //===============STATEMENTS===============
 
     @Override
     public TR visit(FunctionInvoke v, TP p) {
@@ -218,8 +233,4 @@ public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
         return null;
     }
 
-    @Override
-    public TR visit(ErrorType v, TP p) {
-        return null;
-    }
 }

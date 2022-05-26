@@ -28,7 +28,7 @@ public class AddressCGVisitor extends VisitorCGAbs<Void, Void> {
      *      }else{
      *          <PUSH BP>
      *          <PUSHI> Expression.type.offset
-     *          <ADDI> Expression.type.suffixe
+     *          <ADD>
      *      }
      */
     @Override

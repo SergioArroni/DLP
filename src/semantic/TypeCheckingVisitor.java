@@ -17,6 +17,19 @@ import ast.type.sympleTypes.IntType;
 
 public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
 
+    //===============DEF===============
+
+    @Override
+    public Void visit(FuncDefinition v, Type p) {
+        v.getType().Accept(this, p);
+        for (Statement st : v.getStatements())
+            st.Accept(this, ((FunctionType) v.getType()).getTypeReturn());
+
+        return null;
+    }
+
+    //===============EXPRESSIONS===============
+
     @Override
     public Void visit(Variable v, Type p) {
         v.setLValue(true);
@@ -48,7 +61,9 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
     @Override
     public Void visit(Aritmmetic v, Type p) {
         super.visit(v, p);
+
         v.setType(v.getLeft().getType().aritmmetic(v.getRight().getType(), v.getLeft()));
+
         v.setLValue(false);
         return null;
     }
@@ -58,35 +73,6 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
         super.visit(v, p);
         v.setType(v.getLeft().getType().comparision(v.getRight().getType(), v.getLeft()));
         v.setLValue(false);
-        return null;
-    }
-
-    @Override
-    public Void visit(Condition v, Type p) {
-        v.getCondition().Accept(this, p);
-
-        if (!v.getCondition().getType().isLogical()) {
-            new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, that conditional expression: { " + v.getCondition() + " } is not logical");
-        }
-        for (Statement st : v.getIfStatement())
-            st.Accept(this, p);
-        for (Statement st : v.getElseStatement())
-            st.Accept(this, p);
-
-        return null;
-    }
-
-    @Override
-    public Void visit(Iterative v, Type p) {
-        v.getCondition().Accept(this, p);
-
-        if (!v.getCondition().getType().isLogical()) {
-            new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, that conditional expression: { " + v.getCondition() + " } is not logical");
-        }
-
-        for (Statement st : v.getLoopStatement())
-            st.Accept(this, p);
-
         return null;
     }
 
@@ -141,14 +127,7 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
         return null;
     }
 
-    @Override
-    public Void visit(Return v, Type p) {
-        super.visit(v, p);
-
-        v.getExpression().setType(v.getExpression().getType().promotesTo(p, v.getExpression()));
-
-        return null;
-    }
+    //===============STATEMENTS===============
 
     @Override
     public Void visit(FunctionInvoke v, Type p) {
@@ -159,10 +138,39 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
     }
 
     @Override
-    public Void visit(FuncDefinition v, Type p) {
-        v.getType().Accept(this, p);
-        for (Statement st : v.getStatements())
-            st.Accept(this, ((FunctionType) v.getType()).getTypeReturn());
+    public Void visit(Condition v, Type p) {
+        v.getCondition().Accept(this, p);
+
+        if (!v.getCondition().getType().isLogical()) {
+            new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, that conditional expression: { " + v.getCondition() + " } is not logical");
+        }
+        for (Statement st : v.getIfStatement())
+            st.Accept(this, p);
+        for (Statement st : v.getElseStatement())
+            st.Accept(this, p);
+
+        return null;
+    }
+
+    @Override
+    public Void visit(Iterative v, Type p) {
+        v.getCondition().Accept(this, p);
+
+        if (!v.getCondition().getType().isLogical()) {
+            new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, that conditional expression: { " + v.getCondition() + " } is not logical");
+        }
+
+        for (Statement st : v.getLoopStatement())
+            st.Accept(this, p);
+
+        return null;
+    }
+
+    @Override
+    public Void visit(Return v, Type p) {
+        super.visit(v, p);
+
+        v.getExpression().setType(v.getExpression().getType().promotesTo(p, v.getExpression()));
 
         return null;
     }

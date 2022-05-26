@@ -15,6 +15,8 @@ public class IdentificationVisitor extends VisitorAbs<Void, Void> {
         symbolTable = new SymbolTable();
     }
 
+    //===============DEF===============
+
     @Override
     public Void visit(FuncDefinition v, Void p) {
 
@@ -40,16 +42,19 @@ public class IdentificationVisitor extends VisitorAbs<Void, Void> {
         return null;
     }
 
+    //===============EXPRESSION===============
+
     @Override
     public Void visit(Variable v, Void p) {
         var find = symbolTable.find(v.getName());
         if (find == null) {
             var error = new ErrorType(v.getColumn(), v.getLine(), "Error, variable not defined: " + v.getName());
-            v.setDefinition(new VarDefinition(v.getColumn(),v.getLine(),v.getName(),error));
+            v.setDefinition(new VarDefinition(v.getColumn(), v.getLine(), v.getName(), error));
             return null;
         }
         v.setDefinition(find);
         return null;
     }
+
 
 }
