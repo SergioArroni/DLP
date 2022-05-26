@@ -103,7 +103,7 @@ expression returns [Expression ast] locals [List<Expression> param =  new ArrayL
 INT_CONSTANT: [0-9]+ ;
 //INT_CONSTANT: '0' | [1-9][0-9]* ;
 
-CHAR_CONSTANT: '\'' . '\'' | '\'\\' ([0-9]+|'n'|'r'|'t'|' '|) '\'' | '\'' [0-9]+ '\'';
+CHAR_CONSTANT: '\'' . '\'' | '\'\\' ([0-9]+|'n'|'r'|'t'|' '|) '\'' | '\'' [0-9]? '\'';
 
 REAL_CONSTANT: NUMERIC_REAL_CONSTANT | (NUMERIC_REAL_CONSTANT | INT_CONSTANT) ('E'|'e')  ('+'|'-')?  INT_CONSTANT;
 
