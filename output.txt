@@ -1,33 +1,423 @@
 
-#source	"input.txt"
+#source	"input.13.txt"
 
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { i }, Offset: { 0 }
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { n }, Offset: { 2 }
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { j }, Offset: { 4 }
+	' * Type: { CharType{Line: 4	 Column: 3	} }, Name: { c }, Offset: { 6 }
+	' * Type: { Struct{fields=[RecordField{nameField='integer', typeFields=IntType{Line: 3	 Column: 7	}}, RecordField{nameField='character', typeFields=CharType{Line: 4	 Column: 3	}}]} }, Name: { pair }, Offset: { 7 }
+	' * Type: { ArrayType{size=10, of=ArrayType{size=10, of=IntType{Line: 3	 Column: 7	}}} }, Name: { matrix }, Offset: { 10 }
 	' * Invocation to the main function
 	CALL main
 	HALT
 
-#line	3
-main:	
+#line	12
+p:	
 	ENTER	0
 	' * Parameters
 	' * Local variables
-
-#line	5
-	' * If
-	PUSHB	97
-	b2i	
-	PUSHB	98
-	b2i	
-	EQI
-	JZ	Label0
-	' * If Body
-
-#line	6
-	' * Write
-	PUSHI	12
-	OUTI
-	JMP	Label1
-	' * Else
-Label0:	
-	' * Else Body
-Label1:	
 	RET	0, 0, 0
+
+#line	14
+f:	
+	ENTER	5
+	' * Parameters
+	' * Type: { DoubleType{Line: 14	 Column: 9	} }, Name: { r }, Offset: { 6 }
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { e }, Offset: { 4 }
+	' * Local variables
+	' * Type: { DoubleType{Line: 14	 Column: 9	} }, Name: { real }, Offset: { -4 }
+	' * Type: { CharType{Line: 4	 Column: 3	} }, Name: { c }, Offset: { -5 }
+
+#line	17
+	' * Assignment
+	PUSH	BP
+	PUSHI	-4
+	ADDI
+	PUSHA	7
+	PUSHI	2
+	ADDI
+	LOADB
+	b2i	
+	i2f	
+	PUSHA	7
+	PUSHI	0
+	ADDI
+	LOADI
+	i2f	
+	ADDF
+	PUSH	BP
+	PUSHI	6
+	ADDI
+	LOADF
+	ADDF
+	PUSH	BP
+	PUSHI	4
+	ADDI
+	LOADI
+	i2f	
+	ADDF
+	STOREF
+
+#line	18
+	' * Assignment
+	PUSH	BP
+	PUSHI	-5
+	ADDI
+	PUSHB	48
+	STOREB
+
+#line	3
+	' * Return
+	PUSH	BP
+	PUSHI	-5
+	ADDI
+	LOADB
+	b2i	
+	RET	2, 5, 6
+
+#line	24
+fill:	
+	ENTER	4
+	' * Parameters
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { row }, Offset: { 8 }
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { value }, Offset: { 6 }
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { increment }, Offset: { 4 }
+	' * Local variables
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { i }, Offset: { -2 }
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { inc }, Offset: { -4 }
+
+#line	26
+	' * Assignment
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	PUSHI	0
+	STOREI
+
+#line	27
+	' * Assignment
+	PUSH	BP
+	PUSHI	-4
+	ADDI
+	PUSH	BP
+	PUSHI	4
+	ADDI
+	LOADI
+	STOREI
+
+#line	28
+	' * While
+Label0:	
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	PUSHI	10
+	LTI
+	JZ	Label1
+
+#line	29
+	' * Assignment
+	PUSHA	10
+	PUSH	BP
+	PUSHI	8
+	ADDI
+	LOADI
+	PUSHI	20
+	MULI
+	ADDI
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	PUSHI	2
+	MULI
+	ADDI
+	PUSH	BP
+	PUSHI	6
+	ADDI
+	LOADI
+	PUSH	BP
+	PUSHI	-4
+	ADDI
+	LOADI
+	ADDI
+	STOREI
+
+#line	30
+	' * Assignment
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	PUSHI	1
+	ADDI
+	STOREI
+
+#line	31
+	' * Assignment
+	PUSH	BP
+	PUSHI	-4
+	ADDI
+	PUSH	BP
+	PUSHI	-4
+	ADDI
+	LOADI
+	PUSH	BP
+	PUSHI	4
+	ADDI
+	LOADI
+	ADDI
+	STOREI
+	JMP	Label0
+Label1:	
+	RET	0, 4, 6
+
+#line	35
+show:	
+	ENTER	2
+	' * Parameters
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { row }, Offset: { 4 }
+	' * Local variables
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { i }, Offset: { -2 }
+
+#line	37
+	' * Assignment
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	PUSHI	0
+	STOREI
+
+#line	38
+	' * While
+Label2:	
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	PUSHI	10
+	LTI
+	JZ	Label3
+
+#line	39
+	' * Write
+	PUSHB	40
+	OUTB
+
+#line	39
+	' * Write
+	PUSH	BP
+	PUSHI	4
+	ADDI
+	LOADI
+	OUTI
+
+#line	39
+	' * Write
+	PUSHB	44
+	OUTB
+
+#line	39
+	' * Write
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	OUTI
+
+#line	39
+	' * Write
+	PUSHB	41
+	OUTB
+
+#line	39
+	' * Write
+	PUSHB	58
+	OUTB
+
+#line	39
+	' * Write
+	PUSHA	10
+	PUSH	BP
+	PUSHI	4
+	ADDI
+	LOADI
+	PUSHI	20
+	MULI
+	ADDI
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	PUSHI	2
+	MULI
+	ADDI
+	LOADI
+	OUTI
+
+#line	39
+	' * Write
+	PUSHB	32
+	OUTB
+
+#line	40
+	' * Assignment
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	PUSHI	1
+	ADDI
+	STOREI
+	JMP	Label2
+Label3:	
+
+#line	42
+	' * Write
+	PUSHB	10
+	OUTB
+	RET	0, 2, 2
+
+#line	46
+main:	
+	ENTER	2
+	' * Parameters
+	' * Local variables
+	' * Type: { IntType{Line: 3	 Column: 7	} }, Name: { i }, Offset: { -2 }
+
+#line	49
+	' * FunctionInvoke
+	CALL	p
+
+#line	50
+	' * Assignment
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	PUSHI	0
+	STOREI
+
+#line	51
+	' * Assignment
+	PUSHA	7
+	PUSHI	2
+	ADDI
+	PUSHB	48
+	STOREB
+
+#line	52
+	' * Assignment
+	PUSHA	7
+	PUSHI	0
+	ADDI
+	PUSHB	48
+	b2i	
+	STOREI
+
+#line	53
+	' * Write
+
+#line	53
+	' * FunctionInvoke
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	i2f	
+	PUSHA	7
+	PUSHI	2
+	ADDI
+	LOADB
+	b2i	
+	CALL	f
+	OUTI
+
+#line	53
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	55
+	' * FunctionInvoke
+	PUSHF	1.3
+	PUSHI	2
+	CALL	f
+	POPI
+
+#line	57
+	' * Assignment
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	PUSHI	0
+	STOREI
+
+#line	58
+	' * Assignment
+	PUSHA	4
+	PUSHI	0
+	STOREI
+
+#line	59
+	' * While
+Label4:	
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	PUSHI	10
+	LTI
+	JZ	Label5
+
+#line	60
+	' * FunctionInvoke
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	PUSHA	4
+	LOADI
+	PUSHI	1
+	CALL	fill
+
+#line	61
+	' * FunctionInvoke
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	CALL	show
+
+#line	62
+	' * Assignment
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	PUSHI	1
+	ADDI
+	STOREI
+
+#line	63
+	' * Assignment
+	PUSHA	4
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	PUSHI	10
+	MULI
+	STOREI
+	JMP	Label4
+Label5:	
+	RET	0, 2, 0

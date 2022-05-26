@@ -87,11 +87,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
         }
         cg.comment("Local variables");
         for (Statement s:v.getStatements()) {
-            if(s instanceof Return){
-                s.Accept(this,v);
-            }else{
-                s.Accept(this,p);
-            }
+            s.Accept(this,v);
         }
         if(((FunctionType)v.getType()).getTypeReturn() instanceof VoidType){
             cg.ret(((FunctionType)v.getType()).getTypeReturn().getNumberOfBytes(),v.getLocalOffsetAux(), v.getType().getNumberOfBytes());
@@ -111,8 +107,8 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
     public Void visit(Assigmment v, FuncDefinition p) {
         cg.line(v);
         cg.comment("Assignment");
-        v.getLeft().Accept(this.addrVisitor, p);
-        v.getRight().Accept(this.valueVisitor,p);
+        v.getLeft().Accept(this.addrVisitor, null);
+        v.getRight().Accept(this.valueVisitor,null);
         v.getLeft().getType().promotesTo(v.getRight().getType(),v);
         cg.store(v.getLeft().getType());
         return null;
@@ -129,7 +125,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
         for (Expression e: v.getExpression()) {
             cg.line(v);
             cg.comment("Write");
-            e.Accept(this.valueVisitor,p);
+            e.Accept(this.valueVisitor,null);
             cg.out(e.getType());
         }
         return null;
@@ -148,7 +144,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
         for (Expression e: v.getExpression()) {
             cg.line(v);
             cg.comment("Read");
-            e.Accept(this.addrVisitor,p);
+            e.Accept(this.addrVisitor,null);
             cg.in(e.getType());
             cg.store(e.getType());
         }
@@ -168,7 +164,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
     @Override
     public Void visit(FunctionInvoke v, FuncDefinition p) {
 
-        v.Accept(this.valueVisitor,p);
+        v.Accept(this.valueVisitor,null);
 
         if(!(v.getType() instanceof VoidType)){
             cg.pop(v.getType());
@@ -205,7 +201,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
 
         cg.label("Label" + condition);
 
-        v.getCondition().Accept(this.valueVisitor, p);
+        v.getCondition().Accept(this.valueVisitor, null);
         cg.jz("Label" + end);
 
         for (Statement s : v.getLoopStatement()) {
@@ -249,7 +245,7 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
         int else_ = cg.getLabel();
         int end = cg.getLabel();
 
-        v.getCondition().Accept(this.valueVisitor, p);
+        v.getCondition().Accept(this.valueVisitor, null);
 
         cg.jz("Label" + else_);
 
