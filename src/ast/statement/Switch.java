@@ -9,12 +9,11 @@ public class Switch extends StatementAbs {
 
     private List<Case> switchBody;
     private Expression condition;
-    private Case defaults;
 
-    public Switch(int colum, int line, Expression condition, List<Case> switchBody, Case defaults) {
+    public Switch(int colum, int line, Expression condition, List<Case> switchBody) {
         super(colum, line);
         this.condition = condition;
-        this.defaults = defaults;
+
         this.switchBody = switchBody;
     }
 
@@ -22,9 +21,6 @@ public class Switch extends StatementAbs {
         return switchBody;
     }
 
-    public Case getDefaulta() {
-        return defaults;
-    }
 
     public Expression getCondition() {
         return condition;
@@ -34,7 +30,6 @@ public class Switch extends StatementAbs {
     public String toString() {
         return "Case{" +
                 "switchBody=" + switchBody +
-                ", default='" + defaults + '\'' +
                 ", condition=" + condition +
                 '}';
     }

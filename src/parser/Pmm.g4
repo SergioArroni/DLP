@@ -59,10 +59,11 @@ recordField returns [List<RecordField> ast =  new ArrayList<>()] locals [List<St
                     OP1=ID{$fields.add($OP1.text);} (',' OP2=ID {$fields.add($OP2.text);})* ':' type=tipo ';' {for(String elem : $fields) { $ast.add(new RecordField($OP1.getCharPositionInLine()+1, $OP1.getLine(),elem, $type.ast));}}
                     ;
 
-statement returns [Statement ast] locals [List<Expression> param =  new ArrayList<>(), List<Expression> parameter =  new ArrayList<>(), List<Statement> elses =  new ArrayList<>(), List<Statement> defaults=  new ArrayList<>()]:
+statement returns [Statement ast] locals [List<Expression> param =  new ArrayList<>(), List<Expression> parameter =  new ArrayList<>(), List<Statement> elses =  new ArrayList<>(), List<Statement> defaults=  new ArrayList<>(), List<Case> varAux=  new ArrayList<>() ]:
                     'while' exprWhile=expression ':' cuerpo=statementbody {$ast = new Iterative($exprWhile.ast.getColumn(), $exprWhile.ast.getLine(), $exprWhile.ast, $cuerpo.ast);}
+                   | 'for' '(' initial=statement ';' exprFor=expression ';'  initial2=statement  ')' cuerpo=statementbody {$ast = new IterativeFor($exprFor.ast.getColumn(), $exprFor.ast.getLine(), $initial.ast ,$exprFor.ast, $initial2.ast , $cuerpo.ast);}
                    | 'if' exprIf=expression ':' stateIf=statementbody ('else' statelse=statementbody{$elses = $statelse.ast;})? {$ast= new Condition($exprIf.ast.getColumn(), $exprIf.ast.getLine(), $exprIf.ast, $stateIf.ast, $elses);}
-                   | AUX='switch' '(' expression ')' '{' swtichbody  DEFA='default' ':' (defState=statement {$defaults.add($defState.ast);})* temporal '}' {$ast = new Switch($AUX.getCharPositionInLine()+1, $AUX.getLine(), $expression.ast, $swtichbody.ast, new Case($DEFA.getCharPositionInLine()+1, $DEFA.getLine(), null, $defaults, $temporal.ast)) ;}
+                   | AUX='switch' '(' expression ')' '{' (swtichbody {$varAux.addAll($swtichbody.ast);})*   DEFA='default' ':' (defState=statement {$defaults.add($defState.ast);})* defTe=temporal {$varAux.add(new Case($DEFA.getCharPositionInLine()+1, $DEFA.getLine(), null, $defaults, $defTe.ast ));} '}' {$ast = new Switch($AUX.getCharPositionInLine()+1, $AUX.getLine(), $expression.ast, $varAux) ;}
                    | 'return' stat3=expression ';' {$ast = new Return($stat3.ast.getColumn(), $stat3.ast.getLine(), $stat3.ast);}
                    | AUX='input' stateRead=listExpression ';'{$ast = new Read($AUX.getCharPositionInLine()+1, $AUX.getLine(), $stateRead.ast);}
                    | AUX='print' stateWrite=listExpression ';'{$ast = new Write($AUX.getCharPositionInLine()+1, $AUX.getLine(), $stateWrite.ast);}
@@ -72,7 +73,7 @@ statement returns [Statement ast] locals [List<Expression> param =  new ArrayLis
                    ;
 
 swtichbody returns [List<Case> ast =  new ArrayList<>()] locals [List<Statement> states =  new ArrayList<>()]:
-            (AUX='case' expression ':' (statement {$states.add($statement.ast);})* temporal {$ast.add(new Case($AUX.getCharPositionInLine()+1, $AUX.getLine(), $expression.ast, $states, $temporal.ast ));})+
+            AUX='case' expression ':' (statement {$states.add($statement.ast);})* temporal {$ast.add(new Case($AUX.getCharPositionInLine()+1, $AUX.getLine(), $expression.ast, $states, $temporal.ast ));}
             ;
 
 temporal returns [String ast]:

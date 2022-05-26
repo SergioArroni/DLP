@@ -272,7 +272,50 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
         return null;
     }
 
-    private boolean defaults = true;
+    /**
+     * Execute[[IterativeFor:Statement -> condition loopStatement*]]()=
+     *      int condition = cg.getLabel();
+     *      int end = cg.getLabel();
+     *      <Label_>condition<:>
+     *      Value[[condition]]()
+     *      <JZ Label_> end
+     *
+     *      for(Statement s: loopStatement){
+     *          Execute[[s]]()
+     *      }
+     *
+     *      <JMP Label_> condition
+     *
+     *      <Label_>end<:>
+     *
+     */
+    @Override
+    public Void visit(IterativeFor v, FuncDefinition p) {
+        cg.line(v);
+        cg.comment("For");
+
+        int condition = cg.getLabel();
+        int end = cg.getLabel();
+
+        cg.label("Label" + condition);
+
+        v.getInitial1().Accept(this, p);
+
+        v.getCondition().Accept(this.valueVisitor, p);
+
+        cg.jz("Label" + end);
+
+        for (Statement s : v.getLoopStatement()) {
+            s.Accept(this, p);
+        }
+
+        v.getInitial2().Accept(this, p);
+        cg.jmp("Label" + condition);
+
+        cg.label("Label" + end);
+
+        return null;
+    }
 
     /**
      * Execute[[Switch:Statement -> condition switchBody* defaults]]()=
@@ -296,20 +339,18 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
         cg.line(v);
         cg.comment("Switch");
 
+        int finals = cg.getLabel();
+        int i = 0;
+
         for (Case s : v.getSwitchBody()) {
-
-            v.getCondition().Accept(this.valueVisitor, p);
-
-            s.Accept(this,p);
-
-        }
-
-            cg.line(v.getDefaulta());
-            cg.comment("Case - Default");
-            for (Statement st : v.getDefaulta().getCaseBody()) {
-                st.Accept(this, p);
+            i++;
+            if(i < v.getSwitchBody().size()){
+                v.getCondition().Accept(this.valueVisitor, p);
             }
-
+            s.Accept(this,p);
+            cg.jnz("Label_"+finals);
+        }
+        cg.label("Label_"+finals);
         return null;
     }
     /**
@@ -336,27 +377,45 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
 
             int siguiente = cg.getLabel();
 
-            v.getCondition().Accept(this.valueVisitor, p);
+            int finals = cg.getLabel();
 
-            cg.eq(v.getCondition().getType());
+            if(v.getCondition() != null){
+                v.getCondition().Accept(this.valueVisitor, p);
 
-            cg.jz("Label" + siguiente);
+                cg.eq(v.getCondition().getType());
 
-            for(Statement st : v.getCaseBody()){
-                st.Accept(this,p);
+                cg.jz("Label_" + siguiente);
+
+                for(Statement st : v.getCaseBody()){
+                    st.Accept(this,p);
+                }
+
+                if(v.getTemporal().equals("break")){
+                    cg.push(1);
+
+                    cg.jmp("Label_"+finals);
+                }
+
+                cg.label("Label_" + siguiente);
+
+                cg.push(0);
+
+                cg.label("Label_" + finals);
+
+
+            }else{
+
+                for(Statement st : v.getCaseBody()){
+                    st.Accept(this,p);
+                }
+                cg.push(1);
+
             }
 
-            if(v.getTemporal().equals("break")){
-                defaults = false;
-            }
 
-            cg.label("Label" + siguiente);
 
         return null;
     }
-
-
-
 
     /**
      * Execute[[Condition:Statement -> condition:expression ifStatement:statement* elseStatement:statement*]]()=

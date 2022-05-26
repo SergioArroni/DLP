@@ -7,55 +7,73 @@
 
 #line	16
 main:	
-	ENTER	3
+	ENTER	2
 	' * Parameters
 	' * Local variables
-	' * Type: { IntType{Line: 17	 Column: 15	} }, Name: { month }, Offset: { -2 }
-	' * Type: { CharType{Line: 18	 Column: 21	} }, Name: { monthString }, Offset: { -3 }
-
-#line	19
-	' * Assignment
+	' * Type: { IntType{Line: 17	 Column: 3	} }, Name: { b }, Offset: { -2 }
 	PUSH	BP
 	PUSHI	-2
 	ADDI
-	PUSHI	4
+	PUSHI	1
 	STOREI
 
-#line	20
-	' * Switch
+#line	18
+	' * For
+Label0:	
+
+#line	18
+	' * VariablePlus
+	PUSH	BP
+	PUSHI	-2
+	ADDI
 	PUSH	BP
 	PUSHI	-2
 	ADDI
 	LOADI
-
-#line	21
-	' * Case
 	PUSHI	1
-	EQI
-	JZ	Label0
-
-#line	21
-	' * Assignment
+	SUBI
+	STOREI
 	PUSH	BP
-	PUSHI	-3
+	PUSHI	-2
 	ADDI
-	PUSHB	74
-	STOREB
+	LOADI
+	PUSHI	4
+	LTI
+	JZ	Label1
 
-#line	22
-	' * Assignment
+#line	19
+	' * VariablePlus
 	PUSH	BP
-	PUSHI	-3
+	PUSHI	-2
 	ADDI
-	PUSHB	80
-	STOREB
-Label0:	
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	PUSHI	1
+	ADDI
+	STOREI
 
-#line	28
+#line	20
 	' * Write
 	PUSH	BP
-	PUSHI	-3
+	PUSHI	-2
 	ADDI
-	LOADB
-	OUTB
-	RET	0, 3, 0
+	LOADI
+	OUTI
+
+#line	18
+	' * VariablePlus
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	PUSHI	1
+	ADDI
+	STOREI
+	JMP	Label0
+Label1:	
+	RET	0, 2, 0

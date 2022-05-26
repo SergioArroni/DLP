@@ -215,8 +215,6 @@ public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
         v.getCondition().Accept(this, p);
         for (Statement st : v.getSwitchBody())
             st.Accept(this, p);
-
-        v.getDefaulta().Accept(this, p);
         return null;
     }
 
@@ -238,9 +236,24 @@ public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
 
     @Override
     public TR visit(Iterative v, TP p) {
+        v.getCondition().Accept(this, p);
         for (Statement st : v.getLoopStatement())
             st.Accept(this, p);
+
+        return null;
+    }
+
+    @Override
+    public TR visit(IterativeFor v, TP p) {
+        v.getInitial1().Accept(this, p);
+
         v.getCondition().Accept(this, p);
+
+        v.getInitial2().Accept(this, p);
+
+        for (Statement st : v.getLoopStatement())
+            st.Accept(this, p);
+
         return null;
     }
 

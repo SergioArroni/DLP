@@ -14,17 +14,11 @@ def wrong(): {
 
 
 def main(): {
-        month:int;
-        monthString:char;
-        month = 4;
-        switch (month) {
-            case 1:  monthString = 'J';
-                     monthString = 'P';
-                     break;
+b:int  = 1;
+    for(b--;;b<4;b++;){
+        b++;
+        print b;
 
-            default: monthString = 'I';
-                     break;
-        }
-        print monthString;
+    }
 }
 	

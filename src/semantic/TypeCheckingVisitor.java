@@ -95,19 +95,34 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
         }
         for (Case cases : v.getSwitchBody()){
             cases.Accept(this, p);
-            if(cases.getCondition().getType() != v.getCondition().getType())
+            if(cases.getCondition() != null && cases.getCondition().getType() != v.getCondition().getType())
                 new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, that Switch condition and the case condition: { " + v.getCondition() + " } is not a same type");
 
         }
-
-        v.getDefaulta().Accept(this,p);
-
         return null;
     }
 
     @Override
     public Void visit(Iterative v, Type p) {
         v.getCondition().Accept(this, p);
+
+        if (!v.getCondition().getType().isLogical()) {
+            new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, that conditional expression: { " + v.getCondition() + " } is not logical");
+        }
+
+        for (Statement st : v.getLoopStatement())
+            st.Accept(this, p);
+
+        return null;
+    }
+
+    @Override
+    public Void visit(IterativeFor v, Type p) {
+        v.getInitial1().Accept(this, p);
+
+        v.getCondition().Accept(this, p);
+
+        v.getInitial2().Accept(this, p);
 
         if (!v.getCondition().getType().isLogical()) {
             new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, that conditional expression: { " + v.getCondition() + " } is not logical");
