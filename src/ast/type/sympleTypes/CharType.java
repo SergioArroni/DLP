@@ -29,8 +29,10 @@ public class CharType extends TypeAbs {
     @Override
     public Type aritmmetic(Type other, AstNode node) {
 
-        if (other.equals(CharType.getInstance(other.getColumn(), other.getLine())) || other instanceof ErrorType) {
+        if (other.equals(CharType.getInstance(other.getColumn(), other.getLine())) ) {
             return IntType.getInstance(node.getColumn(), node.getLine());
+        } else if (other instanceof ErrorType) {
+            return other;
         } else {
             return super.aritmmetic(other, node);
         }
@@ -43,8 +45,10 @@ public class CharType extends TypeAbs {
 
     @Override
     public Type comparision(Type other, AstNode node) {
-        if (other.equals(CharType.getInstance(other.getColumn(), other.getLine())) || other instanceof ErrorType) {
+        if (other.equals(CharType.getInstance(other.getColumn(), other.getLine()))) {
             return IntType.getInstance(getColumn(), getLine());
+        } else if (other instanceof ErrorType) {
+            return other;
         } else {
             return super.comparision(other, node);
         }

@@ -15,6 +15,8 @@ public class IdentificationVisitor extends VisitorAbs<Void, Void> {
         symbolTable = new SymbolTable();
     }
 
+    //===============DEF===============
+
     @Override
     public Void visit(FuncDefinition v, Void p) {
 
@@ -39,6 +41,8 @@ public class IdentificationVisitor extends VisitorAbs<Void, Void> {
         }
         return null;
     }
+
+    //===============EXPRESSION===============
 
     @Override
     public Void visit(Variable v, Void p) {

@@ -2,9 +2,8 @@
 # Main program
 def main(): {
 
-    print 'b' + 'a';
-    if 1 && 2 : {
-    print 'a';
+    if 'a'=='b' : {
+    print 12;
     }
 }
 

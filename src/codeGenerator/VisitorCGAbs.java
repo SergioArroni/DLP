@@ -22,10 +22,13 @@ import visitor.Visitor;
 
 public abstract class VisitorCGAbs<TR, TP> implements Visitor<TR, TP> {
 
+    //===============PROGRAM===============
     @Override
     public TR visit(Program v, TP p) {
         throw new IllegalStateException();
     }
+
+    //===============DEF===============
 
     @Override
     public TR visit(VarDefinition v, TP p) {
@@ -37,63 +40,10 @@ public abstract class VisitorCGAbs<TR, TP> implements Visitor<TR, TP> {
         throw new IllegalStateException();
     }
 
+    //===============EXPRESSIONS===============
+
     @Override
     public TR visit(Variable v, TP p) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public TR visit(IntLiteral v, TP p) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public TR visit(CharLiteral v, TP p) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public TR visit(DoubleLiteral v, TP p) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public TR visit(RecordField v, TP p) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public TR visit(FunctionType v, TP p) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public TR visit(DoubleType v, TP p) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public TR visit(CharType v, TP p) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public TR visit(VoidType v, TP p) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public TR visit(IntType v, TP p) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public TR visit(Struct v, TP p) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public TR visit(ArrayType v, TP p) {
         throw new IllegalStateException();
     }
 
@@ -138,6 +88,70 @@ public abstract class VisitorCGAbs<TR, TP> implements Visitor<TR, TP> {
     }
 
     @Override
+    public TR visit(IntLiteral v, TP p) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public TR visit(CharLiteral v, TP p) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public TR visit(DoubleLiteral v, TP p) {
+        throw new IllegalStateException();
+    }
+
+    //===============TYPE===============
+
+    @Override
+    public TR visit(RecordField v, TP p) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public TR visit(FunctionType v, TP p) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public TR visit(DoubleType v, TP p) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public TR visit(CharType v, TP p) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public TR visit(VoidType v, TP p) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public TR visit(IntType v, TP p) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public TR visit(Struct v, TP p) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public TR visit(ArrayType v, TP p) {
+        throw new IllegalStateException();
+    }
+
+    @Override
+    public TR visit(ErrorType v, TP p) {
+        throw new IllegalStateException();
+    }
+
+    //===============STATEMENTS===============
+
+    @Override
     public TR visit(FunctionInvoke v, TP p) {
         throw new IllegalStateException();
     }
@@ -169,11 +183,6 @@ public abstract class VisitorCGAbs<TR, TP> implements Visitor<TR, TP> {
 
     @Override
     public TR visit(Iterative v, TP p) {
-        throw new IllegalStateException();
-    }
-
-    @Override
-    public TR visit(ErrorType v, TP p) {
         throw new IllegalStateException();
     }
 }

@@ -43,8 +43,10 @@ public class DoubleType extends TypeAbs {
 
     @Override
     public Type comparision(Type other, AstNode node) {
-        if (other.equals(DoubleType.getInstance(other.getColumn(), other.getLine())) || other instanceof ErrorType) {
-            return IntType.getInstance(getColumn(),getLine());
+        if (other.equals(DoubleType.getInstance(other.getColumn(), other.getLine()))) {
+            return IntType.getInstance(getColumn(), getLine());
+        } else if (other instanceof ErrorType) {
+            return other;
         } else {
             return super.comparision(other, node);
         }

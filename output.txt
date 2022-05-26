@@ -12,26 +12,19 @@ main:
 	' * Local variables
 
 #line	5
-	' * Write
-	PUSHB	98
-	b2i	
+	' * If
 	PUSHB	97
 	b2i	
-	ADDI
-	OUTI
-
-#line	6
-	' * If
-	PUSHI	1
-	PUSHI	2
-	AND	
+	PUSHB	98
+	b2i	
+	EQI
 	JZ	Label0
 	' * If Body
 
-#line	7
+#line	6
 	' * Write
-	PUSHB	97
-	OUTB
+	PUSHI	12
+	OUTI
 	JMP	Label1
 	' * Else
 Label0:	

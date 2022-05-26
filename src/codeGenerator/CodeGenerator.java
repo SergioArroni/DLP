@@ -134,38 +134,38 @@ public class CodeGenerator {
     }
 
     public void eq(Type type) {
-        if (!type.getClass().equals(CharType.getInstance(type.getColumn(), type.getLine()).getClass())) {
-            out.println("\tEQ" + type.suffix());
-            out.flush();
-        }
+
+        out.println("\tEQ" + type.suffix());
+        out.flush();
+
     }
 
     public void ne(Type type) {
-        if (!type.getClass().equals(CharType.getInstance(type.getColumn(), type.getLine()).getClass())) {
-            out.println("\tNE" + type.suffix());
-            out.flush();
-        }
+
+        out.println("\tNE" + type.suffix());
+        out.flush();
+
     }
 
     public void le(Type type) {
-        if (!type.getClass().equals(CharType.getInstance(type.getColumn(), type.getLine()).getClass())) {
-            out.println("\tLE" + type.suffix());
-            out.flush();
-        }
+
+        out.println("\tLE" + type.suffix());
+        out.flush();
+
     }
 
     public void ge(Type type) {
-        if (!type.getClass().equals(CharType.getInstance(type.getColumn(), type.getLine()).getClass())) {
-            out.println("\tGE" + type.suffix());
-            out.flush();
-        }
+
+        out.println("\tGE" + type.suffix());
+        out.flush();
+
     }
 
     public void lt(Type type) {
-        if (!type.getClass().equals(CharType.getInstance(type.getColumn(), type.getLine()).getClass())) {
-            out.println("\tLT" + type.suffix());
-            out.flush();
-        }
+
+        out.println("\tLT" + type.suffix());
+        out.flush();
+
     }
 
     public void gt(Type type) {
@@ -219,6 +219,12 @@ public class CodeGenerator {
         out.println("\tJZ\t" + name);
         out.flush();
     }
+
+    public void jnz(String name) {
+        out.println("\tJNZ\t" + name);
+        out.flush();
+    }
+
 
     public void jmp(String name) {
         out.println("\tJMP\t" + name);
