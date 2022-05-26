@@ -2,8 +2,8 @@
 # Main program
 def main(): {
 
-    if 'a'=='b' : {
-    print 12;
+    if 'a'=='a' : {
+    print 12, '\n', '1', '\t', 98;
     }
 }
 
