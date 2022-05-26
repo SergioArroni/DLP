@@ -143,10 +143,31 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
     public Void visit(Assigmment v, FuncDefinition p) {
         cg.line(v);
         cg.comment("Assignment");
-        v.getLeft().Accept(this.addrVisitor, p);
-        v.getRight().Accept(this.valueVisitor,p);
 
-        cg.store(v.getLeft().getType());
+        if(v.getLeft().getType() instanceof  ArrayType && v.getRight().getType() instanceof  ArrayType){
+            for (int i = 0; i<((ArrayType) v.getRight().getType()).getSize(); i++){
+                v.getLeft().Accept(this.addrVisitor, p);
+                cg.push(i);
+                cg.push(((ArrayType)v.getLeft().getType()).getOf().getNumberOfBytes());
+                cg.mul(IntType.getInstance(v.getLeft().getColumn(),v.getLeft().getLine()));
+                cg.add(IntType.getInstance(v.getLeft().getColumn(),v.getLeft().getLine()));
+
+                v.getRight().Accept(this.addrVisitor, p);
+                cg.push(i);
+                cg.push(((ArrayType)v.getRight().getType()).getOf().getNumberOfBytes());
+                cg.mul(IntType.getInstance(v.getRight().getColumn(),v.getRight().getLine()));
+                cg.add(IntType.getInstance(v.getRight().getColumn(),v.getRight().getLine()));
+                cg.load(((ArrayType)v.getRight().getType()).getOf());
+
+                cg.store(((ArrayType)v.getLeft().getType()).getOf());
+            }
+        }else {
+
+            v.getLeft().Accept(this.addrVisitor, p);
+            v.getRight().Accept(this.valueVisitor, p);
+
+            cg.store(v.getLeft().getType());
+        }
         return null;
     }
 
@@ -170,7 +191,6 @@ public class ExecuteCGVisitor extends VisitorCGAbs<Void, FuncDefinition> {
 
             if (e.getType() instanceof ArrayType) {
                 for (int i = 0;i<((ArrayType)e.getType()).getSize();i++) {
-
                     e.Accept(this.addrVisitor, p);
                     cg.push(i);
                     cg.push(((ArrayType)e.getType()).getOf().getNumberOfBytes());

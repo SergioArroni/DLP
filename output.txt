@@ -5,75 +5,269 @@
 	CALL main
 	HALT
 
-#line	16
+#line	8
 main:	
-	ENTER	2
+	ENTER	6
 	' * Parameters
 	' * Local variables
-	' * Type: { IntType{Line: 17	 Column: 3	} }, Name: { b }, Offset: { -2 }
+	' * Type: { ArrayType{size=3, of=CharType{Line: 10	 Column: 11	}} }, Name: { prueba }, Offset: { -3 }
+	' * Type: { ArrayType{size=3, of=CharType{Line: 10	 Column: 11	}} }, Name: { otra }, Offset: { -6 }
+
+#line	13
+	' * Assignment
 	PUSH	BP
-	PUSHI	-2
+	PUSHI	-3
+	ADDI
+	PUSHI	0
+	PUSHI	1
+	MULI
+	ADDI
+	PUSHB	97
+	STOREB
+
+#line	14
+	' * Assignment
+	PUSH	BP
+	PUSHI	-3
 	ADDI
 	PUSHI	1
-	STOREI
-
-#line	18
-	' * For
-Label0:	
-
-#line	18
-	' * VariablePlus
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
 	PUSHI	1
-	SUBI
-	STOREI
-	PUSH	BP
-	PUSHI	-2
+	MULI
 	ADDI
-	LOADI
-	PUSHI	4
-	LTI
-	JZ	Label1
+	PUSHB	98
+	STOREB
 
-#line	19
-	' * VariablePlus
+#line	15
+	' * Assignment
 	PUSH	BP
-	PUSHI	-2
+	PUSHI	-3
 	ADDI
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
+	PUSHI	2
 	PUSHI	1
+	MULI
 	ADDI
-	STOREI
+	PUSHB	99
+	STOREB
 
-#line	20
+#line	17
 	' * Write
 	PUSH	BP
-	PUSHI	-2
+	PUSHI	-3
 	ADDI
-	LOADI
-	OUTI
-
-#line	18
-	' * VariablePlus
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	PUSH	BP
-	PUSHI	-2
-	ADDI
-	LOADI
+	PUSHI	0
 	PUSHI	1
+	MULI
 	ADDI
-	STOREI
-	JMP	Label0
-Label1:	
-	RET	0, 2, 0
+	LOADB
+	OUTB
+	PUSH	BP
+	PUSHI	-3
+	ADDI
+	PUSHI	1
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	OUTB
+	PUSH	BP
+	PUSHI	-3
+	ADDI
+	PUSHI	2
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	OUTB
+
+#line	17
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	19
+	' * Assignment
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHI	0
+	PUSHI	1
+	MULI
+	ADDI
+	PUSHB	100
+	STOREB
+
+#line	20
+	' * Assignment
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHI	1
+	PUSHI	1
+	MULI
+	ADDI
+	PUSHB	101
+	STOREB
+
+#line	21
+	' * Assignment
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHI	2
+	PUSHI	1
+	MULI
+	ADDI
+	PUSHB	102
+	STOREB
+
+#line	23
+	' * Write
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHI	0
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	OUTB
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHI	1
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	OUTB
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHI	2
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	OUTB
+
+#line	23
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	25
+	' * Assignment
+	PUSH	BP
+	PUSHI	-3
+	ADDI
+	PUSHI	0
+	PUSHI	1
+	MULI
+	ADDI
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHI	0
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	STOREB
+	PUSH	BP
+	PUSHI	-3
+	ADDI
+	PUSHI	1
+	PUSHI	1
+	MULI
+	ADDI
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHI	1
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	STOREB
+	PUSH	BP
+	PUSHI	-3
+	ADDI
+	PUSHI	2
+	PUSHI	1
+	MULI
+	ADDI
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHI	2
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	STOREB
+
+#line	27
+	' * Write
+	PUSH	BP
+	PUSHI	-3
+	ADDI
+	PUSHI	0
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	OUTB
+	PUSH	BP
+	PUSHI	-3
+	ADDI
+	PUSHI	1
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	OUTB
+	PUSH	BP
+	PUSHI	-3
+	ADDI
+	PUSHI	2
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	OUTB
+
+#line	27
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	28
+	' * Write
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHI	0
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	OUTB
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHI	1
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	OUTB
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHI	2
+	PUSHI	1
+	MULI
+	ADDI
+	LOADB
+	OUTB
+	RET	0, 6, 0

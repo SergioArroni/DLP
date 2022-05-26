@@ -93,9 +93,9 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
         if (!(v.getCondition() instanceof Variable)) {
             new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, that Switch expression: { " + v.getCondition() + " } is not a variable");
         }
-        for (Case cases : v.getSwitchBody()){
+        for (Case cases : v.getSwitchBody()) {
             cases.Accept(this, p);
-            if(cases.getCondition() != null && cases.getCondition().getType() != v.getCondition().getType())
+            if (cases.getCondition() != null && cases.getCondition().getType() != v.getCondition().getType())
                 new ErrorType(v.getCondition().getColumn(), v.getCondition().getLine(), "Error, that Switch condition and the case condition: { " + v.getCondition() + " } is not a same type");
 
         }
@@ -218,11 +218,20 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
         v.getLeft().Accept(this, p);
         v.getRight().Accept(this, p);
 
-        if (!v.getLeft().getLValue()) {
-            new ErrorType(v.getLeft().getColumn(), v.getLeft().getLine(), "Error, the assignment expression: the left part  {" + v.getLeft() + "} is not assignable");
+        boolean errorArray = false;
+
+        if (v.getLeft().getType() instanceof ArrayType && v.getRight().getType() instanceof ArrayType) {
+            if (!(((ArrayType) v.getLeft().getType()).getSize() > ((ArrayType) v.getRight().getType()).getSize()))
+                errorArray = true;
         }
 
-        if (v.getLeft().getType() != v.getRight().getType()) {
+        if (!v.getLeft().getLValue()) {
+            if(!errorArray){
+                new ErrorType(v.getLeft().getColumn(), v.getLeft().getLine(), "Error, the assignment expression: the left part  {" + v.getLeft() + "} is not assignable");
+            }
+        }
+
+        if (v.getLeft().getType() != v.getRight().getType() && !(v.getLeft().getType() instanceof ArrayType && v.getRight().getType() instanceof ArrayType)) {
             v.getRight().getType().promotesTo(v.getLeft().getType(), v.getRight());
         }
         return null;

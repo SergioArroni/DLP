@@ -5,20 +5,26 @@ Modificar el compilador de Pmm para modificar los operadores logicos
 """
 
 
-"""
-def wrong(): {
-    print 1.0 ^ 0.0;                            # Compilation error
-    print '0' ^ '1';                            # Compilation error
-}
-"""
-
-
 def main(): {
-b:int  = 1;
-    for(b--;;b<4;b++;){
-        b++;
-        print b;
 
-    }
+prueba:[3]char;
+otra:[3]char;
+
+prueba[0] = 'a';
+prueba[1] = 'b';
+prueba[2] = 'c';
+
+print prueba, '\n'; #Imprimiria abc
+
+otra[0] = 'd';
+otra[1] = 'e';
+otra[2] = 'f';
+
+print otra, '\n'; #Imprimiria def
+
+prueba = otra;
+
+print prueba, '\n'; #Imprimiria def
+print otra; #Imprimiria def
 }
 	

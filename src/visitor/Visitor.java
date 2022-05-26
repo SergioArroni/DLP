@@ -89,9 +89,6 @@ public interface Visitor<TR, TP> {
 
     public TR visit(IterativeFor v, TP p);
 
-
-    /**
-    public TR visit(Ternaria v, TP p);
-     */
+    //public TR visit(Ternaria v, TP p);
 
 }
