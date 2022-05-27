@@ -1,53 +1,264 @@
 
-#source	"input.txt"
+#source	"examen1.txt"
 
 	' * Invocation to the main function
 	CALL main
 	HALT
 
-#line	3
-main:	
+#line	2
+f:	
 	ENTER	0
 	' * Parameters
+	' * Type: { IntType{Line: 2	 Column: 9	} }, Name: { a }, Offset: { 8 }
+	' * Type: { IntType{Line: 2	 Column: 9	} }, Name: { b }, Offset: { 6 }
+	' * Type: { IntType{Line: 2	 Column: 9	} }, Name: { c }, Offset: { 4 }
 	' * Local variables
 
-#line	5
-	' * If
-	PUSHB	97
-	b2i	
-	PUSHB	97
-	b2i	
-	EQI
-	JZ	Label0
-	' * If Body
+#line	3
+	' * Return
+	PUSH	BP
+	PUSHI	8
+	ADDI
+	LOADI
+	PUSH	BP
+	PUSHI	6
+	ADDI
+	LOADI
+	AND	
+	PUSH	BP
+	PUSHI	4
+	ADDI
+	LOADI
+	NOT	
+	OR	
+	RET	2, 0, 6
 
-#line	6
+#line	7
+main:	
+	ENTER	8
+	' * Parameters
+	' * Local variables
+	' * Type: { IntType{Line: 2	 Column: 9	} }, Name: { b1 }, Offset: { -2 }
+	' * Type: { IntType{Line: 2	 Column: 9	} }, Name: { b2 }, Offset: { -4 }
+	' * Type: { IntType{Line: 2	 Column: 9	} }, Name: { b3 }, Offset: { -6 }
+	' * Type: { IntType{Line: 9	 Column: 7	} }, Name: { a }, Offset: { -8 }
+
+#line	11
 	' * Write
-	PUSHI	12
+
+#line	11
+	' * FunctionInvoke
+	PUSHI	1
+	PUSHI	0
+	PUSHI	0
+	CALL	f
 	OUTI
 
-#line	6
+#line	11
 	' * Write
 	PUSHB	10
 	OUTB
 
-#line	6
+#line	12
 	' * Write
-	PUSHB	49
-	OUTB
 
-#line	6
-	' * Write
-	PUSHB	9
-	OUTB
-
-#line	6
-	' * Write
-	PUSHI	98
+#line	12
+	' * FunctionInvoke
+	PUSHI	1
+	PUSHI	0
+	PUSHI	1
+	CALL	f
 	OUTI
+
+#line	12
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	13
+	' * Write
+
+#line	13
+	' * FunctionInvoke
+	PUSHI	0
+	PUSHI	1
+	PUSHI	1
+	CALL	f
+	OUTI
+
+#line	13
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	14
+	' * Write
+
+#line	14
+	' * FunctionInvoke
+	PUSHI	0
+	PUSHI	0
+	PUSHI	0
+	CALL	f
+	OUTI
+
+#line	14
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	16
+	' * Assignment
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	PUSHI	1
+	STOREI
+
+#line	17
+	' * Assignment
+	PUSH	BP
+	PUSHI	-4
+	ADDI
+	PUSHI	3
+	PUSHI	1
+	GTI
+	STOREI
+
+#line	18
+	' * Assignment
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHF	4.5
+	PUSHF	4.2
+	LEF
+	STOREI
+
+#line	20
+	' * Assignment
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	PUSHB	97
+	b2i	
+	PUSHB	97
+	b2i	
+	GEI
+	STOREI
+
+#line	22
+	' * Write
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	OUTI
+
+#line	22
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	23
+	' * Write
+	PUSH	BP
+	PUSHI	-4
+	ADDI
+	LOADI
+	OUTI
+
+#line	23
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	24
+	' * Write
+	PUSH	BP
+	PUSHI	-6
+	ADDI
+	LOADI
+	OUTI
+
+#line	24
+	' * Write
+	PUSHB	10
+	OUTB
+
+#line	26
+	' * If
+	PUSH	BP
+	PUSHI	-2
+	ADDI
+	LOADI
+	JZ	Label0
+	' * If Body
+
+#line	27
+	' * Write
+	PUSHB	89
+	OUTB
+
+#line	27
+	' * Write
+	PUSHB	10
+	OUTB
 	JMP	Label1
 	' * Else
 Label0:	
 	' * Else Body
+
+#line	29
+	' * Write
+	PUSHB	78
+	OUTB
+
+#line	29
+	' * Write
+	PUSHB	10
+	OUTB
 Label1:	
-	RET	0, 0, 0
+
+#line	32
+	' * Assignment
+	PUSH	BP
+	PUSHI	-8
+	ADDI
+	PUSHI	0
+	STOREI
+
+#line	34
+	' * While
+Label2:	
+	PUSH	BP
+	PUSHI	-8
+	ADDI
+	LOADI
+	PUSHI	10
+	LTI
+	JZ	Label3
+
+#line	35
+	' * Write
+	PUSH	BP
+	PUSHI	-8
+	ADDI
+	LOADI
+	OUTI
+
+#line	36
+	' * Assignment
+	PUSH	BP
+	PUSHI	-8
+	ADDI
+	PUSH	BP
+	PUSHI	-8
+	ADDI
+	LOADI
+	PUSHI	1
+	ADDI
+	STOREI
+	JMP	Label2
+Label3:	
+	RET	0, 8, 0

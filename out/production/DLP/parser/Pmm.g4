@@ -53,6 +53,7 @@ tipoSimple returns [Type ast]:
                  TYPE='char' {$ast = CharType.getInstance($TYPE.getCharPositionInLine()+1, $TYPE.getLine());}
                 | TYPE='double' {$ast = DoubleType.getInstance($TYPE.getCharPositionInLine()+1, $TYPE.getLine());}
                 | TYPE='int' {$ast = IntType.getInstance($TYPE.getCharPositionInLine()+1, $TYPE.getLine());}
+                | TYPE='boolean' {$ast = BooleanType.getInstance($TYPE.getCharPositionInLine()+1, $TYPE.getLine());}
                 ;
 
 recordField returns [List<RecordField> ast =  new ArrayList<>()] locals [List<String> fields =  new ArrayList<>()] :
@@ -86,6 +87,8 @@ expression returns [Expression ast] locals [List<Expression> param =  new ArrayL
               INT_CONSTANT {$ast = new IntLiteral($INT_CONSTANT.getCharPositionInLine()+1, $INT_CONSTANT.getLine(), LexerHelper.lexemeToInt($INT_CONSTANT.text) );}
             | REAL_CONSTANT {$ast = new DoubleLiteral($REAL_CONSTANT.getCharPositionInLine()+1, $REAL_CONSTANT.getLine(), LexerHelper.lexemeToReal($REAL_CONSTANT.text) );}
             | CHAR_CONSTANT {$ast = new CharLiteral($CHAR_CONSTANT.getCharPositionInLine()+1, $CHAR_CONSTANT.getLine(), LexerHelper.lexemeToChar($CHAR_CONSTANT.text));}
+            | BOOLEAN='true' {$ast = new BooleanLiteral($BOOLEAN.getCharPositionInLine()+1, $BOOLEAN.getLine(), 1 );}
+            | BOOLEAN='false' {$ast = new BooleanLiteral($BOOLEAN.getCharPositionInLine()+1, $BOOLEAN.getLine(), 0 );}
             | ID {$ast = new Variable($ID.getCharPositionInLine()+1, $ID.getLine(), $ID.text );}
             | '(' expr=expression ')' {$ast = $expr.ast;}
             | expr1=expression '[' expr2=expression ']' {$ast = new ArrayAccess( $expr1.ast.getColumn(), $expr1.ast.getLine(), $expr1.ast, $expr2.ast );}

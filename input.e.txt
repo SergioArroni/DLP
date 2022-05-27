@@ -1,0 +1,17 @@
+
+# Main program
+def main(): {
+    b1, b2,b3:boolean;
+    a:int;
+
+    print 4 >= 1, '\n';
+    print 4.5 >= 4.5, '\n';
+    print true, '\n';
+    print false, '\n';
+    print 1>2, '\n';
+    # print 1&&2, '\n'; ERROR
+    print true||false, '\n';
+    print 1!=2&&9==9, '\n';
+    print !false, '\n';
+}
+

@@ -12,7 +12,7 @@ public class IntType extends TypeAbs {
 
     private IntType(int colum, int line) {
         super(colum, line);
-        setLogical(true);
+        setLogical(false);
         super.setNumberOfBytes(2);
     }
 
@@ -35,26 +35,16 @@ public class IntType extends TypeAbs {
 
     @Override
     public Type comparision(Type other, AstNode node) {
-        if (other.equals(IntType.getInstance(other.getColumn(), other.getLine())) || other instanceof ErrorType) {
-            return IntType.getInstance(getColumn(), getLine());
+        if (other.equals(IntType.getInstance(other.getColumn(), other.getLine()))) {
+            return BooleanType.getInstance(getColumn(), getLine());
+        } else if (other instanceof ErrorType) {
+            return other;
         } else {
             return super.comparision(other, node);
         }
     }
 
-    @Override
-    public Type logical(Type other, AstNode node) {
-        if (other.equals(IntType.getInstance(other.getColumn(), other.getLine())) || other instanceof ErrorType) {
-            return other;
-        } else {
-            return super.logical(other, node);
-        }
-    }
 
-    @Override
-    public Type logical(AstNode node) {
-        return this;
-    }
 
     @Override
     public Type aritmmetic(Type other, AstNode node) {

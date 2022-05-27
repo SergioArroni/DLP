@@ -46,7 +46,7 @@ public class CharType extends TypeAbs {
     @Override
     public Type comparision(Type other, AstNode node) {
         if (other.equals(CharType.getInstance(other.getColumn(), other.getLine()))) {
-            return IntType.getInstance(getColumn(), getLine());
+            return BooleanType.getInstance(getColumn(), getLine());
         } else if (other instanceof ErrorType) {
             return other;
         } else {

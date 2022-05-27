@@ -1,6 +1,7 @@
 package codeGenerator;
 
 import ast.expression.*;
+import ast.expression.literal.BooleanLiteral;
 import ast.expression.literal.CharLiteral;
 import ast.expression.literal.DoubleLiteral;
 import ast.expression.literal.IntLiteral;
@@ -11,6 +12,7 @@ import ast.type.complexTypes.ArrayType;
 import ast.type.complexTypes.ErrorType;
 import ast.type.complexTypes.RecordField;
 import ast.type.complexTypes.Struct;
+import ast.type.sympleTypes.BooleanType;
 import ast.type.sympleTypes.CharType;
 import ast.type.sympleTypes.DoubleType;
 import ast.type.sympleTypes.IntType;
@@ -92,17 +94,17 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
         castChar(v.getLeft(), v.getColumn(), v.getLine(), v.getRight());
 
         if (v.getOperator().equals("<"))
-            cg.lt(v.getType());
+            cg.lt(v.getLeft().getType());
         else if (v.getOperator().equals(">"))
-            cg.gt(v.getType());
+            cg.gt(v.getLeft().getType());
         else if (v.getOperator().equals("<="))
-            cg.le(v.getType());
+            cg.le(v.getLeft().getType());
         else if (v.getOperator().equals(">="))
-            cg.ge(v.getType());
+            cg.ge(v.getLeft().getType());
         else if (v.getOperator().equals("=="))
-            cg.eq(v.getType());
+            cg.eq(v.getLeft().getType());
         else if (v.getOperator().equals("!="))
-            cg.ne(v.getType());
+            cg.ne(v.getLeft().getType());
         return null;
     }
 
@@ -294,6 +296,16 @@ public class ValueCGVisitor extends VisitorCGAbs<Void, Void> {
      */
     @Override
     public Void visit(DoubleLiteral v, Void p) {
+        cg.push(v.getValue());
+        return null;
+    }
+
+    /**
+     * Value[[BooleanLiteral: Expression -> value]]()=
+     *      <PUSHB> value
+     */
+    @Override
+    public Void visit(BooleanLiteral v, Void p) {
         cg.push(v.getValue());
         return null;
     }

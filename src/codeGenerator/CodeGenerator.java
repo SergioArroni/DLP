@@ -2,6 +2,7 @@ package codeGenerator;
 
 import ast.AstNode;
 import ast.type.Type;
+import ast.type.sympleTypes.BooleanType;
 import ast.type.sympleTypes.CharType;
 
 import java.io.IOException;
@@ -93,6 +94,11 @@ public class CodeGenerator {
         out.flush();
     }
 
+    public void push(byte value) {
+        out.println("\tPUSHB\t" + value);
+        out.flush();
+    }
+
     public void add(Type type) {
         out.println("\tADD" + type.suffix());
         out.flush();
@@ -134,42 +140,57 @@ public class CodeGenerator {
     }
 
     public void eq(Type type) {
-
-        out.println("\tEQ" + type.suffix());
-        out.flush();
+        if (type instanceof CharType) {
+            out.println("\tGEI");
+        } else {
+            out.println("\tEQ" + type.suffix());
+            out.flush();
+        }
 
     }
 
     public void ne(Type type) {
-
-        out.println("\tNE" + type.suffix());
-        out.flush();
-
+        if (type instanceof CharType) {
+            out.println("\tGEI");
+        } else {
+            out.println("\tNE" + type.suffix());
+            out.flush();
+        }
     }
 
     public void le(Type type) {
-
-        out.println("\tLE" + type.suffix());
-        out.flush();
+        if (type instanceof CharType) {
+            out.println("\tLEI");
+        } else {
+            out.println("\tLE" + type.suffix());
+            out.flush();
+        }
 
     }
 
     public void ge(Type type) {
-
-        out.println("\tGE" + type.suffix());
-        out.flush();
+        if (type instanceof CharType) {
+            out.println("\tGEI");
+        } else {
+            out.println("\tGE" + type.suffix());
+            out.flush();
+        }
 
     }
 
     public void lt(Type type) {
-
-        out.println("\tLT" + type.suffix());
-        out.flush();
-
+        if (type instanceof CharType) {
+            out.println("\tLTI");
+        } else {
+            out.println("\tLT" + type.suffix());
+            out.flush();
+        }
     }
 
     public void gt(Type type) {
-        if (!type.getClass().equals(CharType.getInstance(type.getColumn(), type.getLine()).getClass())) {
+        if (type instanceof CharType) {
+            out.println("\tGTI");
+        } else {
             out.println("\tGT" + type.suffix());
             out.flush();
         }

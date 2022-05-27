@@ -1,9 +1,0 @@
-
-# Main program
-def main(): {
-
-    if 'a'=='a' : {
-    print 12, '\n', '1', '\t', 98;
-    }
-}
-

@@ -1,0 +1,14 @@
+Hola,
+
+Los cambios que implemente para el examen fueron,
+Un nuevo tipo Boolean Type
+Un nuevo BooleanLiteral
+Cambie en el pmm para que permita True y False estos son 1 y 0 respectivamente.
+Int ya no es logico ahora es Boolean
+Cambie las definiciones de comparacion y logica en los tipos para que devuelvan boleanos
+Añadi un nuevo visitor al CodeGenerator que hace un push del valor
+
+
+Otras apreciones
+El tipo Booleano tiene un valor int, actua como tal a la hora de guardarlo en memoria.
+Hay un input.e.txt que use para hacer pruebas.

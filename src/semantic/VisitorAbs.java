@@ -1,7 +1,8 @@
 package semantic;
 
+import ast.expression.literal.BooleanLiteral;
 import ast.type.Type;
-import ast.type.sympleTypes.VoidType;
+import ast.type.sympleTypes.*;
 import ast.definition.Definition;
 import ast.definition.FuncDefinition;
 import ast.definition.VarDefinition;
@@ -15,9 +16,6 @@ import ast.expression.operator.Logic;
 import ast.Program;
 import ast.statement.*;
 import ast.type.complexTypes.*;
-import ast.type.sympleTypes.CharType;
-import ast.type.sympleTypes.DoubleType;
-import ast.type.sympleTypes.IntType;
 import visitor.Visitor;
 
 public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
@@ -94,6 +92,11 @@ public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
         return null;
     }
 
+    @Override
+    public TR visit(BooleanType v, TP p) {
+        return null;
+    }
+
     //===============EXPRESSIONS===============
 
     @Override
@@ -113,6 +116,11 @@ public abstract class VisitorAbs<TR, TP> implements Visitor<TR, TP> {
 
     @Override
     public TR visit(DoubleLiteral v, TP p) {
+        return null;
+    }
+
+    @Override
+    public TR visit(BooleanLiteral v, TP p) {
         return null;
     }
 

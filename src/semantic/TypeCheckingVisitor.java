@@ -2,6 +2,7 @@ package semantic;
 
 import ast.definition.FuncDefinition;
 import ast.expression.*;
+import ast.expression.literal.BooleanLiteral;
 import ast.expression.literal.CharLiteral;
 import ast.expression.literal.DoubleLiteral;
 import ast.expression.literal.IntLiteral;
@@ -11,6 +12,7 @@ import ast.expression.operator.Logic;
 import ast.statement.*;
 import ast.type.Type;
 import ast.type.complexTypes.*;
+import ast.type.sympleTypes.BooleanType;
 import ast.type.sympleTypes.CharType;
 import ast.type.sympleTypes.DoubleType;
 import ast.type.sympleTypes.IntType;
@@ -55,6 +57,13 @@ public class TypeCheckingVisitor extends VisitorAbs<Void, Type> {
     public Void visit(DoubleLiteral v, Type p) {
         v.setLValue(false);
         v.setType(DoubleType.getInstance(v.getColumn(), v.getLine()));
+        return null;
+    }
+
+    @Override
+    public Void visit(BooleanLiteral v, Type p) {
+        v.setLValue(false);
+        v.setType(BooleanType.getInstance(v.getColumn(), v.getLine()));
         return null;
     }
 

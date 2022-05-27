@@ -3,6 +3,7 @@ package visitor;
 import ast.definition.FuncDefinition;
 import ast.definition.VarDefinition;
 import ast.expression.*;
+import ast.expression.literal.BooleanLiteral;
 import ast.expression.literal.CharLiteral;
 import ast.expression.literal.DoubleLiteral;
 import ast.expression.literal.IntLiteral;
@@ -13,10 +14,7 @@ import ast.Program;
 import ast.statement.*;
 import ast.type.Type;
 import ast.type.complexTypes.*;
-import ast.type.sympleTypes.CharType;
-import ast.type.sympleTypes.DoubleType;
-import ast.type.sympleTypes.IntType;
-import ast.type.sympleTypes.VoidType;
+import ast.type.sympleTypes.*;
 
 public interface Visitor<TR, TP> {
 
@@ -33,6 +31,8 @@ public interface Visitor<TR, TP> {
     public TR visit(CharLiteral v, TP p);
 
     public TR visit(DoubleLiteral v, TP p);
+
+    public TR visit(BooleanLiteral v, TP p);
 
     public TR visit(RecordField v, TP p);
 
@@ -81,5 +81,7 @@ public interface Visitor<TR, TP> {
     public TR visit(Iterative v, TP p);
 
     public TR visit(ErrorType v, TP p);
+
+    public TR visit(BooleanType v, TP p);
 
 }

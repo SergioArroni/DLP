@@ -5,6 +5,7 @@ import ast.definition.Definition;
 import ast.definition.FuncDefinition;
 import ast.definition.VarDefinition;
 import ast.expression.*;
+import ast.expression.literal.BooleanLiteral;
 import ast.expression.literal.CharLiteral;
 import ast.expression.literal.DoubleLiteral;
 import ast.expression.literal.IntLiteral;
@@ -14,10 +15,7 @@ import ast.expression.operator.Logic;
 import ast.statement.*;
 import ast.type.Type;
 import ast.type.complexTypes.*;
-import ast.type.sympleTypes.CharType;
-import ast.type.sympleTypes.DoubleType;
-import ast.type.sympleTypes.IntType;
-import ast.type.sympleTypes.VoidType;
+import ast.type.sympleTypes.*;
 import visitor.Visitor;
 
 public abstract class VisitorCGAbs<TR, TP> implements Visitor<TR, TP> {
@@ -102,6 +100,11 @@ public abstract class VisitorCGAbs<TR, TP> implements Visitor<TR, TP> {
         throw new IllegalStateException();
     }
 
+    @Override
+    public TR visit(BooleanLiteral v, TP p){
+        return null;
+    };
+
     //===============TYPE===============
 
     @Override
@@ -147,6 +150,11 @@ public abstract class VisitorCGAbs<TR, TP> implements Visitor<TR, TP> {
     @Override
     public TR visit(ErrorType v, TP p) {
         throw new IllegalStateException();
+    }
+
+    @Override
+    public TR visit(BooleanType v, TP p) {
+        return null;
     }
 
     //===============STATEMENTS===============
